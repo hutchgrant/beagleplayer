@@ -22,7 +22,7 @@ $ git clone https://hutchgrant@github.com/hutchgrant/beagleplayer.git
 -----------------
 compile and run:
 -----------------
- $ cd /opt/extras.ubuntu.com/beagleplayer
+ $ cd ./beagleplayer
  $ qmake 
  $ make
  $ sudo make install
