@@ -42,8 +42,6 @@ void beaglemain::addWidgets(){
 void beaglemain::conSignals(){
     connect(brow, SIGNAL(MenuSelection(int)), brow, SLOT(updateTitle(int)));
     connect(ui->ModeCombo, SIGNAL(currentIndexChanged(int)), brow, SLOT(updateMode(int)));
-
-    //cntrl
     connect(brow, SIGNAL(curListChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));
     connect(brow,SIGNAL(FullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
     connect(brow,SIGNAL(selectionChanged(int)), cntrl, SLOT(setSelection(int)));
@@ -63,4 +61,14 @@ void beaglemain::on_actionImport_Video_triggered()
 void beaglemain::on_actionImport_triggered()
 {
     brow->Sync(2);
+}
+
+void beaglemain::on_actionQuit_triggered()
+{
+    close();
+}
+
+void beaglemain::on_actionPreferences_triggered()
+{
+    brow->sy.dispPref();
 }

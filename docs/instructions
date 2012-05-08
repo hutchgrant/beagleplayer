@@ -9,7 +9,7 @@ $  sudo apt-get install mplayer libqt4-dev libqt4-opengl libqt4-opengl-dev libqt
 
 download and extract:
 
-download beagletomb.v.0.1.0.tar.gz 
+download beagleplayer.v.0.1.0.tar.gz 
  $ cd ~/Downloads
  $  tar -zxvf beagleplayer*.tar.gz 
  $ sudo mkdir /opt/extras.ubuntu.com
@@ -27,20 +27,24 @@ git clone https://hutchgrant@github.com/hutchgrant/beagleplayer.git
 
 
 compile and run
- $ cd /opt/extras.ubuntu.com/beagletomb
+ $ cd /opt/extras.ubuntu.com/beagleplayer
  $ qmake 
  $ make
 
  link it with:
- $ ln -fs /opt/extras.ubuntu.com/beagletomb/beagletomb /usr/bin/beagletomb
+ $ ln -fs /opt/extras.ubuntu.com/beagleplayer/beagleplayer /usr/bin/beagleplayer
  
  Finally run the binary with: 
- $ beagletomb 
+ $ beagleplayer 
 
-On first open you will be asked to enter your server credentials. Make sure the mediatomb server initialized port and server bound ip matches the address you enter into the beagletomb preference window.
+On first open you will be asked to enter your server credentials. Make sure the mediatomb server initialized port and server bound ip matches the address you enter into the beagleplayer preference window.
 
 The defaults are:
 
-user: mediatomb pass: mediatomb table: mediatomb SqlDir?: BTmedia.db
+user: mediatomb 
+pass: mediatomb 
+server: 127.0.0.1 
+port: 49154 
+SqlDir:/home/user/.cache/beagleplayer/BTmedia.db
 
 

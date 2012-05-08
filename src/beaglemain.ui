@@ -101,6 +101,7 @@
     <addaction name="separator"/>
     <addaction name="actionImport"/>
     <addaction name="actionImport_Video"/>
+    <addaction name="actionPreferences"/>
     <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFile"/>
@@ -119,6 +120,11 @@
   <action name="actionImport_Video">
    <property name="text">
     <string>Import Video</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>preferences</string>
    </property>
   </action>
  </widget>

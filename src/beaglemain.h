@@ -46,6 +46,10 @@ private slots:
 
     void on_actionImport_triggered();
 
+    void on_actionQuit_triggered();
+
+    void on_actionPreferences_triggered();
+
 private:
     Ui::beaglemain *ui;
      browse *brow;

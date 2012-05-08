@@ -24,8 +24,9 @@ public:
     syncAll();
 
     void fillObjects(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &Video);
-
     void control(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &Video, int rwmode);
+    void setPref();
+    void dispPref();
 };
 
 #endif // SYNCALL_H

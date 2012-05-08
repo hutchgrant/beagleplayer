@@ -35,6 +35,8 @@ class browse : public QWidget
     Q_OBJECT
     
 public:
+
+    syncAll sy;
     explicit browse(QWidget *parent = 0);
     ~browse();
     void Sync(int mode);
@@ -58,7 +60,6 @@ private slots:
     void on_TrackList_doubleClicked(const QModelIndex &index);
 
 private:
-    syncAll sy;
     int MenuMode;   /// 0  = Artist , 1 = VidDir
     fileObj Artist, Album, Song, VidDir, Video;
     int *curSongID, *curVidID;

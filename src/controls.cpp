@@ -27,7 +27,9 @@ controls::controls(QWidget *parent) :
 {
     ui->setupUi(this);
     CON_MODE = 0;
+    widget.setSeekSlider(ui->trackSlider);
 }
+
 /*
   *  Control for Start of local File
   */
@@ -69,22 +71,6 @@ void controls::startSelected(){
         startLocal(finSong, finPath);
 
 }
-/*
-  *When Stop Button is pressed
-  */
-void controls::on_STOP_but_clicked()
-{
-    widget.stop();
-}
-
-
-/*
-  * When Pause button clicked, pause
-  */
-void controls::on_PAUSE_but_clicked()
-{
-    widget.pause();
-}
 
 /*
   * Slot to Change connection Mode
@@ -113,3 +99,18 @@ controls::~controls()
     delete ui;
 }
 
+
+void controls::on_PAUSE_clicked()
+{
+    widget.pause();
+}
+
+void controls::on_PLAY_clicked()
+{
+    widget.play();
+}
+
+void controls::on_STOP_clicked()
+{
+    widget.stop();
+}

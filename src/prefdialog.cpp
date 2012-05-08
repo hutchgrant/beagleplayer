@@ -31,15 +31,16 @@ PrefDialog::PrefDialog(QWidget *parent) :
 {
 
     ui->setupUi(this);
+    setLabels();
 
 }
 
 void PrefDialog::setLabels(){
+    pref.initDB();
     ui->entry_user->setText(pref.getQUser());
     ui->entry_pass->setText(pref.getQPass());
     ui->entry_serv->setText(pref.getQServer());
     ui->entry_port->setText(pref.getQPort());
-    ui->entry_table->setText(pref.getQTable());
     ui->entry_sql->setText(pref.getQSQL());
 }
 
@@ -64,7 +65,6 @@ void PrefDialog::setPreferences(){
     QString QUser = ui->entry_user->text();
     QString Q_pass = ui->entry_pass->text();
     QString Q_server = ui->entry_serv->text();
-    QString Q_table = ui->entry_table->text();
     QString Q_port = ui->entry_port->text();
     QString Q_sql = ui->entry_sql->text();
 
@@ -72,14 +72,12 @@ void PrefDialog::setPreferences(){
     string strPass = Q_pass.toUtf8().constData();
     string strServer = Q_server.toUtf8().constData();
     string strPort = Q_port.toUtf8().constData();
-    string strTable = Q_table.toUtf8().constData();
     string strSQL = Q_sql.toUtf8().constData();
 
     pref.setUser(strUser);
     pref.setPass(strPass);
     pref.setServ(strServer);
     pref.setPort(strPort);
-    pref.setTable(strTable);
     pref.setSQL(strSQL);
     pref.control();
 }

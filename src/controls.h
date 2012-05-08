@@ -59,8 +59,12 @@ public slots:
     void changeCon(int mode);
 
 private slots:
-        void on_STOP_but_clicked();
-        void on_PAUSE_but_clicked();
+
+    void on_PAUSE_clicked();
+
+    void on_PLAY_clicked();
+
+    void on_STOP_clicked();
 
 private:
         void adjustVol(int vol);

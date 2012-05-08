@@ -25,20 +25,28 @@ syncAll::syncAll()
 
 }
 
+void syncAll::dispPref(){
+
+    prefDg.show();
+    pref.initDB();
+}
+
+void syncAll::setPref(){
+    if(pref.initDB() != false){
+        lclSync.setDB(pref.getSQL().c_str());
+        rDB.setDB(pref.getSQL().c_str());
+    }
+    else{
+        dispPref();
+    }
+}
 
 void syncAll::control(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &Video, int rwMode){
     // reinit objects
     Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100);
 
     // set preferences
-    if(pref.initDB() != false){
-        lclSync.setDB(pref.getSQL().c_str());
-        rDB.setDB(pref.getSQL().c_str());
-    }
-    else{
-        prefDg.show();
-        pref.initDB();
-    }
+    setPref();
 
     if(rwMode == 1){   /// read audo and video
         rDB.LocalFill(Artist,1);
