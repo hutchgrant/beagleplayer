@@ -7,32 +7,27 @@ dependencies:
 
 $  sudo apt-get install mplayer libqt4-dev libqt4-opengl libqt4-opengl-dev libqt4-network libqt4-sql libqt4-sql-sqlite
 
+----------------------
 download and extract:
-
+----------------------
 download beagleplayer.v.0.1.0.tar.gz 
  $ cd ~/Downloads
  $  tar -zxvf beagleplayer*.tar.gz 
- $ sudo mkdir /opt/extras.ubuntu.com
- $ sudo cp -R beagleplayer /opt/extras.ubuntu.com/
- $ chmod 777 -R /opt/extras.ubuntu.com/beagleplayer
 ----
 or ----
 ----
 install git and ...
-git clone https://hutchgrant@github.com/hutchgrant/beagleplayer.git
- $ sudo mkdir /opt/extras.ubuntu.com
- $ sudo cp -R beagleplayer /opt/extras.ubuntu.com/
- $ chmod 777 -R /opt/extras.ubuntu.com/beagleplayer
+$ git clone https://hutchgrant@github.com/hutchgrant/beagleplayer.git
 
-
-
-compile and run
+-----------------
+compile and run:
+-----------------
  $ cd /opt/extras.ubuntu.com/beagleplayer
  $ qmake 
  $ make
 
  link it with:
- $ ln -fs /opt/extras.ubuntu.com/beagleplayer/beagleplayer /usr/bin/beagleplayer
+ $ sudo ln -fs /opt/extras.ubuntu.com/beagleplayer/beagleplayer /usr/bin/beagleplayer
  
  Finally run the binary with: 
  $ beagleplayer 
