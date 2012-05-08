@@ -6,21 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>768</width>
-    <height>435</height>
+    <width>720</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string> beagleplayer 0.1.0</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../res/BTres.qrc">
+   <iconset>
     <normaloff>:/res/beagletomb_icon.png</normaloff>:/res/beagletomb_icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="75,25">
+      <property name="spacing">
+       <number>1</number>
+      </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout" stretch="1,10">
         <item>
@@ -60,7 +63,7 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,7,1">
+       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,7,2">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -94,7 +97,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>768</width>
+     <width>720</width>
      <height>25</height>
     </rect>
    </property>
@@ -151,8 +154,6 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="../res/BTres.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

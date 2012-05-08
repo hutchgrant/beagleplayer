@@ -46,7 +46,6 @@ void browse::updateMenu(){
     m_Model = new QStringListModel(this);
     if(MenuMode == 0)  // artists
     {
-        cout << "Their are " << Artist.getSize() << " artists" << endl;
         for(int i=0; i <= Artist.getSize(); i++){
             curMenu << Artist.getName(i);
         }

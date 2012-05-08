@@ -49,6 +49,8 @@ void beaglemain::conSignals(){
 
 beaglemain::~beaglemain()
 {
+
+    cntrl->close();
     delete ui;
 }
 
@@ -65,6 +67,8 @@ void beaglemain::on_actionImport_triggered()
 
 void beaglemain::on_actionQuit_triggered()
 {
+
+    cntrl->close();
     close();
 }
 
@@ -84,4 +88,7 @@ void beaglemain::on_actionAbout_triggered()
     if(ab.exec()==QDialog::Accepted) {
         ab.close();
     }
+}
+void beaglemain::closeEvent(QCloseEvent *){
+    cntrl->close();
 }

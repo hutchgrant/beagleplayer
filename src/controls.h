@@ -24,6 +24,7 @@
 #include <QWidget>
 #include "fileobj.h"
 #include "qmpwidget.h"
+#include "volume.h"
 namespace Ui {
 class controls;
 }
@@ -74,6 +75,7 @@ private:
         fileObj current;    /// current fileObj List
         Ui::controls *ui;
         string name, path;
+        volume *vol;
 };
 
 #endif // CONTROLS_H

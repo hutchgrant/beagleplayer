@@ -28,6 +28,9 @@ controls::controls(QWidget *parent) :
     ui->setupUi(this);
     CON_MODE = 0;
     widget.setSeekSlider(ui->trackSlider);
+    vol = new volume(this);
+    ui->volLayout->addWidget(vol, 0,0,0,0,0);
+    connect(vol, SIGNAL(volChanged(int)), this, SLOT(setVol(int)));
 }
 
 /*
@@ -40,6 +43,7 @@ void controls::startLocal(char *finSong, char *finPath)
     sprintf(final, "%s", finPath);
     cout << "Final File Playing: " << final << endl;
     widget.show();
+    ui->songTitle->setText(QString(finSong));
     widget.start(QStringList(final));
 }
 
@@ -47,29 +51,23 @@ void controls::startLocal(char *finSong, char *finPath)
   *  Sort the current list for
   */
 void controls::startSelected(){
-    int FinParentID = 0;
     int finSongSize = 0;
     int finPathSize = 0;
     int selID = 0;
     char *finPath;
     char *finSong;
 
-
     selID = curList[CurrentSelect];
 
     finSongSize = strlen(checkSongObjByID(selID, current));
     finSong = new char[finSongSize + 1];
-
-    FinParentID = checkSongObjParByID(selID,current);
     finSong = checkSongObjByID(selID, current);
 
-        finPathSize = strlen(checkSongObjPathByID(selID, current));
-        finPath = new char[finPathSize + 1];
-        finPath = checkSongObjPathByID(selID, current);
-        cout << "final song = " << finSong << endl;
-        cout << "final Path = " << finPath << endl;
-        startLocal(finSong, finPath);
+    finPathSize = strlen(checkSongObjPathByID(selID, current));
+    finPath = new char[finPathSize + 1];
+    finPath = checkSongObjPathByID(selID, current);
 
+    startLocal(finSong, finPath);
 }
 
 /*
@@ -96,6 +94,7 @@ void controls::setVol(int vol){
 }
 controls::~controls()
 {
+    widget.close();
     delete ui;
 }
 

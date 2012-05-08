@@ -40,6 +40,8 @@ public:
     ~beaglemain();
     void addWidgets();
     void conSignals();
+    void closeEvent(QCloseEvent *);
+
     
 private slots:
 
