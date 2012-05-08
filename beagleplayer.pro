@@ -23,7 +23,8 @@ SOURCES += \
     src/browse.cpp \
     src/beaglemain.cpp \
     src/preferences.cpp \
-    src/prefdialog.cpp
+    src/prefdialog.cpp \
+    src/about.cpp
 
 HEADERS  += \
     src/syncall.h \
@@ -37,14 +38,16 @@ HEADERS  += \
     src/browse.h \
     src/beaglemain.h \
     src/preferences.h \
-    src/prefdialog.h
+    src/prefdialog.h \
+    src/about.h
 
 FORMS    += \
     src/playlist.ui \
     src/controls.ui \
     src/browse.ui \
     src/beaglemain.ui \
-    src/prefdialog.ui
+    src/prefdialog.ui \
+    src/about.ui
 
 OTHER_FILES += \
     qmpwidget.pri \
@@ -58,7 +61,19 @@ OTHER_FILES += \
     res/FWD_icon.png \
     res/FFWD_icon.png \
     res/DOWN_icon.png \
-    res/beagletomb_icon.png
+    res/beagleplayer_icon.png
 
 RESOURCES += \
     res/BTres.qrc
+
+documentation.files = docs/*
+documentation.path = /opt/extras.ubuntu.com/beagleplayer/docs
+sources.files = src/*
+sources.path = /opt/extras.ubuntu.com/beagleplayer/src
+target.path = /opt/extras.ubuntu.com/beagleplayer
+other.files = ./*
+other.path = /opt/extras.ubuntu.com/beagleplayer/release
+INSTALLS += target \
+            sources \
+            documentation \
+            other

@@ -6,9 +6,9 @@
         <file>RRWD_icon.png</file>
         <file>RWD_icon.png</file>
         <file>STOP_icon.png</file>
-        <file>beagletomb_icon.png</file>
         <file>RPT_icon.png</file>
         <file>DOWN_icon.png</file>
         <file>UP_icon.png</file>
+        <file>beagleplayer_icon.png</file>
     </qresource>
 </RCC>

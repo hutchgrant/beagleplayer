@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Beagle Preferences</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../res/BTres.qrc">
+    <normaloff>:/res/beagletomb_icon.png</normaloff>:/res/beagletomb_icon.png</iconset>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
@@ -229,7 +233,9 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res/BTres.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

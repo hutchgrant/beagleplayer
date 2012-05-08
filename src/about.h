@@ -18,48 +18,29 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BEAGLEMAIN_H
-#define BEAGLEMAIN_H
 
-#include <QMainWindow>
-#include "browse.h"
-#include "controls.h"
-#include "playlist.h"
-#include "about.h"
-#include <QDesktopServices>
+#ifndef ABOUT_H
+#define ABOUT_H
+
+#include <QDialog>
+
 namespace Ui {
-class beaglemain;
+    class About;
 }
 
-class beaglemain : public QMainWindow
+class About : public QDialog
 {
     Q_OBJECT
-    
+
 public:
-    explicit beaglemain(QWidget *parent = 0);
-    ~beaglemain();
-    void addWidgets();
-    void conSignals();
-    
+    explicit About(QWidget *parent = 0);
+    virtual ~About();
+
 private slots:
-
-    void on_actionImport_Video_triggered();
-
-    void on_actionImport_triggered();
-
-    void on_actionQuit_triggered();
-
-    void on_actionPreferences_triggered();
-
-    void on_actionDonate_triggered();
-
-    void on_actionAbout_triggered();
+    void on_buttonBox_accepted();
 
 private:
-    Ui::beaglemain *ui;
-     browse *brow;
-     controls *cntrl;
-     playlist *plList;
-     About ab;
+    Ui::About *ui;
 };
-#endif // BEAGLEMAIN_H
+
+#endif // ABOUT_H

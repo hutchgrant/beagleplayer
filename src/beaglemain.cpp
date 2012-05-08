@@ -72,3 +72,16 @@ void beaglemain::on_actionPreferences_triggered()
 {
     brow->sy.dispPref();
 }
+
+void beaglemain::on_actionDonate_triggered()
+{
+      QDesktopServices::openUrl(QUrl("https://flattr.com/profile/hutchgrant", QUrl::TolerantMode));
+}
+
+void beaglemain::on_actionAbout_triggered()
+{
+    ab.show();
+    if(ab.exec()==QDialog::Accepted) {
+        ab.close();
+    }
+}
