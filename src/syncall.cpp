@@ -33,8 +33,6 @@ void syncAll::dispPref(){
 
 void syncAll::setPref(){
     if(pref.initDB() != false){
-        lclSync.setDB(pref.getSQL().c_str());
-        rDB.setDB(pref.getSQL().c_str());
     }
     else{
         dispPref();
@@ -48,15 +46,7 @@ void syncAll::control(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &
     // set preferences
     setPref();
 
-    if(rwMode == 1){   /// read audo and video
-        rDB.LocalFill(Artist,1);
-        rDB.LocalFill(Song, 2);
-        rDB.LocalFill(VidDir, 3);
-        rDB.LocalFill(Video, 4);
-
-        cout << Artist.getName(2) << endl;
-    }
-    else if(rwMode == 2 || rwMode == 3){
+    if(rwMode == 2 || rwMode == 3){
         QDir usrDir = QString(getenv("HOME"));
         usrDir = QFileDialog::getExistingDirectory(this, tr("Import a directory"), QDir::currentPath());  // get folder import directory
         if(rwMode == 2){   /// import audio
@@ -65,10 +55,11 @@ void syncAll::control(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &
         else if(rwMode == 3){  /// import video
             lclSync.Sync(usrDir, 1);
         }
-        rDB.LocalFill(Artist,1);
-        rDB.LocalFill(Song, 2);
-        rDB.LocalFill(VidDir, 3);
-        rDB.LocalFill(Video, 4);
     }
 
+    dbCon.readDB(Artist, "SELECT * FROM lcl_songdirs");
+    dbCon.readDB(Song, "SELECT * FROM lcl_songs");
+    dbCon.readDB(VidDir, "SELECT * FROM lcl_viddirs");
+    dbCon.readDB(Video, "SELECT * FROM lcl_videos");
 }
+

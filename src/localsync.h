@@ -31,7 +31,7 @@
 #include "fileobj.h"
 #include <QtSql>
 #include <sstream>
-#define TEMPSYNCPREF "/.cache/beagleplayer/dbcache.txt"
+#include "dbconnect.h"
 
 using namespace std;
 
@@ -65,6 +65,7 @@ class localsync
     int VideoCount;      // counter for overall video file imports i.e. last file ID
 
     string home, db_local;
+    dbconnect dbCon;
 
 public:
     localsync();
@@ -76,22 +77,9 @@ public:
     void scanFiles(int scanType);
     void scanDir(QString dir, int scanType);
 
-    void getLastIDs();
     void Sync(QDir usrDir, int syncType);
     void Remove();
 
-    QSqlDatabase openLocalDB();
-    void openLocalDB2();
-
-    void createLocalDB();
-    void writeDBFiles(char *dbTable, int init, int type);
-    void writeDBDirs(char *dbTable, int init, int type);
-    void writeMe(string qry);
-    void removeDir(int selected, int mode);
-    //  void removeFile(int selected);
-
-
-    int getMaxPos(int count);
     fileObj& readLocalDB(int type, fileObj &src);
     void setLastID(int last){
         lastID = last;
@@ -100,76 +88,8 @@ public:
     void setDB(string local){
         db_local = local;
     }
-
-    void addFile(int count, string direc, string name, int par, int type){
-        lclFileNames[count] = name;
-        lclFiles[count] = direc;
-        lclFilePar[count] = par;
-        if(type == 0){
-            lclFileID[count] = AudItemCount+AudioCount;
-            AudItemCount++;
-            if(AudItemCount >= AudItemINIT){
-                initFiles(AudItemCount, 100, AudItemCount);
-                AudItemINIT = AudItemCount + 100;
-            }
-        }
-        else{
-            lclFileID[count] = VidItemCount+VideoCount;
-            VidItemCount++;
-            if(VidItemCount >= VidItemINIT){
-                initFiles(VidItemCount, 100, VidItemCount);
-                VidItemINIT = VidItemCount + 100;
-            }
-        }
-    }
-
-    /*
-     * Import Audio + Video Folder.  Types: 0) Audio. 1) Video.
-     */
-    void addFolder(int count, string dir, string name, int type){
-        lclDir[count] = dir;       /// full path
-        lclDirName[count] = name;  /// folder name
-        getLastIDs();
-        if(type == 0){
-            if(AudDirCount == 0){          /// initial import folder
-                lclDirPar[count] = 0;      /// parent to root
-                lclDirID[count] = AudDirCount+AudFolderCount+5;
-                parentID = AudDirCount+AudFolderCount+1;
-                AudDirCount++;
-            }
-            else{
-                lclDirPar[count] = parentID;
-                lclDirID[count] = AudDirCount+AudFolderCount+1;
-
-                AudDirCount++;
-                if(AudDirCount >= AudDirINIT){
-                    initDirs(AudDirCount, 100, AudDirCount);
-                    AudDirINIT = AudDirCount + 100;
-                }
-            }
-        }
-        else{
-            if(VidDirCount == 0){
-                lclDirPar[count] = 0;      /// parent to root
-                lclDirID[count] = VidDirCount+VidFolderCount+5;
-
-                parentID = VidDirCount+VidFolderCount+1;
-                VidDirCount++;
-            }
-            else{
-                lclDirPar[count] = parentID;
-                lclDirID[count] = VidDirCount+VidFolderCount+1;
-
-                VidDirCount++;
-                if(VidDirCount >= VidDirINIT){
-                    initDirs(VidDirCount, 100, VidDirCount);
-                    VidDirINIT = VidDirCount + 100;
-                }
-
-            }
-        }
-    }
-
+    void addFile(int count, string direc, string name, int par, int type);
+    void addFolder(int count, string direc, string name, int type);
 private:
     QDir mydir;
 

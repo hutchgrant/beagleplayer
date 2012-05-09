@@ -13,7 +13,6 @@ QT += network \
 
 SOURCES += \
     src/syncall.cpp \
-    src/readdb.cpp \
     src/qmpwidget.cpp \
     src/playlist.cpp \
     src/main.cpp \
@@ -25,11 +24,11 @@ SOURCES += \
     src/preferences.cpp \
     src/prefdialog.cpp \
     src/about.cpp \
-    src/volume.cpp
+    src/volume.cpp \
+    src/dbconnect.cpp
 
 HEADERS  += \
     src/syncall.h \
-    src/readdb.h \
     src/qmpyuvreader.h \
     src/qmpwidget.h \
     src/playlist.h \
@@ -41,7 +40,8 @@ HEADERS  += \
     src/preferences.h \
     src/prefdialog.h \
     src/about.h \
-    src/volume.h
+    src/volume.h \
+    src/dbconnect.h
 
 FORMS    += \
     src/playlist.ui \

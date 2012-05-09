@@ -23,9 +23,6 @@
 localsync::localsync()
 {
     initLocalObj();
-
-    home = getenv("HOME");
-    db_local = home + TEMPSYNCPREF;
 }
 
 /*
@@ -52,57 +49,6 @@ void localsync::initLocalObj(){
     initFiles(0, 5, 5);
 }
 
-/*
-  * Open DB connection
-  */
-QSqlDatabase localsync::openLocalDB(){
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(db_local.c_str());
-    if(!db.open()){
-        cout << "couldn't read locally from " << db_local.c_str() << endl;
-    }
-    return db;
-}
-
-/*
-* Create Local Database Table
-*/
-void localsync::createLocalDB() {
-    string finalQry[4];
-    // string create = "create table ";
-    finalQry[0] = "create table lcl_songdirs (key INTEGER PRIMARY KEY,lcl_dir_name TEXT,lcl_dir_path TEXT,lcl_dir_id integer,lcl_dir_par integer,lcl_dir_type TEXT)";
-    finalQry[1] = "create table lcl_songs (key INTEGER PRIMARY KEY,lcl_dir_name TEXT,lcl_dir_path TEXT,lcl_dir_id integer,lcl_dir_par integer,lcl_dir_type TEXT)";
-    finalQry[2] = "create table lcl_viddirs (key INTEGER PRIMARY KEY,lcl_dir_name TEXT,lcl_dir_path TEXT,lcl_dir_id integer,lcl_dir_par integer,lcl_dir_type TEXT)";
-    finalQry[3] = "create table lcl_videos (key INTEGER PRIMARY KEY,lcl_dir_name TEXT,lcl_dir_path TEXT,lcl_dir_id integer,lcl_dir_par integer,lcl_dir_type TEXT)";
-    for(int i=0; i<4; i++){
-        writeMe(finalQry[i]);
-    }
-}
-
-/*
-  * Remove Directory from DB
-  */
-void localsync::removeDir(int selected, int mode){
-    char *myQry;
-    if(selected >= 0){
-        if(mode == 1){
-            if(selected < AudDirCount){
-                myQry = new char[lclDirName[selected].length()+100];
-                sprintf(myQry, "DELETE from lcl_dirs WHERE lcl_dir_name='%s'", lclDirName[selected].c_str());
-                string finQry = string(myQry);
-                writeMe(finQry);
-            }
-        }
-        else{
-            if(selected < VidDirCount){
-                myQry = new char[lclDirName[selected].length()+100];
-                sprintf(myQry, "DELETE from lcl_dirs WHERE lcl_dir_name='%s'", lclDirName[selected].c_str());
-                string finQry = string(myQry);
-                writeMe(finQry);
-            }
-        }
-    }
-}
 
 /*
   * When Add is clicked
@@ -124,20 +70,18 @@ void localsync::Sync(QDir usrDir, int syncType)
             // scan main for directories
             scanDir(curDir, 0);
             scanFiles(0);
-            createLocalDB();
-            /// fill query
-            writeDBDirs("lcl_songdirs", AudFolderCount, syncType);
-            writeDBFiles("lcl_songs", AudioCount, syncType);
+            dbCon.createLocalDB();  // write DB
+            dbCon.writeDB(lclDirName, lclDir, lclDirID, lclDirPar, AudDirCount, 0);  // write song directories
+            dbCon.writeDB(lclFileNames, lclFiles, lclFileID, lclFilePar, AudItemCount, 1);  // write song files
         }
         else{
             // add main import folder
             addFolder(VidDirCount, curDir.toStdString(), usrDir.dirName().toStdString(), syncType);
             scanDir(curDir, 1);
             scanFiles(1);
-            createLocalDB();
-            /// fill query
-            writeDBDirs("lcl_viddirs", VidFolderCount, syncType);
-            writeDBFiles("lcl_videos", VideoCount, syncType);
+            dbCon.createLocalDB();  // write DB
+            dbCon.writeDB(lclDirName, lclDir, lclDirID, lclDirPar, VidDirCount, 2);  // write song directories
+            dbCon.writeDB(lclFileNames, lclFiles, lclFileID, lclFilePar, VidItemCount, 3);  // write song files
             lclSyncExit = 1;
         }
     }
@@ -199,121 +143,74 @@ void localsync::scanFiles(int scanType){
     }
 }
 
-
-/*
-* Write Local Database files to local database table  type: 0 Audio 1 Video
-*/
-void localsync::writeDBFiles(char *dbTable, int init, int type){
-    int  pos = 0, posMax = 0, counter = 0, countRemind = 0, fileCount;
-    if(type == 0){ // Audio
-        fileCount = AudItemCount;
+void localsync::addFile(int count, string direc, string name, int par, int type){
+    lclFileNames[count] = name;
+    lclFiles[count] = direc;
+    lclFilePar[count] = par;
+    if(type == 0){
+        lclFileID[count] = AudItemCount+AudioCount;
+        AudItemCount++;
+        if(AudItemCount >= AudItemINIT){
+            initFiles(AudItemCount, 100, AudItemCount);
+            AudItemINIT = AudItemCount + 100;
+        }
     }
     else{
-        fileCount = VidItemCount;
-    }
-    string str2;
-    counter = getMaxPos(fileCount);
-    posMax = counter;
-
-    for (int m = 0; m <= (fileCount / counter); m++) {
-        countRemind = 0;
-        stringstream os;
-        for (int i = pos; i <= posMax; i++) {
-            if (i<fileCount){
-                if (i != posMax && countRemind == 0) {
-                    os << " INSERT INTO "<< dbTable << " (lcl_dir_name,lcl_dir_path,lcl_dir_id, lcl_dir_par,lcl_dir_type) " <<
-                          "SELECT \"" << lclFileNames[i] << "\" AS \"" << "lcl_dir_name" << "\", \""
-                       <<  lclFiles[i] << "\" AS \"" << "lcl_dir_path" << "\", \""
-                       <<  lclFileID[i] << "\" AS \"" << "lcl_dir_id" << "\", \""
-                       <<  lclFilePar[i] << "\" AS \"" << "lcl_dir_par" << "\", \""
-                       <<  "songs" << "\" AS \"" << "lcl_dir_type" << "\"";
-                    cout << os;
-                    countRemind++;
-                }
-                if (i != posMax && countRemind != 0 ) {
-                    os << " UNION SELECT \"" << lclFileNames[i] << "\",\""<< lclFiles[i] << "\",\"" << lclFileID[i] <<"\",\""<< lclFilePar[i]<<"\",\""<< "song" << "\"";
-
-                } else if (i == posMax && countRemind != 0) {
-                    os << ";";
-                }
-            }
-        }
-        str2 = os.str();
-        writeMe(str2);
-        posMax += counter;
-        pos += counter;
-
-        if (m == (fileCount / counter) - 1) {
-            posMax = pos + fileCount - ((fileCount / counter)
-                                        * counter);
+        lclFileID[count] = VidItemCount+VideoCount;
+        VidItemCount++;
+        if(VidItemCount >= VidItemINIT){
+            initFiles(VidItemCount, 100, VidItemCount);
+            VidItemINIT = VidItemCount + 100;
         }
     }
 }
 
 /*
-* Write Local Database Folders to local database table  type: 0 Audio 1 Video
-*/
-void localsync::writeDBDirs(char *dbTable, int init, int type){
-    int  pos = 0, posMax = 0, counter = 0, countRemind = 0, dirCount;
-    if(type == 0){ // Audio Dir
-        dirCount = AudDirCount;
+ * Import Audio + Video Folder.  Types: 0) Audio. 1) Video.
+ */
+void localsync::addFolder(int count, string dir, string name, int type){
+    lclDir[count] = dir;       /// full path
+    lclDirName[count] = name;  /// folder name
+    dbCon.getLastIDs(&AudFolderCount, &VidFolderCount, &AudioCount, &VideoCount);
+    if(type == 0){
+        if(AudDirCount == 0){          /// initial import folder
+            lclDirPar[count] = 0;      /// parent to root
+            lclDirID[count] = AudDirCount+AudFolderCount+5;
+            parentID = AudDirCount+AudFolderCount+1;
+            AudDirCount++;
+        }
+        else{
+            lclDirPar[count] = parentID;
+            lclDirID[count] = AudDirCount+AudFolderCount+1;
+
+            AudDirCount++;
+            if(AudDirCount >= AudDirINIT){
+                initDirs(AudDirCount, 100, AudDirCount);
+                AudDirINIT = AudDirCount + 100;
+            }
+        }
     }
     else{
-        dirCount = VidDirCount;
-    }
-    string str2;
-    counter = getMaxPos(dirCount);
-    posMax = counter;
-    /// reminder to get previous import folder position on second import
-    for (int m = 0; m <= (dirCount / counter); m++) {
-        countRemind = 0;
-        stringstream os;
-        for (int i = pos; i <= posMax; i++) {
-            //   string strFin = lclD
-            //            str2.erase(remove(str2.begin(), str2.end(), '\"'), str2.end());
-            if (i != posMax && countRemind == 0) {
-                os << " INSERT INTO "<< dbTable << " (lcl_dir_name,lcl_dir_path,lcl_dir_id,lcl_dir_par,lcl_dir_type) "
-                   <<  "SELECT \"" << lclDirName[i] << "\" AS \"" << "lcl_dir_name" << "\", \""
-                   <<  lclDir[i] << "\" AS \"" << "lcl_dir_path" << "\", \""
-                   <<  lclDirID[i] << "\" AS \"" << "lcl_dir_id" << "\", \""
-                   <<  lclDirPar[i] << "\" AS \"" << "lcl_dir_par" << "\", \""
-                   <<  "folder" << "\" AS \"" << "lcl_dir_type" << "\"";
-                countRemind++;
-            }
-            if (i != posMax && countRemind != 0) {
-                os << " UNION SELECT \""<< lclDirName[i] <<"\",\""<< lclDir[i] << "\",\"" << lclDirID[i] << "\",\""<< lclDirPar[i] << "\",\""<< "folder" << "\"";
+        if(VidDirCount == 0){
+            lclDirPar[count] = 0;      /// parent to root
+            lclDirID[count] = VidDirCount+VidFolderCount+5;
 
-            } else if (i == posMax && countRemind != 0) {
-                os << ";";
-            }
+            parentID = VidDirCount+VidFolderCount+1;
+            VidDirCount++;
         }
-        str2 = os.str();
-        writeMe(str2);
-        posMax += counter;
-        pos += counter;
+        else{
+            lclDirPar[count] = parentID;
+            lclDirID[count] = VidDirCount+VidFolderCount+1;
 
-        if (m == (dirCount / counter) - 1) {
-            posMax = pos + dirCount - ((dirCount / counter)
-                                       * counter);
+            VidDirCount++;
+            if(VidDirCount >= VidDirINIT){
+                initDirs(VidDirCount, 100, VidDirCount);
+                VidDirINIT = VidDirCount + 100;
+            }
+
         }
     }
 }
-
-
-/*
-* Write Any string to database
-*/
-void localsync::writeMe(string qry){
-    QSqlDatabase db = openLocalDB();
-    if(db.open()){
-        QSqlQuery myQry;
-        myQry.prepare(qry.c_str());
-        myQry.exec();
-
-        db.close();
-    }
-}
-
 /*
 * allocate new initial Directory array
 */
@@ -404,70 +301,7 @@ void localsync::initFiles(int beg, int end, int count){
     }
 }
 
-/*
-  * Get last ID from last entry in database
-  */
-void localsync::getLastIDs(){
-    int IDcounter =0;
-    if(QFile::exists(db_local.c_str())){
-        QSqlDatabase db = openLocalDB();
-        if(db.open()){
-            QSqlQuery query;
-            for(int i=0; i<4; i++){
-                IDcounter = i;
-                if(IDcounter == 0){
-                    query = QString("SELECT * FROM lcl_songdirs");
-                }
-                else if(IDcounter == 1){
-                    query = QString("SELECT * FROM lcl_viddirs");
-                }
-                else if(IDcounter == 2){
-                    query = QString("SELECT * FROM lcl_songs");
-                }
-                else if(IDcounter == 3){
-                    query = QString("SELECT * FROM lcl_videos");
-                }
 
-                while (query.next()){
-                    if(IDcounter == 0){
-                        AudFolderCount = query.value(3).toInt();
-                    }
-                    else if(IDcounter == 1){
-                        VidFolderCount = query.value(3).toInt();
-                    }
-                    else if(IDcounter == 2){
-                        AudioCount = query.value(3).toInt();
-                    }
-                    else if(IDcounter == 3){
-                        VideoCount = query.value(3).toInt();
-                    }
-                }
-            }
-
-            db.close();
-        }
-    }
-}
-
-/*
-  *  Get maximum write count
-  */
-int localsync::getMaxPos(int count) {
-    int posMax;
-
-    if (count < 400 && count > 100) {
-        posMax = 100;
-    } else if (count < 100 && count > 20) {
-        posMax = 10;
-    } else if (count < 20) {
-        posMax = 5;
-    } else if (count < 20 && count > 10) {
-        posMax = 1;
-    } else {
-        posMax = 200;
-    }
-    return posMax;
-}
 
 
 localsync::~localsync()
