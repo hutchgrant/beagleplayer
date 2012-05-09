@@ -1,0 +1,5 @@
+beagleplayer (0.1.0-0ubuntu1) precise; urgency=low
+
+  * Initial release. (Closes: #XXXXXX)
+
+ -- Grant Hutchinson <h.g.utchinson@gmail.com>  Wed, 09 May 2012 01:48:38 -0400

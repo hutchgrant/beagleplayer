@@ -1,0 +1,4 @@
+#! /bin/bash -e
+
+sudo rm -R /opt/extras.ubuntu.com/beagleplayer
+sudo rm /usr/bin/beagleplayer
