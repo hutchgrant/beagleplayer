@@ -164,7 +164,6 @@ void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount, int *AudioC
                     }
                     else if(IDcounter == 1){
                         *VidFolderCount = query.value(3).toInt();
-                        cout << *VidFolderCount << endl;
                     }
                     else if(IDcounter == 2){
                         *AudioCount = query.value(3).toInt();

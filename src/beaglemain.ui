@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>480</height>
+    <width>779</width>
+    <height>487</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,8 +26,24 @@
       </property>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout" stretch="1,10">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,9">
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>8</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item>
            <widget class="QComboBox" name="ModeCombo">
             <item>
@@ -58,7 +74,11 @@
          </layout>
         </item>
         <item>
-         <layout class="QGridLayout" name="widgetLayout"/>
+         <layout class="QGridLayout" name="widgetLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+         </layout>
         </item>
        </layout>
       </item>
@@ -97,7 +117,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>720</width>
+     <width>779</width>
      <height>25</height>
     </rect>
    </property>

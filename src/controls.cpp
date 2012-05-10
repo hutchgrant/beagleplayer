@@ -113,3 +113,15 @@ void controls::on_STOP_clicked()
 {
     widget.stop();
 }
+
+void controls::on_NEXT_clicked()
+{
+    CurrentSelect++;
+    startSelected();
+}
+
+void controls::on_PREV_clicked()
+{
+    CurrentSelect--;
+    startSelected();
+}

@@ -67,6 +67,10 @@ private slots:
 
     void on_STOP_clicked();
 
+    void on_NEXT_clicked();
+
+    void on_PREV_clicked();
+
 private:
         void adjustVol(int vol);
         int CurrentSelect;  /// current selection number
