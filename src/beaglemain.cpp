@@ -43,8 +43,13 @@ void beaglemain::conSignals(){
     connect(brow, SIGNAL(MenuSelection(int)), brow, SLOT(updateTitle(int)));
     connect(ui->ModeCombo, SIGNAL(currentIndexChanged(int)), brow, SLOT(updateMode(int)));
     connect(brow, SIGNAL(curListChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));
+    connect(brow, SIGNAL(plItemChanged(string,string,int,int)), plList, SLOT(AddToTempPL(string, string, int, int)));
     connect(brow,SIGNAL(FullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
     connect(brow,SIGNAL(selectionChanged(int)), cntrl, SLOT(setSelection(int)));
+    // playlist
+    connect(plList, SIGNAL(playlistChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));
+    connect(plList,SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
+    connect(plList, SIGNAL(playlistFullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
 }
 
 beaglemain::~beaglemain()

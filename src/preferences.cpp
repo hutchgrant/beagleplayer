@@ -63,6 +63,7 @@ bool preferences::initDB(){
     fp = fopen(Cache.c_str(), "r");   /// open cached db location
 
     if(fp != NULL){
+        cout << "cache found " << endl;
         rewind(fp);
         while(!feof(fp)){
             fscanf(fp, "%s", &PrefIn);

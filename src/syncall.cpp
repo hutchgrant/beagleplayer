@@ -28,6 +28,7 @@ syncAll::syncAll()
 void syncAll::dispPref(){
 
     prefDg.show();
+    dbCon.createLocalDB();  /// create data tables for local and playlist
     pref.initDB();
 }
 
@@ -56,7 +57,6 @@ void syncAll::control(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &
             lclSync.Sync(usrDir, 1);
         }
     }
-
     dbCon.readDB(Artist, "SELECT * FROM lcl_songdirs");
     dbCon.readDB(Song, "SELECT * FROM lcl_songs");
     dbCon.readDB(VidDir, "SELECT * FROM lcl_viddirs");

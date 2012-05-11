@@ -22,12 +22,14 @@ void dbconnect::closeDB(){
 * Create Local Database Table
 */
 void dbconnect::createLocalDB() {
-    string finalQry[4];
-    finalQry[0] = "create table lcl_songdirs (key INTEGER PRIMARY KEY,lcl_dir_name TEXT,lcl_dir_path TEXT,lcl_dir_id integer,lcl_dir_par integer,lcl_dir_type TEXT)";
-    finalQry[1] = "create table lcl_songs (key INTEGER PRIMARY KEY,lcl_dir_name TEXT,lcl_dir_path TEXT,lcl_dir_id integer,lcl_dir_par integer,lcl_dir_type TEXT)";
-    finalQry[2] = "create table lcl_viddirs (key INTEGER PRIMARY KEY,lcl_dir_name TEXT,lcl_dir_path TEXT,lcl_dir_id integer,lcl_dir_par integer,lcl_dir_type TEXT)";
-    finalQry[3] = "create table lcl_videos (key INTEGER PRIMARY KEY,lcl_dir_name TEXT,lcl_dir_path TEXT,lcl_dir_id integer,lcl_dir_par integer,lcl_dir_type TEXT)";
-    for(int i=0; i<4; i++){
+    string finalQry[7];
+    finalQry[0] = "create table lcl_songdirs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
+    finalQry[1] = "create table lcl_songs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
+    finalQry[2] = "create table lcl_viddirs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
+    finalQry[3] = "create table lcl_videos (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
+    finalQry[4] = "create table playlists (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
+    finalQry[5] = "create table playlist_items (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
+    for(int i=0; i<6; i++){
         writeMe(finalQry[i]);
     }
 }
@@ -35,25 +37,24 @@ void dbconnect::createLocalDB() {
 /*
 * Write Local Database Folders to local database table  type: 0 Audio 1 Video
 */
-void dbconnect::writeDB(string *itemName, string *itemPath, int *itemID, int *itemPar, int itemCount, int type){
-    int  pos = 0, posMax = 0, counter = 0, countRemind = 0, dirCount;
-    string dbTable, itemType;
+void dbconnect::writeDB(fileObj &src, int itemCount, int type){
+    int  pos = 0, posMax = 0, counter = 0, countRemind = 0;
+    string dbTable;
 
     if(type == 0){  // directory
         dbTable = "lcl_songDirs";
-        itemType = "folder";
     }
     else if(type ==1){
         dbTable = "lcl_songs";
-        itemType = "song";
     }
     else if(type == 2){
         dbTable = "lcl_vidDirs";
-        itemType = "folder";
     }
     else if(type == 3){
         dbTable = "lcl_videos";
-        itemType = "video";
+    }
+    else if(type == 4){
+        dbTable = "playlist_items";
     }
     string str2;
     counter = getMaxPos(itemCount);
@@ -66,16 +67,14 @@ void dbconnect::writeDB(string *itemName, string *itemPath, int *itemID, int *it
             //   string strFin = lclD
             //            str2.erase(remove(str2.begin(), str2.end(), '\"'), str2.end());
             if (i != posMax && countRemind == 0) {
-                os << " INSERT INTO "<< dbTable << " (lcl_dir_name,lcl_dir_path,lcl_dir_id,lcl_dir_par,lcl_dir_type) "
-                   <<  "SELECT \"" << itemName[i] << "\" AS \"" << "lcl_dir_name" << "\", \""
-                   <<  itemPath[i] << "\" AS \"" << "lcl_dir_path" << "\", \""
-                   <<  itemID[i] << "\" AS \"" << "lcl_dir_id" << "\", \""
-                   <<  itemPar[i] << "\" AS \"" << "lcl_dir_par" << "\", \""
-                   <<  itemType << "\" AS \"" << "lcl_dir_type" << "\"";
+                os << " INSERT INTO "<< dbTable << " (lcl_dir_par,lcl_dir_name,lcl_dir_path) "
+                   <<  "SELECT \"" << src.getPar(i) << "\" AS \"" << "lcl_dir_par" << "\", \""
+                   <<  src.getName(i) << "\" AS \"" << "lcl_dir_name" << "\", \""
+                   <<  src.getPath(i) << "\" AS \"" << "lcl_dir_path" << "\"";
                 countRemind++;
             }
             if (i != posMax && countRemind != 0) {
-                os << " UNION SELECT \""<< itemName[i] <<"\",\""<< itemPath[i] << "\",\"" << itemID[i] << "\",\""<< itemPar[i] << "\",\""<< itemType << "\"";
+                os << " UNION SELECT \""<< src.getPar(i) <<"\",\""<<src.getName(i) << "\",\""<< src.getPath(i) << "\"";
 
             } else if (i == posMax && countRemind != 0) {
                 os << ";";
@@ -101,6 +100,7 @@ void dbconnect::writeMe(string qry){
     QSqlDatabase db = OpenDB();
     if(db.open()){
         QSqlQuery myQry;
+        cout << qry << endl;
         myQry.prepare(qry.c_str());
         myQry.exec();
 
@@ -121,17 +121,39 @@ void dbconnect::readDB(fileObj &src, string qry){
         query = QString(qry.c_str());
 
         while(query.next()){
-            QString QVal1 = query.value(1).toString();
-            QString QVal2 = query.value(2).toString();
-            QString QVal3 = query.value(3).toString();
-            QString QVal4 = query.value(4).toString();
+            QString QValID = query.value(0).toString();   // ID
+            QString QValPAR = query.value(1).toString();   // PARID
+            QString QValNAME = query.value(2).toString();   // NAME
+            QString QValPATH = query.value(3).toString();   // PATH
 
-            if(QVal1.toStdString() != "-"){
-                src.set(count, QVal3.toInt(), QVal4.toInt(), QVal1.toStdString().c_str(), QVal2.toStdString().c_str());
+            if(QValNAME.toStdString() != "-"){
+                src.set(count, QValID.toInt(), QValPAR.toInt(), QValNAME.toStdString().c_str(), QValPATH.toStdString().c_str());
                 count++;
             }
     }
     closeDB();
+    }
+}
+
+/*
+  * Read database and fill objects for playlist
+  */
+void dbconnect::readPL(fileObj &playlist, fileObj &playlistItems ){
+
+    readDB(playlist, "SELECT * FROM playlists");
+    readDB(playlistItems, "SELECT * FROM playlist_items");
+}
+
+void dbconnect::getLastIDs(int *lastID){
+    QSqlDatabase db = OpenDB();
+    if(db.open()){
+        QSqlQuery query;
+        query = QString("SELECT * FROM playlists");
+
+        while(query.next()){
+            *lastID = query.value(0).toInt();
+        }
+
     }
 }
 
@@ -160,16 +182,16 @@ void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount, int *AudioC
 
                 while (query.next()){
                     if(IDcounter == 0){
-                        *AudFolderCount = query.value(3).toInt();
+                        *AudFolderCount = query.value(0).toInt();
                     }
                     else if(IDcounter == 1){
-                        *VidFolderCount = query.value(3).toInt();
+                        *VidFolderCount = query.value(0).toInt();
                     }
                     else if(IDcounter == 2){
-                        *AudioCount = query.value(3).toInt();
+                        *AudioCount = query.value(0).toInt();
                     }
                     else if(IDcounter == 3){
-                        *VideoCount = query.value(3).toInt();
+                        *VideoCount = query.value(0).toInt();
                     }
                 }
             }
@@ -178,32 +200,6 @@ void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount, int *AudioC
         }
 }
 
-
-/*
-  * Remove Directory from DB
-  */ /*
-void dbconnect::removeDir(int selected, int mode){
-    char *myQry;
-    if(selected >= 0){
-        if(mode == 1){
-            if(selected < AudDirCount){
-                myQry = new char[lclDirName[selected].length()+100];
-                sprintf(myQry, "DELETE from lcl_dirs WHERE lcl_dir_name='%s'", lclDirName[selected].c_str());
-                string finQry = string(myQry);
-                writeMe(finQry);
-            }
-        }
-        else{
-            if(selected < VidDirCount){
-                myQry = new char[lclDirName[selected].length()+100];
-                sprintf(myQry, "DELETE from lcl_dirs WHERE lcl_dir_name='%s'", lclDirName[selected].c_str());
-                string finQry = string(myQry);
-                writeMe(finQry);
-            }
-        }
-    }
-}
-*/
 
 /*
   *  Get maximum write count

@@ -25,7 +25,8 @@ SOURCES += \
     src/prefdialog.cpp \
     src/about.cpp \
     src/volume.cpp \
-    src/dbconnect.cpp
+    src/dbconnect.cpp \
+    src/newplaylist.cpp
 
 HEADERS  += \
     src/syncall.h \
@@ -41,7 +42,8 @@ HEADERS  += \
     src/prefdialog.h \
     src/about.h \
     src/volume.h \
-    src/dbconnect.h
+    src/dbconnect.h \
+    src/newplaylist.h
 
 FORMS    += \
     src/playlist.ui \
@@ -50,7 +52,8 @@ FORMS    += \
     src/beaglemain.ui \
     src/prefdialog.ui \
     src/about.ui \
-    src/volume.ui
+    src/volume.ui \
+    src/newplaylist.ui
 
 OTHER_FILES += \
     qmpwidget.pri \

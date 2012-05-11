@@ -29,6 +29,8 @@ browse::browse(QWidget *parent) :
     Sync(1);
     initCueID(4, 100 , 0);
     MenuMode = 0;
+    songCount = 0;
+    vidCount = 0;
 }
 
 browse::~browse()
@@ -61,12 +63,11 @@ void browse::updateMenu(){
 }
 
 void browse::updateTitle(int selected){
-    int songCount = 0;
-    int vidCount = 0;
     int selID = 0;
     QStringList curSong;
     t_Model = new QStringListModel(this);
-
+    songCount = 0;
+    vidCount = 0;
         if(MenuMode == 0){
             selID = Artist.getID(selected);
             initCueID(1, Song.getSize(),1);
@@ -134,7 +135,26 @@ void browse::on_MenuList_clicked(const QModelIndex &index)
 
 void browse::on_TrackList_clicked(const QModelIndex &index)
 {
-    emit selectionChanged(ui->TrackList->currentIndex().row());
+    int selected = 0;
+    selected = ui->TrackList->currentIndex().row();
+    emit selectionChanged(selected);
+
+    if(MenuMode == 0){
+        for(int i=0; i<=songCount; i++){
+            if(curSongID[selected] == Song.getID(i)){
+                emit plItemChanged(Song.getName(i), Song.getPath(i), Song.getID(i), Song.getPar(i));
+            }
+        }
+    }
+    else if(MenuMode == 1){
+        for(int i =0; i<=vidCount; i++){
+            if(curVidID[selected]== Video.getID(i)){
+                emit plItemChanged(Video.getName(i), Video.getPath(i), Video.getID(i), Video.getPar(i));
+            }
+        }
+    }
+
+
 }
 
 void browse::on_TrackList_doubleClicked(const QModelIndex &index)

@@ -10,13 +10,15 @@ public:
     preferences pref;
     dbconnect();
     void readDB(fileObj &src, string qry);
+    void readPL(fileObj &playlists, fileObj &playlistItems);
     void writeMe(string qry);
     QSqlDatabase OpenDB();
     void closeDB();
 
 
     void createLocalDB();
-    void writeDB(string *itemName, string *itemPath, int *itemID, int *itemPar, int itemCount, int type);
+    void writeDB(fileObj &src, int itemCount, int type);
+    void getLastIDs(int *lastID);
     void getLastIDs(int *AudFolderCount, int *VidFolderCount, int *AudioCount, int *VideoCount);
     void removeDir(int selected, int mode);
     int getMaxPos(int count);
