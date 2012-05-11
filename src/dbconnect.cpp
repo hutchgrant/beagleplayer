@@ -160,7 +160,7 @@ void dbconnect::getLastIDs(int *lastID){
 /*
   * Get last ID from last entry in database
   */
-void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount, int *AudioCount, int *VideoCount){
+void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount){
     int IDcounter =0;
         QSqlDatabase db = OpenDB();
         if(db.open()){
@@ -186,12 +186,6 @@ void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount, int *AudioC
                     }
                     else if(IDcounter == 1){
                         *VidFolderCount = query.value(0).toInt();
-                    }
-                    else if(IDcounter == 2){
-                        *AudioCount = query.value(0).toInt();
-                    }
-                    else if(IDcounter == 3){
-                        *VideoCount = query.value(0).toInt();
                     }
                 }
             }

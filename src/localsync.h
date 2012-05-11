@@ -48,12 +48,13 @@ class localsync
     int VideoCount;      // counter for overall video file imports i.e. last file ID
 
     dbconnect dbCon;
-    fileObj localFiles, localDirs;
+    int curVidCount, curAudCount;
+    fileObj localDir, localFile;
 public:
     localsync();
     virtual ~localsync();
-    void scanFiles( fileObj &localFile, int scanType);
-    void scanDir(QString dir, int scanType, fileObj &localDir);
+    void scanFiles(int scanType);
+    void scanDir(QString dir, int scanType);
 
     void Sync(QDir usrDir, int syncType);
     void Remove();

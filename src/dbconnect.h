@@ -19,7 +19,7 @@ public:
     void createLocalDB();
     void writeDB(fileObj &src, int itemCount, int type);
     void getLastIDs(int *lastID);
-    void getLastIDs(int *AudFolderCount, int *VidFolderCount, int *AudioCount, int *VideoCount);
+    void getLastIDs(int *AudFolderCount, int *VidFolderCount);
     void removeDir(int selected, int mode);
     int getMaxPos(int count);
     void getLastIDs();

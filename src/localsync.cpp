@@ -26,6 +26,8 @@ localsync::localsync()
     VidFolderCount = 0;
     AudioCount = 0;
     VideoCount = 0;
+    curAudCount = 0;
+    curVidCount = 0;
 }
 
 /*
@@ -37,21 +39,17 @@ void localsync::Sync(QDir usrDir, int syncType)
 
     if(usrDir != QString(getenv("HOME"))){
         curDir = usrDir.absolutePath();  // get chosen path
-        dbCon.getLastIDs(&AudFolderCount, &VidFolderCount, &AudioCount, &VideoCount);
-        fileObj localDir, localFile;
-        scanDir(curDir, syncType, localDir);
-
-      //  scanFiles(syncType);
+        scanDir(curDir, syncType);
         //sync to db
         if(syncType == 0){  /// sync Audio
             // scan main for directories
-            dbCon.writeDB(localDir, AudFolderCount, 0);  // write song directories
-            scanFiles(localFile, syncType);
+            dbCon.writeDB(localDir, curAudCount, 0);  // write song directories
+            scanFiles(syncType);
             dbCon.writeDB(localFile, AudioCount, 1);  // write song files
         }
         else{  /// sync video
-            dbCon.writeDB(localDir, VidFolderCount, 2);  // write song directories
-            scanFiles(localFile, syncType);
+            dbCon.writeDB(localDir, curVidCount, 2);  // write song directories
+            scanFiles(syncType);
             dbCon.writeDB(localFile, VideoCount, 3);  // write song file
         }
     }
@@ -60,23 +58,24 @@ void localsync::Sync(QDir usrDir, int syncType)
 /*
 * Scan User Directory for folders. Add all discovered folders
 */
-void localsync::scanDir(QString dir, int scantype, fileObj &localDir){
+void localsync::scanDir(QString dir, int scantype){
     QDirIterator directories(dir, QDir::Dirs | QDir::NoDotAndDotDot);
-    int count = 0;
+    curAudCount = 0;
+    curVidCount = 0;
+    dbCon.getLastIDs(&AudFolderCount, &VidFolderCount);
     localDir.initFile(100);
     while(directories.hasNext()){
 
         directories.next();
         if(scantype == 0 ){
-            localDir.set(count, AudFolderCount, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
-            AudFolderCount++;
+            localDir.set(curAudCount, AudFolderCount+curAudCount, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+            curAudCount++;
         }
         else{
-            localDir.set(count, VidFolderCount, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
-            VidFolderCount++;
+            localDir.set(curVidCount, VidFolderCount+curVidCount, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+            curVidCount++;
 
         }
-        count++;
     }
     localDir.display();
 }
@@ -84,41 +83,38 @@ void localsync::scanDir(QString dir, int scantype, fileObj &localDir){
 /*
 * Scan User Directory for folders. Add all discovered files
 */
-void localsync::scanFiles(fileObj &localFile,  int scanType){
+void localsync::scanFiles(int scanType){
 
     int itemcount = 0;
-    int countSize = 0;
-    fileObj playObj;
+    int newSize = 0;
+    AudioCount = 0;
+    VideoCount = 0;
+    localFile.initFile(100);
 
     if(scanType == 0){
-        countSize = AudFolderCount;
-        dbCon.readDB(playObj, "SELECT * FROM lcl_songdirs");
-
+        newSize = curAudCount;
     }
     else{
-        countSize = VidFolderCount;
-        dbCon.readDB(playObj, "SELECT * FROM lcl_viddirs");
+        newSize = curVidCount;
 
     }
-    for(int i=0; i<countSize; i++){
+    for(int i=0; i<newSize; i++){
 
-        QDirIterator dirWalk(QString::fromStdString(playObj.getPath(i)), QDir::Files | QDir::NoSymLinks);
+        QDirIterator dirWalk(QString::fromStdString(localDir.getPath(i)), QDir::Files | QDir::NoSymLinks);
 
         while(dirWalk.hasNext())
         {
             dirWalk.next();
             if(scanType == 0){  // if scanning audio
                 if(dirWalk.fileInfo().completeSuffix() == "mp3" || dirWalk.fileInfo().completeSuffix() == "flac"){
-                    localFile.set(itemcount,VideoCount, playObj.getID(i), dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
+                    localFile.set(itemcount,AudioCount, localDir.getID(i), dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
                     AudioCount++;
                     itemcount++;
                 }
             }
             else{   // if scanning video
-
-                VidFolderCount++;
                 if(dirWalk.fileInfo().suffix() == "avi" || dirWalk.fileInfo().suffix() == "mp4" || dirWalk.fileInfo().suffix() == "mkv"){
-                    localFile.set(itemcount,VideoCount, playObj.getID(i), dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
+                    localFile.set(itemcount,VideoCount, localDir.getID(i), dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
                     VideoCount++;
                     itemcount++;
                 }
