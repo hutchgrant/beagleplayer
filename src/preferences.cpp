@@ -31,28 +31,12 @@ preferences::preferences(){
     string DB = "/.cache/beagleplayer/BTmedia.db";
     DBlocation = getenv("HOME") + DB;
 }
-preferences::preferences(const preferences& src){
-    USER = src.USER;
-    PASS = src.PASS;
-    SERVER = src.SERVER;
-    PORT = src.PORT;
-    TABLE = src.TABLE;
-    DBlocation = src.DBlocation;
-}
-
-/// construct with default sql location
-preferences::preferences(string DFLTSQL)
-{
-    DBlocation = DFLTSQL;
-}
-
-
+/// controls inital functions at once
 void preferences::control(){
     createCache();
     createPrefDB();
     setInitDB();
 }
-
 /// get initial db file from text cache
 bool preferences::initDB(){
     bool found = false;
@@ -61,7 +45,6 @@ bool preferences::initDB(){
     string tempcache = TEMPCACHE;
     string Cache = getenv("HOME") + tempcache;
     fp = fopen(Cache.c_str(), "r");   /// open cached db location
-
     if(fp != NULL){
         cout << "cache found " << endl;
         rewind(fp);
@@ -85,7 +68,6 @@ bool preferences::initDB(){
         return false;
     }
 }
-
 /// set initial db file in text cache
 void preferences::setInitDB(){
     string tempcache = TEMPCACHE;
@@ -95,9 +77,6 @@ void preferences::setInitDB(){
     myfile << DBlocation.c_str();
     myfile.close();
 }
-
-
-
 /// remove Preference database
 void preferences::deletePrefDB() {
     string finalRMPrefqry =  "drop table pref if exists";
@@ -105,7 +84,6 @@ void preferences::deletePrefDB() {
         writeMe(finalRMPrefqry);
     }
 }
-
 /// create Preference database
 void preferences::createPrefDB() {
     string finalQry;
@@ -113,15 +91,8 @@ void preferences::createPrefDB() {
     writeMe(finalQry);
     writeDB();
 }
-
-
-void preferences::OpenDB(){
-
-}
-
 /// read preference table from sql
 void preferences::readDB(){
-
     if(QFile::exists(DBlocation.c_str())){
         db2 = QSqlDatabase::addDatabase("QSQLITE");
         db2.setDatabaseName(DBlocation.c_str());
@@ -138,7 +109,6 @@ void preferences::readDB(){
                 QString QVal5 = query.value(5).toString();
                 QString QVal6 = query.value(6).toString();
 
-
                 setUser(QVal1.toStdString());
                 setPass(QVal2.toStdString());
                 setServ(QVal3.toStdString());
@@ -147,24 +117,19 @@ void preferences::readDB(){
                 setSQL(QVal6.toStdString());
             }
         }
-
         db2.removeDatabase("QSQLITE");
     }
-
 }
-
 /// write to preference table sql
 void preferences::writeDB(){
     string str2;
     stringstream os;
     os << "INSERT INTO pref (usr, PASS, SERVER, PRT, SQLTABLE, SQL, PLAYLISTDIR) VALUES ('"
        << USER << "','" << PASS << "','" << SERVER << "','" << PORT  << "','" << TABLE  << "','" << DBlocation << "','" << PLAYLISTDIR << "')";
-
     str2 = os.str();
     writeMe(str2);
 }
-
-//// write to output file temp qry
+/// write to output file temp qry
 void preferences::writeMe(string qry){
     db2 = QSqlDatabase::addDatabase("QSQLITE");
     db2.setDatabaseName(DBlocation.c_str());
@@ -176,7 +141,7 @@ void preferences::writeMe(string qry){
     }
     db2.removeDatabase(DBlocation.c_str());
 }
-
+/// create initial cache folders
 void preferences::createCache(){
     string main = "/.cache/beagleplayer";
     string u_home = getenv("HOME");
@@ -185,8 +150,15 @@ void preferences::createCache(){
     QDir(q_main).mkdir(q_main);
 }
 
+preferences::preferences(const preferences& src){
+    USER = src.USER;
+    PASS = src.PASS;
+    SERVER = src.SERVER;
+    PORT = src.PORT;
+    TABLE = src.TABLE;
+    DBlocation = src.DBlocation;
+}
 preferences& preferences::operator=(const preferences& src){
-
     if(this != &src)
     {
         setUser(src.USER);
@@ -198,7 +170,6 @@ preferences& preferences::operator=(const preferences& src){
     }
     return *this;
 }
-
 preferences::~preferences(){
 
 }

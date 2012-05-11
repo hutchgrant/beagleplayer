@@ -153,8 +153,6 @@ void browse::on_TrackList_clicked(const QModelIndex &index)
             }
         }
     }
-
-
 }
 
 void browse::on_TrackList_doubleClicked(const QModelIndex &index)

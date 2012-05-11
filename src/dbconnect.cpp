@@ -57,7 +57,12 @@ void dbconnect::writeDB(fileObj &src, int itemCount, int type){
         dbTable = "playlist_items";
     }
     string str2;
-    counter = getMaxPos(itemCount);
+    if(type != 2 && type != 0){
+        counter = getMaxPos(itemCount);
+    }
+    else{
+        counter = 1;
+    }
     posMax = counter;
     /// reminder to get previous import folder position on second import
     for (int m = 0; m <= (itemCount / counter); m++) {
@@ -91,8 +96,6 @@ void dbconnect::writeDB(fileObj &src, int itemCount, int type){
         }
     }
 }
-
-
 /*
 * Write Any string to database
 */
@@ -102,7 +105,6 @@ void dbconnect::writeMe(string qry){
         QSqlQuery myQry;
         myQry.prepare(qry.c_str());
         myQry.exec();
-
         db.close();
     }
 }
@@ -192,7 +194,6 @@ void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount){
             db.close();
         }
 }
-
 
 /*
   *  Get maximum write count

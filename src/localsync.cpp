@@ -29,7 +29,6 @@ localsync::localsync()
     curAudCount = 0;
     curVidCount = 0;
 }
-
 /*
   * When Add is clicked
   */
@@ -48,13 +47,13 @@ void localsync::Sync(QDir usrDir, int syncType)
             dbCon.writeDB(localFile, AudioCount, 1);  // write song files
         }
         else{  /// sync video
+            localDir.display();
             dbCon.writeDB(localDir, curVidCount, 2);  // write song directories
             scanFiles(syncType);
             dbCon.writeDB(localFile, VideoCount, 3);  // write song file
         }
     }
 }
-
 /*
 * Scan User Directory for folders. Add all discovered folders
 */
@@ -75,11 +74,8 @@ void localsync::scanDir(QString dir, int scantype){
             localDir.set(curVidCount, VidFolderCount+curVidCount+1, VidFolderCount+curVidCount+1, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
             curVidCount++;
         }
-
-
     }
 }
-
 /*
 * Scan User Directory for folders. Add all discovered files
 */
@@ -96,17 +92,16 @@ void localsync::scanFiles(int scanType){
     }
     else{
         newSize = curVidCount;
-
     }
     for(int i=0; i<newSize; i++){
-
         QDirIterator dirWalk(QString::fromStdString(localDir.getPath(i)), QDir::Files | QDir::NoSymLinks);
-
+  //      cout << "working with path " << localDir.getPath(i) << " id " << localDir.getID(i) << endl;
         while(dirWalk.hasNext())
         {
             dirWalk.next();
             if(scanType == 0){  // if scanning audio
                 if(dirWalk.fileInfo().completeSuffix() == "mp3" || dirWalk.fileInfo().completeSuffix() == "flac"){
+           //         cout << "file found: " << dirWalk.fileName().toStdString() << endl;
                     localFile.set(itemcount,AudioCount, localDir.getID(i), dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
                     AudioCount++;
                     itemcount++;
@@ -114,6 +109,7 @@ void localsync::scanFiles(int scanType){
             }
             else{   // if scanning video
                 if(dirWalk.fileInfo().suffix() == "avi" || dirWalk.fileInfo().suffix() == "mp4" || dirWalk.fileInfo().suffix() == "mkv"){
+            //        cout << "file found: " << dirWalk.fileName().toStdString() << endl;
                     localFile.set(itemcount,VideoCount, localDir.getID(i), dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
                     VideoCount++;
                     itemcount++;
@@ -121,7 +117,6 @@ void localsync::scanFiles(int scanType){
             }
         }
     }
-    localFile.display();
 }
 
 localsync::~localsync(){

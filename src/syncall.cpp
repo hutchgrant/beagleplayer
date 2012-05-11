@@ -26,7 +26,6 @@ syncAll::syncAll()
 }
 
 void syncAll::dispPref(){
-
     prefDg.show();
     dbCon.createLocalDB();  /// create data tables for local and playlist
     pref.initDB();
@@ -43,10 +42,8 @@ void syncAll::setPref(){
 void syncAll::control(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &Video, int rwMode){
     // reinit objects
     Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100);
-
     // set preferences
     setPref();
-
     if(rwMode == 2 || rwMode == 3){
         QDir usrDir = QString(getenv("HOME"));
         usrDir = QFileDialog::getExistingDirectory(this, tr("Import a directory"), QDir::currentPath());  // get folder import directory

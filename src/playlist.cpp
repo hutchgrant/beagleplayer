@@ -120,7 +120,6 @@ void playlist::initCueID(int initial, int newsize){
     }
 }
 
-
 void playlist::on_ADD_but_clicked()
 {
     if(PLMODE==0){

@@ -44,7 +44,6 @@ class preferences
 public:
     preferences();
     preferences(const preferences& src);
-    preferences(string DFLTQRY);
     void OpenDB();
     QSqlDatabase db2;
     void writeDB();

@@ -23,7 +23,6 @@ public:
     void removeDir(int selected, int mode);
     int getMaxPos(int count);
     void getLastIDs();
-
 };
 
 #endif // DBCONNECT_H

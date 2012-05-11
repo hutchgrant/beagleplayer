@@ -29,10 +29,8 @@ PrefDialog::PrefDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PrefDialog)
 {
-
     ui->setupUi(this);
     setLabels();
-
 }
 
 void PrefDialog::setLabels(){
@@ -48,7 +46,6 @@ PrefDialog::~PrefDialog()
 {
     delete ui;
 }
-
 void PrefDialog::on_buttonBox_accepted()
 {
     setPreferences();
@@ -56,10 +53,7 @@ void PrefDialog::on_buttonBox_accepted()
 void PrefDialog::setPref(preferences& my_pref){
     pref = my_pref;
     setLabels();
-    cout << pref.getSQL() << endl;
-
 }
-
 void PrefDialog::setPreferences(){
 
     QString QUser = ui->entry_user->text();
