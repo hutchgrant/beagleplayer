@@ -63,21 +63,22 @@ void localsync::scanDir(QString dir, int scantype){
     curAudCount = 0;
     curVidCount = 0;
     dbCon.getLastIDs(&AudFolderCount, &VidFolderCount);
+    cout << "Aud Folder Count " << AudFolderCount << endl;
     localDir.initFile(100);
     while(directories.hasNext()){
-
         directories.next();
+
         if(scantype == 0 ){
-            localDir.set(curAudCount, AudFolderCount+curAudCount, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+            localDir.set(curAudCount, AudFolderCount+curAudCount+1, AudFolderCount+curAudCount+1, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
             curAudCount++;
         }
         else{
-            localDir.set(curVidCount, VidFolderCount+curVidCount, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+            localDir.set(curVidCount, VidFolderCount+curVidCount+1, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
             curVidCount++;
-
         }
+
+
     }
-    localDir.display();
 }
 
 /*
@@ -121,7 +122,6 @@ void localsync::scanFiles(int scanType){
             }
         }
     }
-    localFile.display();
 }
 
 localsync::~localsync(){

@@ -100,7 +100,6 @@ void dbconnect::writeMe(string qry){
     QSqlDatabase db = OpenDB();
     if(db.open()){
         QSqlQuery myQry;
-        cout << qry << endl;
         myQry.prepare(qry.c_str());
         myQry.exec();
 
