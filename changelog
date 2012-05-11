@@ -1,3 +1,9 @@
+beagleplayer (0.1.0-0ubuntu5) precise; urgency=low
+
+  * Fixed local sync read, write and display
+
+ -- Grant Hutchinson <h.g.utchinson@gmail.com>  Thu, 10 May 2012 23:43:05 -0400
+
 beagleplayer (0.1.0-0ubuntu1) precise; urgency=low
 
   * Initial release. (Closes: #XXXXXX)

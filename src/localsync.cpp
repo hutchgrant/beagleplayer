@@ -50,9 +50,9 @@ void localsync::Sync(QDir usrDir, int syncType)
             dbCon.writeDB(localFile, AudioCount, 1);  // write song files
         }
         else{  /// sync video
-            dbCon.writeDB(localDir, VidFolderCount, 0);  // write song directories
+            dbCon.writeDB(localDir, VidFolderCount, 2);  // write song directories
             scanFiles(localFile, syncType);
-            dbCon.writeDB(localFiles, VideoCount, 3);  // write song file
+            dbCon.writeDB(localFile, VideoCount, 3);  // write song file
         }
     }
 }
