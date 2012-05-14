@@ -34,6 +34,7 @@ class controls : public QWidget
     Q_OBJECT
 
 public:
+    fileObj current;    /// current fileObj List
     explicit controls(QWidget *parent = 0);
     virtual ~controls();
     QMPwidget widget;
@@ -41,12 +42,14 @@ public:
 
     void startSong(char *FinSong, int selID);
     void startLocal(char *finSong, char *finPath);
+
     void close(){
         widget.close();
     }
     void startSelected();
 public slots:
     void setVol(int vol);
+    void startPlaylistSelected(fileObj &src);
     void setSelection(int selection){
         CurrentSelect = selection;
     }
@@ -55,8 +58,9 @@ public slots:
         CurrentSelect = selection;
         startSelected();
     }
+    void setCurList(fileObj &newlist, int * newIDlist);
+    void setCurPLAYList(fileObj &newlist, int * newIDlist, int selected);
 
-    void setCurList(fileObj &newlist, int *newIDlist);
     void changeCon(int mode);
 
 private slots:
@@ -76,7 +80,6 @@ private:
         int CurrentSelect;  /// current selection number
         int CON_MODE;       /// connection mode
         int *curList;       /// current cue list ID's
-        fileObj current;    /// current fileObj List
         Ui::controls *ui;
         string name, path;
         volume *vol;

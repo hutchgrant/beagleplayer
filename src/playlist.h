@@ -33,19 +33,18 @@ public:
     void initCueID(int initial, int newsize);
     void createPLTable();
     void writeNew(int type);
+    void removePL(int type);
     void createNewPL();
     void fillPL();
-    void readPL();
+    bool readPL();
     void AddToPL(){
         if(newItemCount == 0){
             newPList.initFile(100);
         }
-        else{
-            dbCon.getLastIDs(&lastPlaylistID);
-        }
-        newPList.set(newItemCount, tempPLID, lastPlaylistID++, tempPLName.c_str(), tempPLPath.c_str());
+        dbCon.getLastIDs(&lastPlaylistID);
+        cout << "last PL ID = " << lastPlaylistID << endl;
+        newPList.set(newItemCount, tempPLID, lastPlaylistID, tempPLName.c_str(), tempPLPath.c_str());
         newItemCount++;
-        fillPL();
     }
 
 public slots:
@@ -55,11 +54,12 @@ public slots:
         tempPLPath = tempPath;
         tempPLID = tempID;
         tempPLPar = tempPar;
+        cout << "temp playlist item " << tempPLName << " " << tempPLPath << endl;
     }
 
 
 signals:
-    void playlistChanged(fileObj &plItem, int *plItemList);
+    void playlistChanged(fileObj &plItem, int * plItemList);
     void playlistSelection(int selected);
     void playlistFullSelection(int selected);
 private slots:
@@ -68,11 +68,16 @@ private slots:
 
     void on_PLAYLIST_clicked(const QModelIndex &index);
 
-    void on_ADD_but_clicked();
+    void on_open_tool_clicked();
+
+    void on_add_tool_clicked();
+
+    void on_remove_tool_clicked();
 
 private:
     Ui::playlist *ui;
     QStringListModel *pl_model;
+
 };
 
 #endif // PLAYLIST_H

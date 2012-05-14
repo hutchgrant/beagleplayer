@@ -67,7 +67,10 @@ OTHER_FILES += \
     res/FWD_icon.png \
     res/FFWD_icon.png \
     res/DOWN_icon.png \
-    res/beagleplayer_icon.png
+    res/beagleplayer_icon.png \
+    res/REMOVE_icon.png \
+    res/OPEN_icon.png \
+    res/ADD_icon.png
 
 RESOURCES += \
     res/BTres.qrc

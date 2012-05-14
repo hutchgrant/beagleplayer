@@ -27,7 +27,6 @@ browse::browse(QWidget *parent) :
 {
     ui->setupUi(this);
     Sync(1);
-    initCueID(4, 100 , 0);
     MenuMode = 0;
     songCount = 0;
     vidCount = 0;
@@ -70,7 +69,7 @@ void browse::updateTitle(int selected){
     vidCount = 0;
         if(MenuMode == 0){
             selID = Artist.getID(selected);
-            initCueID(1, Song.getSize(),1);
+            curSongID = new int[Song.getSize()];
             for(int i = 0; i<Song.getSize(); i++){
                 if(Song.getPar(i) == selID){
                     curSong << Song.getName(i);
@@ -82,7 +81,7 @@ void browse::updateTitle(int selected){
         }
         else if(MenuMode == 1){
             selID = VidDir.getID(selected);
-            initCueID(2, Video.getSize(),1);
+            curVidID = new int[Video.getSize()];
             for(int i = 0; i<Video.getSize(); i++){
                 if(Video.getPar(i) == selID){
                     curSong << Video.getName(i);
@@ -96,38 +95,6 @@ void browse::updateTitle(int selected){
     ui->TrackList->setModel(t_Model);
 }
 
-/*
-  *INIT CUE ID LIST
-  */
-void browse::initCueID(int type, int newsize, int inital)
-{
-    if(inital != 0){    // we're reallocating
-
-        if(type == 1){
-            delete [] curSongID;
-            curSongID = new int[newsize+1];
-            for(int i = 0; i<newsize; i++){
-                curSongID[i] = 0;
-            }
-        }
-        else if(type == 2){
-            delete [] curVidID;
-            curVidID = new int[newsize+1];
-            for(int i = 0; i<newsize; i++){
-                curVidID[i] = 0;
-            }
-        }
-    }
-    else{
-        curSongID = new int[newsize+1];
-        curVidID = new int[newsize+1];
-        for(int i = 0; i<newsize; i++){
-            curSongID[i] = 0;
-            curVidID[i] = 0;
-        }
-    }
-}
-
 void browse::on_MenuList_clicked(const QModelIndex &index)
 {
     emit MenuSelection(ui->MenuList->currentIndex().row());
@@ -137,10 +104,11 @@ void browse::on_TrackList_clicked(const QModelIndex &index)
 {
     int selected = 0;
     selected = ui->TrackList->currentIndex().row();
+    cout << "selected " << selected << endl;
     emit selectionChanged(selected);
 
     if(MenuMode == 0){
-        for(int i=0; i<=songCount; i++){
+        for(int i=0; i<=Song.getSize(); i++){
             if(curSongID[selected] == Song.getID(i)){
                 emit plItemChanged(Song.getName(i), Song.getPath(i), Song.getID(i), Song.getPar(i));
             }

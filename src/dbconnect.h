@@ -9,6 +9,7 @@ class dbconnect
 public:
     preferences pref;
     dbconnect();
+    virtual ~dbconnect();
     void readDB(fileObj &src, string qry);
     void readPL(fileObj &playlists, fileObj &playlistItems);
     void writeMe(string qry);

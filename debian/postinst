@@ -1,7 +1,5 @@
 #! /bin/bash -e
 
 cd /opt/extras.ubuntu.com/beagleplayer
-qmake
-make
-
-ln -fs /opt/extras.ubuntu.com/beagleplayer/beagleplayer /usr/bin/beagleplayer
+sudo make
+sudo make install

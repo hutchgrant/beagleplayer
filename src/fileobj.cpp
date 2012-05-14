@@ -57,6 +57,12 @@ void fileObj::initFile(int initSZ){
     }
 }
 
+void fileObj::REzeroFile(int initSZ){
+    delete [] fileName;
+    delete [] filePath;
+    initFile(initSZ);
+}
+
 void fileObj::REinitFile(int oldsize, int newsize){
     //set the new initialize size
     InitSize = oldsize+newsize;
@@ -85,7 +91,6 @@ void fileObj::REinitFile(int oldsize, int newsize){
     delete [] fileID;
     delete [] filePar;
     delete [] filePath;
-
     tempObjSize = objSize;
     initFile(InitSize);
     /// refill array fileName fileID filePar array

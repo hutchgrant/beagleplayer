@@ -27,7 +27,12 @@ playlist::playlist(QWidget *parent) :
 {
     ui->setupUi(this);
     PLMODE = 0;
-    fillPL();
+    if(readPL()){
+        fillPL();
+    }
+    playlistSelected = 0;
+    plSelected = 0;
+    lastPlaylistID = 0;
     plSelected = 0;
     newItemCount = 0;
 }
@@ -38,52 +43,81 @@ playlist::~playlist()
 }
 void playlist::createNewPL(){
     newplDg.show();
-    if(newplDg.Accepted){
+    if(newplDg.exec()==QDialog::Accepted){
         newPLName = newplDg.getName();
+        cout << "new playlist "<< newPLName << endl;
+        writeNew(0);
     }
-    writeNew(0);
 }
 
 void playlist::writeNew(int type){
+
     char *addQry;
-    if(type == 0){
-        addQry = new char[strlen(newPLName.c_str())+250];
-        sprintf(addQry, "INSERT INTO playlists (lcl_dir_name) VALUES ('%s'", newPLName.c_str());
+    if(type == 0){  // add playlist
+        addQry = new char[strlen(newPLName.c_str())+200];
+        sprintf(addQry, "INSERT INTO playlists (lcl_dir_par, lcl_dir_name, lcl_dir_path) VALUES ('%d', '%s', '%s')", 0, newPLName.c_str(), "-");
+        dbCon.writeMe(string(addQry));
+        delete [] addQry;
+    }
+    else if(type == 1){  // add playlist item
+        addQry = new char [strlen(newPList.getPath(newItemCount-1))+strlen(newPList.getName(newItemCount-1))+100];
+        sprintf(addQry, "INSERT INTO playlist_items (lcl_dir_par, lcl_dir_name, lcl_dir_path) VALUES ('%d', '%s', '%s')", newPList.getPar(newItemCount-1), newPList.getName(newItemCount-1), "-");
         dbCon.writeMe(string(addQry));
     }
     else{
-        dbCon.writeDB(newPList, newItemCount, 4);
     }
     delete [] addQry;
 }
 
-void playlist::readPL(){
-    dbCon.readPL(playlists, playlistItems);
+void playlist::removePL(int type){
+    char *addQry;
+    if(type == 0){  // remove playlist
+        addQry = new char[100];
+        sprintf(addQry, "DELETE FROM playlists where key = %d", playlists.getID(playlistSelected));
+        dbCon.writeMe(string(addQry));
+    }
+    else if(type == 1) { // remove playlist item
+        addQry = new char[100];
+        sprintf(addQry, "DELETE FROM playlist_items where key = %d", curPLlist[playlistSelected]);
+        dbCon.writeMe(string(addQry));
+    }
+    delete [] addQry;
+}
+
+bool playlist::readPL(){
+    dbCon.readDB(playlists, "SELECT * FROM playlists");
+    dbCon.readDB(playlistItems, "SELECT * FROM playlist_items");
 }
 
 void playlist::fillPL(){
-    /// recheck db ///
-    readPL();
     QStringList curList;
-    pl_model = new QStringListModel(this);
-
+    int count = 0;
     if(PLMODE == 0){  // browsing playlists
-        initCueID(0, playlists.getSize());
-        for(int i= 0; i<= playlists.getSize(); i++){
+        for(int i= 0; i< playlists.getSize(); i++){
             curList << playlists.getName(i);
-            curPLlist[i] = playlists.getID(i);
         }
     }
-    else{            // browsing playlist items
-        initCueID(1, playlistItems.getSize());
-        for(int i = 0; i<= playlistItems.getSize(); i++){
+    else if(PLMODE == 1){            // browsing playlist items
+
+        curPLlist = new int[playlistItems.getSize() + 10];
+        for(int i = 0; i< playlistItems.getSize(); i++){
             if(playlistItems.getPar(i) == playlists.getID(playlistSelected)){
                 curList << playlistItems.getName(i);
-                curPLlist[i] = playlists.getID(i);
+                curPLlist[count] = playlistItems.getID(i);
+                count++;
             }
+             emit playlistChanged(playlistItems, curPLlist);
         }
-        emit playlistChanged(playlistItems, curPLlist);
     }
+    else if(PLMODE == 2){            // new playlist items
+        curPLlist = new int[newPList.getSize()+10];
+        for(int i = 0; i<= newPList.getSize(); i++){
+            curList << newPList.getName(i);
+            curPLlist[i] = newPList.getID(i);
+        }
+        emit playlistChanged(newPList, curPLlist);
+    }
+    pl_model = new QStringListModel(this);
     pl_model->setStringList(curList);
     ui->PLAYLIST->setModel(pl_model);
 }
@@ -94,12 +128,17 @@ void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
         PLMODE = 1;
         fillPL();
     }
-    plSelected = ui->PLAYLIST->currentIndex().row();
-    emit playlistFullSelection(plSelected);
+    else{
+        plSelected = ui->PLAYLIST->currentIndex().row();
+        cout << plSelected << "is the number chosen " << endl;
+        emit playlistFullSelection(plSelected);
+
+    }
 }
 
 void playlist::on_PLAYLIST_clicked(const QModelIndex &index)
 {
+
     if(PLMODE == 0){
         playlistSelected = ui->PLAYLIST->currentIndex().row();
     }
@@ -109,24 +148,39 @@ void playlist::on_PLAYLIST_clicked(const QModelIndex &index)
     }
 }
 
-void playlist::initCueID(int initial, int newsize){
-
-    if(initial != 0){
-        delete [] curPLlist;
-    }
-    curPLlist = new int[newsize];
-    for(int i=0; i<=newsize; i++){
-        curPLlist[i] = 0;
+void playlist::on_open_tool_clicked()
+{
+    PLMODE = 0;
+    if(readPL()){
+        fillPL();
     }
 }
 
-void playlist::on_ADD_but_clicked()
+void playlist::on_add_tool_clicked()
 {
     if(PLMODE==0){
         createNewPL();
         AddToPL();
+        writeNew(1);
+        PLMODE = 1;
+        if(readPL()){
+        playlistSelected = playlists.getSize() - 1;
+        fillPL();
+        }
     }
     else if(PLMODE==1){
+        AddToPL();
+        writeNew(1);
+        if(readPL()){
+        fillPL();
+        }
+    }
+}
 
+void playlist::on_remove_tool_clicked()
+{
+    removePL(PLMODE);
+    if(readPL()){
+        fillPL();
     }
 }

@@ -45,6 +45,7 @@ public:
 
     void initFile(int initSZ);
     void REinitFile(int oldsize, int newsize);
+    void REzeroFile(int initSZ);
     void display();
     virtual ~fileObj();
 

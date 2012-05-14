@@ -41,7 +41,6 @@ public:
     explicit browse(QWidget *parent = 0);
     ~browse();
     void Sync(int mode);
-    void initCueID(int type, int newsize, int inital);   // initialize our curID lists
 signals:
     void curListChanged(fileObj &filelist, int *itemList);
     void plItemChanged(string plName, string plPath, int plID, int plPar);

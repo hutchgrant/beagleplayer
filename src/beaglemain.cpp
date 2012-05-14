@@ -48,8 +48,9 @@ void beaglemain::conSignals(){
     connect(brow,SIGNAL(selectionChanged(int)), cntrl, SLOT(setSelection(int)));
     // playlist
     connect(plList, SIGNAL(playlistChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));
-    connect(plList,SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
+    connect(plList, SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
     connect(plList, SIGNAL(playlistFullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
+   // connect(plList, SIGNAL(playlistChanged(fileObj&,int*, int)), cntrl, SLOT(setCurPLAYList(fileObj&,int*, int)));
 }
 
 beaglemain::~beaglemain()

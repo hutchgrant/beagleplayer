@@ -1,8 +1,8 @@
-beagleplayer (0.1.0-0ubuntu5) precise; urgency=low
+beagleplayer (0.1.1-0ubuntu1) precise; urgency=low
 
-  * Fixed local sync read, write and display
+  * Added playlist add/save/remove
 
- -- Grant Hutchinson <h.g.utchinson@gmail.com>  Thu, 10 May 2012 23:43:05 -0400
+ -- Grant Hutchinson <h.g.utchinson@gmail.com>  Mon, 14 May 2012 04:31:21 -0400
 
 beagleplayer (0.1.0-0ubuntu1) precise; urgency=low
 

@@ -2,10 +2,10 @@
 
 dbconnect::dbconnect()
 {
-    pref.initDB();
 }
 
 QSqlDatabase dbconnect::OpenDB(){
+    pref.initDB();
     QSqlDatabase db2 = QSqlDatabase::addDatabase("QSQLITE");
     db2.setDatabaseName(pref.getSQL().c_str());
     if(!db2.open()){
@@ -57,7 +57,7 @@ void dbconnect::writeDB(fileObj &src, int itemCount, int type){
         dbTable = "playlist_items";
     }
     string str2;
-    if(type != 2 && type != 0){
+    if(type == 1 || type == 3){
         counter = getMaxPos(itemCount);
     }
     else{
@@ -131,19 +131,11 @@ void dbconnect::readDB(fileObj &src, string qry){
                 src.set(count, QValID.toInt(), QValPAR.toInt(), QValNAME.toStdString().c_str(), QValPATH.toStdString().c_str());
                 count++;
             }
-    }
-    closeDB();
+        }
+        db.close();
     }
 }
 
-/*
-  * Read database and fill objects for playlist
-  */
-void dbconnect::readPL(fileObj &playlist, fileObj &playlistItems ){
-
-    readDB(playlist, "SELECT * FROM playlists");
-    readDB(playlistItems, "SELECT * FROM playlist_items");
-}
 
 void dbconnect::getLastIDs(int *lastID){
     QSqlDatabase db = OpenDB();
@@ -154,7 +146,7 @@ void dbconnect::getLastIDs(int *lastID){
         while(query.next()){
             *lastID = query.value(0).toInt();
         }
-
+        db.close();
     }
 }
 
@@ -213,4 +205,8 @@ int dbconnect::getMaxPos(int count) {
         posMax = 200;
     }
     return posMax;
+}
+
+dbconnect::~dbconnect(){
+  //  closeDB();
 }

@@ -94,10 +94,10 @@ void preferences::createPrefDB() {
 /// read preference table from sql
 void preferences::readDB(){
     if(QFile::exists(DBlocation.c_str())){
-        db2 = QSqlDatabase::addDatabase("QSQLITE");
+        QSqlDatabase db2 = QSqlDatabase::addDatabase("QSQLITE");
         db2.setDatabaseName(DBlocation.c_str());
         if(db2.open()){
-            QSqlQuery query(db2);
+            QSqlQuery query;
 
             query = QString("SELECT * FROM pref");
 
@@ -116,8 +116,8 @@ void preferences::readDB(){
                 setTable(QVal5.toStdString());
                 setSQL(QVal6.toStdString());
             }
+            db2.close();
         }
-        db2.removeDatabase("QSQLITE");
     }
 }
 /// write to preference table sql
@@ -131,7 +131,7 @@ void preferences::writeDB(){
 }
 /// write to output file temp qry
 void preferences::writeMe(string qry){
-    db2 = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase db2 = QSqlDatabase::addDatabase("QSQLITE");
     db2.setDatabaseName(DBlocation.c_str());
     if(db2.open()){
         QSqlQuery myQry(db2);
@@ -139,7 +139,6 @@ void preferences::writeMe(string qry){
         myQry.exec();
         db2.close();
     }
-    db2.removeDatabase(DBlocation.c_str());
 }
 /// create initial cache folders
 void preferences::createCache(){

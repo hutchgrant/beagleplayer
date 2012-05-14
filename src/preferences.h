@@ -45,7 +45,6 @@ public:
     preferences();
     preferences(const preferences& src);
     void OpenDB();
-    QSqlDatabase db2;
     void writeDB();
     void readDB();
     void writeMe(string qry);
