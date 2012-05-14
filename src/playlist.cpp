@@ -51,7 +51,6 @@ void playlist::createNewPL(){
         newPLName = newplDg.getName();
         cout << "new playlist "<< newPLName << endl;
         writeNew(0);
-        newPList.initFile(100);
     }
 }
 
@@ -63,6 +62,7 @@ void playlist::writeNew(int type){
         addQry = new char[strlen(newPLName.c_str())+200];
         sprintf(addQry, "INSERT INTO playlists (lcl_dir_par, lcl_dir_name, lcl_dir_path) VALUES ('%d', '%s', '%s')", 0, newPLName.c_str(), "-");
         dbCon.writeMe(string(addQry));
+        delete [] addQry;
     }
     else if(type == 1){  // add playlist item
 
@@ -70,6 +70,7 @@ void playlist::writeNew(int type){
         addQry = new char [strlen(newPList.getPath(newItemCount-1))+strlen(newPList.getName(newItemCount-1))+100];
         sprintf(addQry, "INSERT INTO playlist_items (lcl_dir_par, lcl_dir_name, lcl_dir_path) VALUES ('%d', '%s', '%s')", newPList.getPar(newItemCount-1), newPList.getName(newItemCount-1), "-");
         dbCon.writeMe(string(addQry));
+        delete [] addQry;
     }
     else{
     }
@@ -168,7 +169,7 @@ void playlist::on_add_tool_clicked()
         AddToPL();
         writeNew(1);
         PLMODE = 1;
-        playlistSelected = playlists.getSize() - 1;
+        playlistSelected = playlists.getSize();
         if(readPL()){
             fillPL();
         }
@@ -176,7 +177,6 @@ void playlist::on_add_tool_clicked()
     else if(PLMODE==1){
         AddToPL();
         writeNew(1);
-        playlistSelected = playlists.getSize() - 1;
         if(readPL()){
             fillPL();
         }
