@@ -27,9 +27,7 @@ playlist::playlist(QWidget *parent) :
 {
     ui->setupUi(this);
     PLMODE = 0;
-    if(readPL()){
-        fillPL();
-    }
+    fillPL();
     playlistSelected = 0;
     plSelected = 0;
     lastPlaylistID = 0;
@@ -90,6 +88,7 @@ bool playlist::readPL(){
 }
 
 void playlist::fillPL(){
+    if(readPL()){
     QStringList curList;
     int count = 0;
     if(PLMODE == 0){  // browsing playlists
@@ -117,9 +116,11 @@ void playlist::fillPL(){
         }
         emit playlistChanged(newPList, curPLlist);
     }
+
     pl_model = new QStringListModel(this);
     pl_model->setStringList(curList);
     ui->PLAYLIST->setModel(pl_model);
+    }
 }
 void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
 {
@@ -130,7 +131,6 @@ void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
     }
     else{
         plSelected = ui->PLAYLIST->currentIndex().row();
-        cout << plSelected << "is the number chosen " << endl;
         emit playlistFullSelection(plSelected);
 
     }
@@ -138,7 +138,6 @@ void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
 
 void playlist::on_PLAYLIST_clicked(const QModelIndex &index)
 {
-
     if(PLMODE == 0){
         playlistSelected = ui->PLAYLIST->currentIndex().row();
     }
@@ -151,9 +150,7 @@ void playlist::on_PLAYLIST_clicked(const QModelIndex &index)
 void playlist::on_open_tool_clicked()
 {
     PLMODE = 0;
-    if(readPL()){
-        fillPL();
-    }
+    fillPL();
 }
 
 void playlist::on_add_tool_clicked()
@@ -163,24 +160,18 @@ void playlist::on_add_tool_clicked()
         AddToPL();
         writeNew(1);
         PLMODE = 1;
-        if(readPL()){
         playlistSelected = playlists.getSize() - 1;
         fillPL();
-        }
     }
     else if(PLMODE==1){
         AddToPL();
         writeNew(1);
-        if(readPL()){
         fillPL();
-        }
     }
 }
 
 void playlist::on_remove_tool_clicked()
 {
     removePL(PLMODE);
-    if(readPL()){
-        fillPL();
-    }
+    fillPL();
 }
