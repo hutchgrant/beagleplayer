@@ -27,7 +27,13 @@ playlist::playlist(QWidget *parent) :
 {
     ui->setupUi(this);
     PLMODE = 0;
-    fillPL();
+    if(readPL()){
+        fillPL();
+    }
+    tempPLName = "-";
+    tempPLPath = "-";
+    tempPLID = 0;
+    tempPLPar = 0;
     playlistSelected = 0;
     plSelected = 0;
     lastPlaylistID = 0;
@@ -45,26 +51,28 @@ void playlist::createNewPL(){
         newPLName = newplDg.getName();
         cout << "new playlist "<< newPLName << endl;
         writeNew(0);
+        newPList.initFile(100);
     }
 }
 
 void playlist::writeNew(int type){
 
-    char *addQry;
     if(type == 0){  // add playlist
+
+        char *addQry;
         addQry = new char[strlen(newPLName.c_str())+200];
         sprintf(addQry, "INSERT INTO playlists (lcl_dir_par, lcl_dir_name, lcl_dir_path) VALUES ('%d', '%s', '%s')", 0, newPLName.c_str(), "-");
         dbCon.writeMe(string(addQry));
-        delete [] addQry;
     }
     else if(type == 1){  // add playlist item
+
+        char *addQry;
         addQry = new char [strlen(newPList.getPath(newItemCount-1))+strlen(newPList.getName(newItemCount-1))+100];
         sprintf(addQry, "INSERT INTO playlist_items (lcl_dir_par, lcl_dir_name, lcl_dir_path) VALUES ('%d', '%s', '%s')", newPList.getPar(newItemCount-1), newPList.getName(newItemCount-1), "-");
         dbCon.writeMe(string(addQry));
     }
     else{
     }
-    delete [] addQry;
 }
 
 void playlist::removePL(int type){
@@ -88,7 +96,6 @@ bool playlist::readPL(){
 }
 
 void playlist::fillPL(){
-    if(readPL()){
     QStringList curList;
     int count = 0;
     if(PLMODE == 0){  // browsing playlists
@@ -120,7 +127,6 @@ void playlist::fillPL(){
     pl_model = new QStringListModel(this);
     pl_model->setStringList(curList);
     ui->PLAYLIST->setModel(pl_model);
-    }
 }
 void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
 {
@@ -150,7 +156,9 @@ void playlist::on_PLAYLIST_clicked(const QModelIndex &index)
 void playlist::on_open_tool_clicked()
 {
     PLMODE = 0;
-    fillPL();
+    if(readPL()){
+       fillPL();
+    }
 }
 
 void playlist::on_add_tool_clicked()
@@ -161,17 +169,24 @@ void playlist::on_add_tool_clicked()
         writeNew(1);
         PLMODE = 1;
         playlistSelected = playlists.getSize() - 1;
-        fillPL();
+        if(readPL()){
+            fillPL();
+        }
     }
     else if(PLMODE==1){
         AddToPL();
         writeNew(1);
-        fillPL();
+        playlistSelected = playlists.getSize() - 1;
+        if(readPL()){
+            fillPL();
+        }
     }
 }
 
 void playlist::on_remove_tool_clicked()
 {
     removePL(PLMODE);
+    if(readPL()){
     fillPL();
+    }
 }
