@@ -97,7 +97,7 @@ void preferences::readDB(){
         QSqlDatabase db2 = QSqlDatabase::addDatabase("QSQLITE");
         db2.setDatabaseName(DBlocation.c_str());
         if(db2.open()){
-            QSqlQuery query;
+            QSqlQuery query(db2);
 
             query = QString("SELECT * FROM pref");
 

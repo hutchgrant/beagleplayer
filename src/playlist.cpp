@@ -27,6 +27,8 @@ playlist::playlist(QWidget *parent) :
 {
     ui->setupUi(this);
     PLMODE = 0;
+    playlists.initFile(100);
+    playlistItems.initFile(100);
     if(readPL()){
         fillPL();
     }
@@ -94,6 +96,7 @@ void playlist::removePL(int type){
 bool playlist::readPL(){
     dbCon.readDB(playlists, "SELECT * FROM playlists");
     dbCon.readDB(playlistItems, "SELECT * FROM playlist_items");
+    return true;
 }
 
 void playlist::fillPL(){
