@@ -42,7 +42,6 @@ public:
             newPList.initFile(100);
         }
         dbCon.getLastIDs(&lastPlaylistID);
-        cout << "last PL ID = " << lastPlaylistID << endl;
         newPList.set(newItemCount, tempPLID, lastPlaylistID, tempPLName.c_str(), tempPLPath.c_str());
         newItemCount++;
     }
@@ -54,7 +53,6 @@ public slots:
         tempPLPath = tempPath;
         tempPLID = tempID;
         tempPLPar = tempPar;
-        cout << "temp playlist item " << tempPLName << " " << tempPLPath << endl;
     }
 
 

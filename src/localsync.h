@@ -55,7 +55,6 @@ public:
     virtual ~localsync();
     void scanFiles(int scanType);
     void scanDir(QString dir, int scanType);
-
     void Sync(QDir usrDir, int syncType);
     void Remove();
 

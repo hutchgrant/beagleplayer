@@ -70,28 +70,6 @@ void controls::startSelected(){
     startLocal(finSong, finPath);
 }
 /*
-  *  Sort the current play list
-  */
-void controls::startPlaylistSelected(fileObj &PLCurrent){
-    int finSongSize = 0;
-    int finPathSize = 0;
-    int selID = 0;
-    char *finPath;
-    char *finSong;
-
-    selID = curList[CurrentSelect];
-    cout << "selection id " << selID << endl;
-    finSongSize = strlen(checkSongObjByID(selID, PLCurrent));
-    finSong = new char[finSongSize + 100];
-    finSong = checkSongObjByID(selID, PLCurrent);
-
-    finPathSize = strlen(checkSongObjPathByID(selID, PLCurrent));
-    finPath = new char[finPathSize + 100];
-    finPath = checkSongObjPathByID(selID, PLCurrent);
-
-    startLocal(finSong, finPath);
-}
-/*
   * Slot to Change connection Mode
   */
 void controls::changeCon(int mode){
@@ -106,16 +84,6 @@ void controls::setCurList(fileObj &newList, int *newIDlist){
     curList = newIDlist;
 }
 
-/*
-  * Set Current playlist list when list changes
-  */
-void controls::setCurPLAYList(fileObj &newList, int *newIDlist, int selected){
-    curList = newIDlist;
-    current.initFile(100);
-    current = newList;
-    CurrentSelect = selected;
-    startPlaylistSelected(newList);
-}
 
 /*
   * public slot for volume

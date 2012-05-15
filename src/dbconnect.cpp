@@ -2,27 +2,30 @@
 
 dbconnect::dbconnect()
 {
+    string DB = "/.cache/beagleplayer/BTmedia.db";
+    DBlocation = getenv("HOME") + DB;
 }
 
 QSqlDatabase dbconnect::OpenDB(){
-    pref.initDB();
+    if(!initDB()){
+        control();
+    }
     QSqlDatabase db2 = QSqlDatabase::addDatabase("QSQLITE");
-    db2.setDatabaseName(pref.getSQL().c_str());
+    db2.setDatabaseName(getSQL().c_str());
     if(!db2.open()){
-        cout << "unable to connect with " << pref.getSQL().c_str() << endl;
+        cout << "unable to connect with " << getSQL().c_str() << endl;
     }
     return db2;
 }
 void dbconnect::closeDB(){
-
-    QSqlDatabase::removeDatabase(pref.getSQL().c_str());
+    QSqlDatabase::removeDatabase(getSQL().c_str());
 }
 
 /*
 * Create Local Database Table
 */
 void dbconnect::createLocalDB() {
-    string finalQry[7];
+    string finalQry[8];
     finalQry[0] = "create table lcl_songdirs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
     finalQry[1] = "create table lcl_songs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
     finalQry[2] = "create table lcl_viddirs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
@@ -108,7 +111,12 @@ void dbconnect::writeMe(string qry){
         db.close();
     }
 }
-
+void dbconnect::readLocal(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &Video ){
+    readDB(Artist, "SELECT * FROM lcl_songdirs");
+    readDB(Song, "SELECT * FROM lcl_songs");
+    readDB(VidDir, "SELECT * FROM lcl_viddirs");
+    readDB(Video, "SELECT * FROM lcl_videos");
+}
 /*
   * read database and fill object src
   */
@@ -120,7 +128,6 @@ void dbconnect::readDB(fileObj &src, string qry){
 
     if(db.open()){
         query = QString(qry.c_str());
-
         while(query.next()){
             QString QValID = query.value(0).toString();   // ID
             QString QValPAR = query.value(1).toString();   // PARID
@@ -136,6 +143,63 @@ void dbconnect::readDB(fileObj &src, string qry){
     }
 }
 
+/// controls inital functions at once
+void dbconnect::control(){
+    if(prefDg.exec()==QDialog::Accepted){
+        setSQL(prefDg.getSQL());
+        createCache();
+        setInitDB();
+        createLocalDB();
+    }
+}
+/// get initial db file from text cache
+bool dbconnect::initDB(){
+    bool found = false;
+    char PrefIn[100];
+    FILE* fp;
+    string tempcache = TEMPCACHE;
+    string Cache = getenv("HOME") + tempcache;
+    fp = fopen(Cache.c_str(), "r");   /// open cached db location
+    if(fp != NULL){
+        cout << "cache found " << endl;
+        rewind(fp);
+        while(!feof(fp)){
+            fscanf(fp, "%s", &PrefIn);
+            found = true;
+        }
+    }
+    else{
+        return false;
+    }
+
+    if(found){   // if the db (listed in this text cache) exists
+        setSQL(PrefIn);  /// set SQL location
+        fclose(fp);
+        return true;
+    }
+    else{
+        fclose(fp);
+        return false;
+    }
+}
+/// set initial db file in text cache
+void dbconnect::setInitDB(){
+    string tempcache = TEMPCACHE;
+    ofstream myfile;
+    string cache = getenv("HOME") + tempcache;
+    myfile.open (cache.c_str());
+    myfile << DBlocation.c_str();
+    myfile.close();
+}
+
+/// create initial cache folders
+void dbconnect::createCache(){
+    string main = "/.cache/beagleplayer";
+    string u_home = getenv("HOME");
+    string finMain = u_home + main;
+    QString q_main = finMain.c_str();
+    QDir(q_main).mkdir(q_main);
+}
 
 void dbconnect::getLastIDs(int *lastID){
     QSqlDatabase db = OpenDB();
@@ -149,7 +213,6 @@ void dbconnect::getLastIDs(int *lastID){
         db.close();
     }
 }
-
 /*
   * Get last ID from last entry in database
   */
@@ -186,7 +249,6 @@ void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount){
             db.close();
         }
 }
-
 /*
   *  Get maximum write count
   */
@@ -206,7 +268,16 @@ int dbconnect::getMaxPos(int count) {
     }
     return posMax;
 }
-
+dbconnect::dbconnect(const dbconnect& src){
+    DBlocation = src.DBlocation;
+}
+dbconnect& dbconnect::operator=(const dbconnect& src){
+    if(this != &src)
+    {
+        setSQL(src.DBlocation);
+    }
+    return *this;
+}
 dbconnect::~dbconnect(){
   //  closeDB();
 }

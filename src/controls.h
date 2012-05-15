@@ -49,7 +49,6 @@ public:
     void startSelected();
 public slots:
     void setVol(int vol);
-    void startPlaylistSelected(fileObj &src);
     void setSelection(int selection){
         CurrentSelect = selection;
     }
@@ -59,7 +58,6 @@ public slots:
         startSelected();
     }
     void setCurList(fileObj &newlist, int * newIDlist);
-    void setCurPLAYList(fileObj &newlist, int * newIDlist, int selected);
 
     void changeCon(int mode);
 

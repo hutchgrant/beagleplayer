@@ -37,7 +37,19 @@ browse::~browse()
     delete ui;
 }
 void browse::Sync(int type){
-    sy.control(Artist,Song,VidDir, Video, type);
+    // reinit objects
+    Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100);
+    if(type == 2 || type == 3){
+        QDir usrDir = QString(getenv("HOME"));
+        usrDir = QFileDialog::getExistingDirectory(this, tr("Import a directory"), QDir::currentPath());  // get folder import directory
+        if(type == 2){   /// import audio
+           lclSync.Sync(usrDir, 0);
+        }
+        else if(type == 3){  /// import video
+            lclSync.Sync(usrDir, 1);
+        }
+    }
+    dbCon.readLocal(Artist, Song, VidDir, Video);
     updateMenu();
 }
 

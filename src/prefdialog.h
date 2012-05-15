@@ -26,7 +26,10 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstring>
-#include "preferences.h"
+#include <QFile>
+#define TEMPDB "/.cache/beagleplayer/BPmedia.db"
+
+using namespace std;
 namespace Ui {
     class PrefDialog;
 }
@@ -36,14 +39,19 @@ class PrefDialog : public QDialog
     Q_OBJECT
 
 public:
-    preferences pref;
+    string DBlocation;
+
     explicit PrefDialog(QWidget *parent = 0);
     void setPreferences();
-    void setPref(preferences& my_pref);
     void setLabels();
-    bool exists(const char *str);
-    preferences getPref();
     virtual ~PrefDialog();
+
+    void setSQL(string strSQL){
+        DBlocation = getenv("HOME") + strSQL;
+    }
+    string getSQL(){
+        return DBlocation;
+    }
 
 private slots:
     void on_buttonBox_accepted();

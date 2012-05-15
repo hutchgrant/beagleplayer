@@ -12,7 +12,6 @@ QT += network \
         opengl
 
 SOURCES += \
-    src/syncall.cpp \
     src/qmpwidget.cpp \
     src/playlist.cpp \
     src/main.cpp \
@@ -21,7 +20,6 @@ SOURCES += \
     src/controls.cpp \
     src/browse.cpp \
     src/beaglemain.cpp \
-    src/preferences.cpp \
     src/prefdialog.cpp \
     src/about.cpp \
     src/volume.cpp \
@@ -29,7 +27,6 @@ SOURCES += \
     src/newplaylist.cpp
 
 HEADERS  += \
-    src/syncall.h \
     src/qmpyuvreader.h \
     src/qmpwidget.h \
     src/playlist.h \
@@ -38,7 +35,6 @@ HEADERS  += \
     src/controls.h \
     src/browse.h \
     src/beaglemain.h \
-    src/preferences.h \
     src/prefdialog.h \
     src/about.h \
     src/volume.h \

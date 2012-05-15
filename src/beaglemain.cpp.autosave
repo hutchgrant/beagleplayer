@@ -54,7 +54,6 @@ void beaglemain::conSignals(){
 
 beaglemain::~beaglemain()
 {
-
     cntrl->close();
     delete ui;
 }
@@ -62,7 +61,6 @@ beaglemain::~beaglemain()
 
 void beaglemain::on_actionImport_Video_triggered()
 {
-
     ui->ModeCombo->setCurrentIndex(1);
     brow->Sync(3);
 }

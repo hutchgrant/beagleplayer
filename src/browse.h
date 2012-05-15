@@ -24,7 +24,8 @@
 #include <QWidget>
 #include <QStringListModel>
 #include "fileobj.h"
-#include "syncall.h"
+#include "localsync.h"
+#include "dbconnect.h"
 
 namespace Ui {
 class browse;
@@ -37,10 +38,13 @@ class browse : public QWidget
 public:
     int songCount;
     int vidCount;
-    syncAll sy;
+    localsync lclSync;
+    dbconnect dbCon;
+
     explicit browse(QWidget *parent = 0);
     ~browse();
     void Sync(int mode);
+
 signals:
     void curListChanged(fileObj &filelist, int *itemList);
     void plItemChanged(string plName, string plPath, int plID, int plPar);
