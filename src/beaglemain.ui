@@ -14,9 +14,8 @@
    <string> beagleplayer 0.1.1</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/res/beagletomb_icon.png</normaloff>
-    <normalon>:/res/beagleplayer_icon.png</normalon>:/res/beagletomb_icon.png</iconset>
+   <iconset resource="../images/BTres.qrc">
+    <normaloff>:/images/beagleplayer_icon.png</normaloff>:/images/beagleplayer_icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -175,6 +174,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../images/BTres.qrc"/>
+ </resources>
  <connections/>
 </ui>

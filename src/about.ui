@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Beagle Player About</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../images/BTres.qrc">
+    <normaloff>:/images/beagleplayer_icon.png</normaloff>:/images/beagleplayer_icon.png</iconset>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="99,1">
@@ -101,8 +105,8 @@ Multimedia codecs</string>
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
-           <normaloff>:/res/beagleplayer_icon.png</normaloff>:/res/beagleplayer_icon.png</iconset>
+          <iconset resource="../images/BTres.qrc">
+           <normaloff>:/images/beagleplayer_icon.png</normaloff>:/images/beagleplayer_icon.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -129,7 +133,7 @@ Multimedia codecs</string>
   </layout>
  </widget>
  <resources>
-  <include location="../res/BTres.qrc"/>
+  <include location="../images/BTres.qrc"/>
  </resources>
  <connections>
   <connection>

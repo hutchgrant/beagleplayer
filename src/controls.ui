@@ -53,8 +53,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
-           <normaloff>:/res/RRWD_icon.png</normaloff>:/res/RRWD_icon.png</iconset>
+          <iconset resource="../images/BTres.qrc">
+           <normaloff>:/images/RRWD_icon.png</normaloff>:/images/RRWD_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -76,8 +76,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
-           <normaloff>:/res/RWD_icon.png</normaloff>:/res/RWD_icon.png</iconset>
+          <iconset resource="../images/BTres.qrc">
+           <normaloff>:/images/RWD_icon.png</normaloff>:/images/RWD_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -93,8 +93,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
-           <normaloff>:/res/STOP_icon.png</normaloff>:/res/STOP_icon.png</iconset>
+          <iconset resource="../images/BTres.qrc">
+           <normaloff>:/images/STOP_icon.png</normaloff>:/images/STOP_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -116,8 +116,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
-           <normaloff>:/res/PAUSE_icon.png</normaloff>:/res/PAUSE_icon.png</iconset>
+          <iconset resource="../images/BTres.qrc">
+           <normaloff>:/images/PAUSE_icon.png</normaloff>:/images/PAUSE_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -133,8 +133,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
-           <normaloff>:/res/FWD_icon.png</normaloff>:/res/FWD_icon.png</iconset>
+          <iconset resource="../images/BTres.qrc">
+           <normaloff>:/images/FWD_icon.png</normaloff>:/images/FWD_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -150,8 +150,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
-           <normaloff>:/res/FFWD_icon.png</normaloff>:/res/FFWD_icon.png</iconset>
+          <iconset resource="../images/BTres.qrc">
+           <normaloff>:/images/FFWD_icon.png</normaloff>:/images/FFWD_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -167,8 +167,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
-           <normaloff>:/res/RPT_icon.png</normaloff>:/res/RPT_icon.png</iconset>
+          <iconset resource="../images/BTres.qrc">
+           <normaloff>:/images/RPT_icon.png</normaloff>:/images/RPT_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -195,7 +195,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../res/BTres.qrc"/>
+  <include location="../images/BTres.qrc"/>
  </resources>
  <connections/>
 </ui>
