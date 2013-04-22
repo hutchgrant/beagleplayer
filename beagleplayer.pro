@@ -24,7 +24,9 @@ SOURCES += \
     src/about.cpp \
     src/volume.cpp \
     src/dbconnect.cpp \
-    src/newplaylist.cpp
+    src/newplaylist.cpp \
+    src/prefobj.cpp \
+    src/remotesync.cpp
 
 HEADERS  += \
     src/qmpyuvreader.h \
@@ -39,7 +41,9 @@ HEADERS  += \
     src/about.h \
     src/volume.h \
     src/dbconnect.h \
-    src/newplaylist.h
+    src/newplaylist.h \
+    src/prefobj.h \
+    src/remotesync.h
 
 FORMS    += \
     src/playlist.ui \
@@ -54,28 +58,31 @@ FORMS    += \
 OTHER_FILES += \
     qmpwidget.pri \
     src/qmpwidget.pri \
-    images/UP_icon.png \
-    images/STOP_icon.png \
-    images/RWD_icon.png \
-    images/RRWD_icon.png \
-    images/RPT_icon.png \
-    images/PAUSE_icon.png \
-    images/FWD_icon.png \
-    images/FFWD_icon.png \
-    images/DOWN_icon.png \
-    images/beagleplayer_icon.png \
-    images/REMOVE_icon.png \
-    images/OPEN_icon.png \
-    images/ADD_icon.png
+    res/UP_icon.png \
+    res/STOP_icon.png \
+    res/RWD_icon.png \
+    res/RRWD_icon.png \
+    res/RPT_icon.png \
+    res/PAUSE_icon.png \
+    res/FWD_icon.png \
+    res/FFWD_icon.png \
+    res/DOWN_icon.png \
+    res/beagleplayer_icon.png \
+    res/REMOVE_icon.png \
+    res/OPEN_icon.png \
+    res/ADD_icon.png
 
 RESOURCES += \
-    images/BTres.qrc
+    res/BTres.qrc
 
 documentation.files = docs/*
 documentation.path = /opt/extras.ubuntu.com/beagleplayer/docs
 sources.files = src/*
 sources.path = /opt/extras.ubuntu.com/beagleplayer/src
 target.path = /opt/extras.ubuntu.com/beagleplayer
+other.files = ./*
+other.path = /opt/extras.ubuntu.com/beagleplayer/release
 INSTALLS += target \
             sources \
-            documentation 
+            documentation \
+            other
