@@ -26,11 +26,14 @@ controls::controls(QWidget *parent) :
     ui(new Ui::controls)
 {
     ui->setupUi(this);
+    remoteMode = 0;  // init play mode to local
+
     CON_MODE = 0;
     widget.setSeekSlider(ui->trackSlider);
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
     connect(vol, SIGNAL(volChanged(int)), this, SLOT(setVol(int)));
+
 }
 
 /*
@@ -45,6 +48,19 @@ void controls::startLocal(char *finSong, char *finPath)
     widget.show();
     ui->songTitle->setText(QString(finSong));
     widget.start(QStringList(final));
+}
+
+/*
+  * Control for start of remote file
+  */
+ void controls::startRemote(char *finSong, int selID){
+    char *final;
+        final = new char[strlen(finSong) + 100];
+        sprintf(final, "http://%s:%s/content/media/object_id/%d/res_id/0", pref.getHostIP().c_str(), pref.getHostPort().c_str(), selID);
+        cout << "Final File Playing: " << final << endl;
+        widget.show();
+        ui->songTitle->setText(QString(finSong));
+        widget.start(QStringList(final));
 }
 
 /*
@@ -63,11 +79,16 @@ void controls::startSelected(){
     finSong = new char[finSongSize + 1];
     finSong = checkSongObjByID(selID, current);
 
-    finPathSize = strlen(checkSongObjPathByID(selID, current));
-    finPath = new char[finPathSize + 1];
-    finPath = checkSongObjPathByID(selID, current);
 
-    startLocal(finSong, finPath);
+    cout << "final song:" << finSong << endl;
+    if(remoteMode == 0){   /// if local mode
+        finPathSize = strlen(checkSongObjPathByID(selID, current));
+        finPath = new char[finPathSize + 1];
+        finPath = checkSongObjPathByID(selID, current);
+        startLocal(finSong, finPath);
+    }else{                  /// if remote mode
+        startRemote(finSong, selID);
+    }
 }
 /*
   * Slot to Change connection Mode

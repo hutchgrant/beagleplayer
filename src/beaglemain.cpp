@@ -37,6 +37,7 @@ void beaglemain::addWidgets(){
     ui->widgetLayout->addWidget(brow,0,0,0,0,0);
     ui->cntrlWidget->addWidget(cntrl,0,0,0,0,0);
     ui->playwidget->addWidget(plList,0,0,0,0,0);
+
 }
 
 void beaglemain::conSignals(){
@@ -46,6 +47,8 @@ void beaglemain::conSignals(){
     connect(brow, SIGNAL(plItemChanged(string,string,int,int)), plList, SLOT(AddToTempPL(string, string, int, int)));
     connect(brow,SIGNAL(FullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
     connect(brow,SIGNAL(selectionChanged(int)), cntrl, SLOT(setSelection(int)));
+    // preferences
+    connect(brow, SIGNAL(prefChanged(prefObj&, int)), cntrl, SLOT(setCurPref(prefObj&, int)));
     // playlist
     connect(plList, SIGNAL(playlistChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));
     connect(plList, SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
@@ -83,6 +86,7 @@ void beaglemain::on_actionQuit_triggered()
 void beaglemain::on_actionPreferences_triggered()
 {
     brow->dbCon.control();
+    brow->getPref();
 }
 
 void beaglemain::on_actionDonate_triggered()
@@ -99,4 +103,31 @@ void beaglemain::on_actionAbout_triggered()
 }
 void beaglemain::closeEvent(QCloseEvent *){
     cntrl->close();
+}
+
+void beaglemain::on_actionEnable_remote_triggered()
+{
+    brow->ToggleMode();
+    /// Toggle Combo Box List
+    QStringList curComboMenu;
+    m_ComboModel = new QStringListModel(this);
+    if(brow->remoteMode == 1){
+        curComboMenu << "Remote Artists";
+        curComboMenu << "Remote Albums";
+        curComboMenu << "Remote VidDirs";
+    }
+    else{
+        curComboMenu << "Artists";
+        curComboMenu << "Videos";
+    }
+
+    m_ComboModel->setStringList(curComboMenu);
+    ui->ModeCombo->setModel(m_ComboModel);
+}
+
+void beaglemain::on_actionSync_remote_triggered()
+{
+    brow->Sync(5);
+
+
 }

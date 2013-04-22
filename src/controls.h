@@ -25,6 +25,8 @@
 #include "fileobj.h"
 #include "qmpwidget.h"
 #include "volume.h"
+#include "prefobj.h"
+
 namespace Ui {
 class controls;
 }
@@ -39,9 +41,11 @@ public:
     virtual ~controls();
     QMPwidget widget;
     int pl_selected;
+    prefObj pref;
+    int remoteMode;
 
-    void startSong(char *FinSong, int selID);
     void startLocal(char *finSong, char *finPath);
+    void startRemote(char *finSong, int selID);
 
     void close(){
         widget.close();
@@ -58,6 +62,10 @@ public slots:
         startSelected();
     }
     void setCurList(fileObj &newlist, int * newIDlist);
+    void setCurPref(prefObj &srcpref, int remote){
+        pref = srcpref;
+        remoteMode = remote;
+    }
 
     void changeCon(int mode);
 

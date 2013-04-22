@@ -27,6 +27,8 @@
 #include <iostream>
 #include <cstring>
 #include <QFile>
+#include "prefobj.h"
+#include "dbconnect.h"
 #define TEMPDB "/.cache/beagleplayer/BPmedia.db"
 
 using namespace std;
@@ -40,17 +42,15 @@ class PrefDialog : public QDialog
 
 public:
     string DBlocation;
+    prefObj preferences;
+
 
     explicit PrefDialog(QWidget *parent = 0);
     void setPreferences();
     void setLabels();
     virtual ~PrefDialog();
-
-    void setSQL(string strSQL){
-        DBlocation = getenv("HOME") + strSQL;
-    }
-    string getSQL(){
-        return DBlocation;
+    prefObj getPref(){
+        return preferences;
     }
 
 private slots:

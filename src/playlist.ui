@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../images/BTres.qrc">
-    <normaloff>:/images/beagleplayer_icon.png</normaloff>:/images/beagleplayer_icon.png</iconset>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -41,8 +37,8 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../images/BTres.qrc">
-           <normaloff>:/images/OPEN_icon.png</normaloff>:/images/OPEN_icon.png</iconset>
+          <iconset resource="../res/BTres.qrc">
+           <normaloff>:/res/OPEN_icon.png</normaloff>:/res/OPEN_icon.png</iconset>
          </property>
          <property name="popupMode">
           <enum>QToolButton::InstantPopup</enum>
@@ -55,8 +51,8 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../images/BTres.qrc">
-           <normaloff>:/images/ADD_icon.png</normaloff>:/images/ADD_icon.png</iconset>
+          <iconset resource="../res/BTres.qrc">
+           <normaloff>:/res/ADD_icon.png</normaloff>:/res/ADD_icon.png</iconset>
          </property>
          <property name="popupMode">
           <enum>QToolButton::InstantPopup</enum>
@@ -69,8 +65,8 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../images/BTres.qrc">
-           <normaloff>:/images/REMOVE_icon.png</normaloff>:/images/REMOVE_icon.png</iconset>
+          <iconset resource="../res/BTres.qrc">
+           <normaloff>:/res/REMOVE_icon.png</normaloff>:/res/REMOVE_icon.png</iconset>
          </property>
          <property name="popupMode">
           <enum>QToolButton::InstantPopup</enum>
@@ -104,7 +100,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../images/BTres.qrc"/>
+  <include location="../res/BTres.qrc"/>
  </resources>
  <connections/>
 </ui>

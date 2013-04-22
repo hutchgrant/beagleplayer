@@ -57,11 +57,17 @@ private slots:
 
     void on_actionAbout_triggered();
 
+    void on_actionEnable_remote_triggered();
+
+    void on_actionSync_remote_triggered();
+
 private:
     Ui::beaglemain *ui;
      browse *brow;
      controls *cntrl;
      playlist *plList;
      About ab;
+
+     QStringListModel *m_ComboModel;
 };
 #endif // BEAGLEMAIN_H

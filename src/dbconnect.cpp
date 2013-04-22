@@ -2,20 +2,18 @@
 
 dbconnect::dbconnect()
 {
-    string DB = "/.cache/beagleplayer/BTmedia.db";
+    string DB = "/.cache/beagleplayer/BPmedia.db";
     DBlocation = getenv("HOME") + DB;
+    OpenDB();
+
 }
 
-QSqlDatabase dbconnect::OpenDB(){
+void dbconnect::OpenDB(){
     if(!initDB()){
         control();
     }
-    QSqlDatabase db2 = QSqlDatabase::addDatabase("QSQLITE");
-    db2.setDatabaseName(getSQL().c_str());
-    if(!db2.open()){
-        cout << "unable to connect with " << getSQL().c_str() << endl;
-    }
-    return db2;
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(getSQL().c_str());
 }
 void dbconnect::closeDB(){
     QSqlDatabase::removeDatabase(getSQL().c_str());
@@ -25,14 +23,62 @@ void dbconnect::closeDB(){
 * Create Local Database Table
 */
 void dbconnect::createLocalDB() {
-    string finalQry[8];
+    string finalQry[12];
     finalQry[0] = "create table lcl_songdirs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
     finalQry[1] = "create table lcl_songs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
     finalQry[2] = "create table lcl_viddirs (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
     finalQry[3] = "create table lcl_videos (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
-    finalQry[4] = "create table playlists (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
-    finalQry[5] = "create table playlist_items (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
-    for(int i=0; i<6; i++){
+
+    finalQry[4] = "create table rem_Artists(key INTEGER PRIMARY KEY,Artist TEXT,ArtistID integer, ArtistPar integer) ";
+    finalQry[5] = "create table rem_Albums(key INTEGER PRIMARY KEY,Album TEXT,AlbumID integer, AlbumPar integer)";
+    finalQry[6] = "create table rem_Songs(key INTEGER PRIMARY KEY,Song TEXT,SongID integer, SongPar integer)";
+    finalQry[7] = "create table rem_Videos(key INTEGER PRIMARY KEY,Video TEXT,VideoID integer, VideoPar integer)";
+    finalQry[8] = "create table rem_VidDirs(key INTEGER PRIMARY KEY,VidDir TEXT,VidDirID integer, VidDirPar integer)";
+
+    finalQry[9] = "create table playlists (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
+    finalQry[10] = "create table playlist_items (key INTEGER PRIMARY KEY,lcl_dir_par integer,lcl_dir_name TEXT,lcl_dir_path TEXT)";
+    finalQry[11] = "create table pref(key INTEGER PRIMARY KEY,usr TEXT,PASS TEXT,SERVER TEXT,PRT TEXT,SQLTABLE TEXT,SQL TEXT)";
+
+    for(int i=0; i<12; i++){
+        writeMe(finalQry[i]);
+    }
+}
+
+/*
+  * Delete Database tables
+  */
+void dbconnect::dropTable(int mode){
+    string finalQry[5];
+    int itemCount = 0;
+
+    if( mode == 1)  // drop local audio/video files
+    {
+        finalQry[0] = "drop table lcl_songdirs if exists";
+        finalQry[1] = "drop table lcl_songs if exists";
+        finalQry[2] = "drop table lcl_viddirs if exists";
+        finalQry[3] = "drop table lcl_videos if exists";
+        itemCount = 4;
+    }
+    else if(mode == 2){  // drop remote audio/video files
+        finalQry[0] = "drop table rem_Artists if exists";
+        finalQry[1] = "drop table rem_Albums if exists";
+        finalQry[2] = "drop table rem_Songs if exists";
+        finalQry[3] = "drop table rem_Videos if exists";
+        finalQry[4] = "drop table rem_VidDirs if exists";
+        itemCount = 5;
+    }
+    else if(mode == 3){
+        finalQry[0] = "drop table pref if exists";
+        itemCount = 1;
+
+    }
+    else if(mode == 4){
+        finalQry[0] = "drop table playlists if exists";
+        finalQry[1] = "drop table playlist_items if exists";
+        itemCount = 2;
+    }
+
+    for(int i=0; i<itemCount; i++){
         writeMe(finalQry[i]);
     }
 }
@@ -99,11 +145,113 @@ void dbconnect::writeDB(fileObj &src, int itemCount, int type){
         }
     }
 }
+
+/*
+  * Write All Remote Medaitomb objects
+  */
+void dbconnect::writeAllRemote(fileObj &Artist, fileObj &Album, fileObj &Song, fileObj &VidDir, fileObj &Video){
+    int pos = 0, posMax = 0, countRemind = 0, counter = 0;   /// counter for individual files within each file object
+    int objSize = 0;   // size of each object
+    int TotalWrites = 0;    /// counter for number of objects looped
+    string str2;
+    string insertStr, col1, col2, col3;
+    fileObj src;
+
+    while(TotalWrites<=5){
+        TotalWrites++;
+        if(TotalWrites == 1){
+            objSize = Artist.getSize();
+            src = Artist;
+            insertStr =  " INSERT INTO rem_Artists (Artist,ArtistID,ArtistPar) ";
+            col1 = "Artist"; col2 = "ArtistID"; col3 = "ArtistPar";
+        }
+        else if(TotalWrites == 2){
+            objSize = Album.getSize()-1;
+            src = Album;
+            insertStr =  " INSERT INTO rem_Albums (Album,AlbumID,AlbumPar) ";
+            col1 = "Album"; col2 = "AlbumID"; col3 = "AlbumPar";
+        }
+        else if(TotalWrites == 3){
+            objSize = Song.getSize()-1;
+            src = Song;
+            insertStr =  " INSERT INTO rem_Songs (Song,SongID,SongPar) ";
+            col1 = "Song"; col2 = "SongID"; col3 = "SongPar";
+        }
+        else if(TotalWrites == 4){
+            objSize = VidDir.getSize();
+            src = VidDir;
+            insertStr =  " INSERT INTO rem_VidDirs (VidDir,VidDirID,VidDirPar) ";
+            col1 = "VidDir"; col2 = "VidDirID"; col3 = "VidDirPar";
+        }
+        else if(TotalWrites == 5){
+            objSize = Video.getSize()-1;
+            src = Video;
+            insertStr =  " INSERT INTO rem_Videos (Video,VideoID,VideoPar) ";
+            col1 = "Video"; col2 = "VideoID"; col3 = "VideoPar";
+        }
+        pos = 0, posMax = 0,counter = 0, countRemind = 0;   /// counter for individual files within each file object
+
+            counter = getMaxPos(objSize);
+            posMax = counter;
+            for (int m = 0; m <= (objSize / counter); m++) {
+                countRemind = 0;
+                stringstream os;
+                for (int i = pos; i <= posMax; i++) {
+                    str2 = src.getName(i);
+
+                    str2.erase(remove(str2.begin(), str2.end(), '\"'), str2.end());
+                    src.setName(i,(char *)str2.c_str());
+
+                    if (i != posMax && countRemind == 0) {
+                        os << insertStr << "SELECT \""
+                           << src.getName(i) << "\" AS \"" << col1 << "\", \""
+                           <<  src.getID(i) << "\" AS \"" << col2 << "\", \""
+                           << src.getPar(i) << "\" AS \"" << col3 << "\"";
+                        countRemind++;
+                    }
+                    if (i != posMax && countRemind != 0) {
+                        os << " UNION SELECT \""<< src.getName(i)<<"\",\""<< src.getID(i)<<"\",\""<< src.getPar(i)<<"\"";
+
+                    } else if (i == posMax && countRemind != 0) {
+                        os << ";";
+                    }
+                }
+                str2 = os.str();
+             //   cout << str2 << endl;
+                writeMe(str2);
+                posMax += counter;
+                pos += counter;
+
+                if (m == (objSize / counter) - 1) {
+                    posMax = pos + objSize - ((objSize / counter)
+                                              * counter);
+                }
+            }
+        }
+
+
+}
+
+
+/*
+  * Write all preferences
+  */
+void dbconnect::writePref(prefObj &src){
+    string str2;
+    stringstream os;
+    os << "INSERT INTO pref (usr, PASS, SERVER, PRT, SQLTABLE, SQL) VALUES ('"
+       << src.USER << "','" << src.UPASS << "','" << src.HOSTIP << "','" << src.HOSTPORT  << "','" << src.HostTable  << "','" << src.localDBPath << "')";
+
+    str2 = os.str();
+    writeMe(str2);
+}
+
+
 /*
 * Write Any string to database
 */
 void dbconnect::writeMe(string qry){
-    QSqlDatabase db = OpenDB();
+    OpenDB();
     if(db.open()){
         QSqlQuery myQry;
         myQry.prepare(qry.c_str());
@@ -112,44 +260,96 @@ void dbconnect::writeMe(string qry){
     }
 }
 void dbconnect::readLocal(fileObj &Artist, fileObj &Song, fileObj &VidDir, fileObj &Video ){
-    readDB(Artist, "SELECT * FROM lcl_songdirs");
-    readDB(Song, "SELECT * FROM lcl_songs");
-    readDB(VidDir, "SELECT * FROM lcl_viddirs");
-    readDB(Video, "SELECT * FROM lcl_videos");
+    int local = 0;
+    OpenDB();
+
+    readDB(Artist, "SELECT * FROM lcl_songdirs", local);
+    readDB(Song, "SELECT * FROM lcl_songs", local);
+    readDB(VidDir, "SELECT * FROM lcl_viddirs", local);
+    readDB(Video, "SELECT * FROM lcl_videos", local);
+}
+void dbconnect::readRemote(fileObj &RemArtist, fileObj &RemAlbum, fileObj &RemSong, fileObj &RemVidDir, fileObj &RemVideo ){
+    int remote = 1;
+    OpenDB();
+
+    readDB(RemArtist, "SELECT * FROM rem_Artists", remote);
+    readDB(RemAlbum, "SELECT * fROM rem_Albums", remote);
+    readDB(RemSong, "SELECT * FROM rem_Songs", remote);
+    readDB(RemVidDir, "SELECT * FROM rem_viddirs", remote);
+    readDB(RemVideo, "SELECT * FROM rem_videos" ,remote);
 }
 /*
-  * read database and fill object src
+  * read database and fill object src for local/remote files
+  * @param: SyncMode 1)local 2) remote
   */
-void dbconnect::readDB(fileObj &src, string qry){
+void dbconnect::readDB(fileObj &src, string qry, int SyncMode){
     src.initFile(100);
-    QSqlDatabase db = OpenDB();
     QSqlQuery query;
     int count = 0;
 
     if(db.open()){
         query = QString(qry.c_str());
         while(query.next()){
-            QString QValID = query.value(0).toString();   // ID
-            QString QValPAR = query.value(1).toString();   // PARID
-            QString QValNAME = query.value(2).toString();   // NAME
-            QString QValPATH = query.value(3).toString();   // PATH
-
-            if(QValNAME.toStdString() != "-"){
-                src.set(count, QValID.toInt(), QValPAR.toInt(), QValNAME.toStdString().c_str(), QValPATH.toStdString().c_str());
-                count++;
+            if(SyncMode == 0){
+                QString QValID = query.value(0).toString();   // ID
+                QString QValPAR = query.value(1).toString();   // PARID
+                QString QValNAME = query.value(2).toString();   // NAME
+                QString QValPATH = query.value(3).toString();   // PATH
+                if(QValNAME.toStdString() != "-"){
+                    src.set(count, QValID.toInt(), QValPAR.toInt(), QValNAME.toStdString().c_str(), QValPATH.toStdString().c_str());
+                    count++;
+                }
+            }
+            else if(SyncMode == 1){
+                QString QValID = query.value(2).toString();   // ID
+                QString QValPAR = query.value(3).toString();   // PARID
+                QString QValNAME = query.value(1).toString();   // NAME
+                QString QValPATH = query.value(0).toString();   // PATH
+                if(QValNAME.toStdString() != "-"){
+                    src.set(count, QValID.toInt(), QValPAR.toInt(), QValNAME.toStdString().c_str(), QValPATH.toStdString().c_str());
+                    count++;
+                }
             }
         }
-        db.close();
     }
+}
+
+/// read preference table from sql
+void dbconnect::readPref(prefObj &src){
+     QSqlQuery query;
+
+        if(db.open()){
+
+            query = QString("SELECT * FROM pref");
+
+            while (query.next()){
+                QString QVal1 = query.value(1).toString();
+                QString QVal2 = query.value(2).toString();
+                QString QVal3 = query.value(3).toString();
+                QString QVal4 = query.value(4).toString();
+                QString QVal5 = query.value(5).toString();
+                QString QVal6 = query.value(6).toString();
+
+
+                src.setPref(QVal1.toStdString(),QVal2.toStdString(), QVal3.toStdString(),QVal4.toStdString(), QVal5.toStdString(), QVal6.toStdString());
+            }
+
+        }
+        closeDB();
 }
 
 /// controls inital functions at once
 void dbconnect::control(){
+    PrefDialog prefDg;
+    prefObj pref;
     if(prefDg.exec()==QDialog::Accepted){
-        setSQL(prefDg.getSQL());
+        pref = prefDg.getPref();
+        setSQL(pref.localDBPath);
         createCache();
         setInitDB();
         createLocalDB();
+    //    dropTable(3);
+        writePref(pref);
     }
 }
 /// get initial db file from text cache
@@ -202,7 +402,6 @@ void dbconnect::createCache(){
 }
 
 void dbconnect::getLastIDs(int *lastID){
-    QSqlDatabase db = OpenDB();
     if(db.open()){
         QSqlQuery query;
         query = QString("SELECT * FROM playlists");
@@ -210,7 +409,6 @@ void dbconnect::getLastIDs(int *lastID){
         while(query.next()){
             *lastID = query.value(0).toInt();
         }
-        db.close();
     }
 }
 /*
@@ -218,7 +416,7 @@ void dbconnect::getLastIDs(int *lastID){
   */
 void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount){
     int IDcounter =0;
-        QSqlDatabase db = OpenDB();
+    OpenDB();
         if(db.open()){
             QSqlQuery query;
             for(int i=0; i<4; i++){
@@ -245,8 +443,6 @@ void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount){
                     }
                 }
             }
-
-            db.close();
         }
 }
 /*
@@ -279,5 +475,6 @@ dbconnect& dbconnect::operator=(const dbconnect& src){
     return *this;
 }
 dbconnect::~dbconnect(){
-  //  closeDB();
+    db.close();
+    closeDB();
 }

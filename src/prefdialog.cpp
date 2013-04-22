@@ -21,6 +21,7 @@
 
 #include "prefdialog.h"
 #include "ui_prefdialog.h"
+
 using namespace std;
 
 PrefDialog::PrefDialog(QWidget *parent) :
@@ -32,7 +33,14 @@ PrefDialog::PrefDialog(QWidget *parent) :
 }
 
 void PrefDialog::setLabels(){
-    ui->entry_sql->setText(QString(TEMPDB));
+    dbconnect dbCon;
+    dbCon.readPref(preferences);
+    ui->entry_sqlPath->setText(QString(TEMPDB));
+    ui->entry_remUser->setText(preferences.getQUser());
+    ui->entry_remPass->setText(preferences.getQPass());
+    ui->entry_remIP->setText(preferences.getQHOSTIP());
+    ui->entry_remPort->setText(preferences.getQHOSTPORT());
+    ui->entry_remTable->setText(preferences.getQTable());
 }
 
 PrefDialog::~PrefDialog()
@@ -45,7 +53,14 @@ void PrefDialog::on_buttonBox_accepted()
 }
 void PrefDialog::setPreferences(){
 
-    QString Q_sql = ui->entry_sql->text();
-        setSQL(Q_sql.toStdString());
+    QString Q_sqlPath = ui->entry_sqlPath->text();
+    QString Q_remoteUser = ui->entry_remUser->text();
+    QString Q_remotePass = ui->entry_remPass->text();
+    QString Q_remoteIP = ui->entry_remIP->text();
+    QString Q_remotePort = ui->entry_remPort->text();
+     QString Q_remoteTable = ui->entry_remTable->text();
+
+
+   preferences.setPref( Q_remoteUser.toStdString(), Q_remotePass.toStdString(), Q_remoteIP.toStdString(), Q_remotePort.toStdString(), Q_remoteTable.toStdString(), Q_sqlPath.toStdString());
 
 }

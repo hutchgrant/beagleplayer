@@ -26,6 +26,9 @@
 #include "fileobj.h"
 #include "localsync.h"
 #include "dbconnect.h"
+#include "mysqlconn.h"
+#include "remotesync.h"
+#include "prefobj.h"
 
 namespace Ui {
 class browse;
@@ -40,17 +43,22 @@ public:
     int vidCount;
     localsync lclSync;
     dbconnect dbCon;
+    prefObj pref;
+
+    int remoteMode; /// 0  = local  , 1 = remote
 
     explicit browse(QWidget *parent = 0);
     ~browse();
     void Sync(int mode);
-
+    void ToggleMode();
+    void getPref();
 signals:
     void curListChanged(fileObj &filelist, int *itemList);
     void plItemChanged(string plName, string plPath, int plID, int plPar);
     void selectionChanged(int);                         //  a track was selected
     void FullSelection(int);                            // a track was double clicked
     void MenuSelection(int);                            // a Menu Item was selected
+    void prefChanged(prefObj &src, int selID);
 public slots:
     void updateTitle(int);                               // update Right ViewList
     void updateMenu();                                   // update Left ViewList
@@ -67,6 +75,7 @@ private slots:
 private:
     int MenuMode;   /// 0  = Artist , 1 = VidDir
     fileObj Artist, Album, Song, VidDir, Video;
+    fileObj RemArtist, RemAlbum, RemSong, RemVidDir, RemVideo;
     int *curSongID, *curVidID;
     Ui::browse *ui;
     QStringListModel *m_Model;

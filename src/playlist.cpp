@@ -95,8 +95,8 @@ void playlist::removePL(int type){
 }
 
 bool playlist::readPL(){
-    dbCon.readDB(playlists, "SELECT * FROM playlists");
-    dbCon.readDB(playlistItems, "SELECT * FROM playlist_items");
+    dbCon.readDB(playlists, "SELECT * FROM playlists", 0);
+    dbCon.readDB(playlistItems, "SELECT * FROM playlist_items", 0);
     return true;
 }
 

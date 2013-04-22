@@ -14,8 +14,9 @@
    <string> beagleplayer 0.1.1</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../images/BTres.qrc">
-    <normaloff>:/images/beagleplayer_icon.png</normaloff>:/images/beagleplayer_icon.png</iconset>
+   <iconset>
+    <normaloff>:/res/beagletomb_icon.png</normaloff>
+    <normalon>:/res/beagleplayer_icon.png</normalon>:/res/beagletomb_icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -138,8 +139,16 @@
     <addaction name="actionAbout"/>
     <addaction name="actionDonate"/>
    </widget>
+   <widget class="QMenu" name="menuRemote">
+    <property name="title">
+     <string>Remote</string>
+    </property>
+    <addaction name="actionEnable_remote"/>
+    <addaction name="actionSync_remote"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuRemote"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionImport">
@@ -172,10 +181,18 @@
     <string>Donate</string>
    </property>
   </action>
+  <action name="actionEnable_remote">
+   <property name="text">
+    <string>Enable remote</string>
+   </property>
+  </action>
+  <action name="actionSync_remote">
+   <property name="text">
+    <string>Sync remote</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="../images/BTres.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
