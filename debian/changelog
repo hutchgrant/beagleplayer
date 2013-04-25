@@ -1,5 +1,17 @@
+beagleplayer (0.1.2-0ubuntu1) precise; urgency=high
+
+  * Added: merged with beagletomb, now accepting remote connections
+
+ -- Grant Hutchinson <h.g.utchinson@gmail.com>  Thu, 25 Apr 2013 00:37:02 -0400
+
 beagleplayer (0.1.1-0ubuntu1) precise; urgency=low
 
-  * Initial release (Closes: #nnnn)
+  * Added playlist add/save/remove
 
- -- Grant Hutchinson <h.g.utchinson@gmail.com>  Sun, 17 Jun 2012 01:10:44 -0400
+ -- Grant Hutchinson <h.g.utchinson@gmail.com>  Mon, 14 May 2012 04:31:21 -0400
+
+beagleplayer (0.1.0-0ubuntu1) precise; urgency=low
+
+  * Initial release. (Closes: #XXXXXX)
+
+ -- Grant Hutchinson <h.g.utchinson@gmail.com>  Wed, 09 May 2012 01:48:38 -0400
