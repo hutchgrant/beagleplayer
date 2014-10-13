@@ -303,11 +303,11 @@ void dbconnect::readRemote(fileObj &RemArtist, fileObj &RemAlbum, fileObj &RemSo
   */
 void dbconnect::readDB(fileObj &src, string qry, int SyncMode){
     src.initFile(100);
-    QSqlQuery query;
+
     int count = 0;
 
     if(db.open()){
-        query = QString(qry.c_str());
+         QSqlQuery query(QString(qry.c_str()));
         while(query.next()){
             if(SyncMode == 0){
                 QString QValID = query.value(0).toString();   // ID
@@ -335,11 +335,11 @@ void dbconnect::readDB(fileObj &src, string qry, int SyncMode){
 
 /// read preference table from sql
 void dbconnect::readPref(prefObj &src){
-     QSqlQuery query;
+
 
         if(db.open()){
 
-            query = QString("SELECT * FROM pref");
+           QSqlQuery query(QString("SELECT * FROM pref"));
 
             while (query.next()){
                 QString QVal1 = query.value(1).toString();
@@ -425,8 +425,7 @@ void dbconnect::createCache(){
 
 void dbconnect::getLastIDs(int *lastID){
     if(db.open()){
-        QSqlQuery query;
-        query = QString("SELECT * FROM playlists");
+        QSqlQuery query(QString("SELECT * FROM playlists"));
 
         while(query.next()){
             *lastID = query.value(0).toInt();
@@ -444,16 +443,16 @@ void dbconnect::getLastIDs(int *AudFolderCount, int *VidFolderCount){
             for(int i=0; i<4; i++){
                 IDcounter = i;
                 if(IDcounter == 0){
-                    query = QString("SELECT * FROM lcl_songdirs");
+                    QSqlQuery query(QString("SELECT * FROM lcl_songdirs"));
                 }
                 else if(IDcounter == 1){
-                    query = QString("SELECT * FROM lcl_viddirs");
+                    QSqlQuery query(QString("SELECT * FROM lcl_viddirs"));
                 }
                 else if(IDcounter == 2){
-                    query = QString("SELECT * FROM lcl_songs");
+                    QSqlQuery query(QString("SELECT * FROM lcl_songs"));
                 }
                 else if(IDcounter == 3){
-                    query = QString("SELECT * FROM lcl_videos");
+                    QSqlQuery query(QString("SELECT * FROM lcl_videos"));
                 }
 
                 while (query.next()){

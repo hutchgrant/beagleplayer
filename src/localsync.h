@@ -23,7 +23,7 @@
 #include <QDir>
 #include <QStringListModel>
 #include <QDirIterator>
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 #include <qstringlist.h>
 #include <QMainWindow>
 #include <QFileDialog>

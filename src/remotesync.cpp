@@ -105,7 +105,7 @@ int remotesync::getAudioMenu(){
         }
 
             QSqlQuery query;
-            query = QString(myQry);
+             query.exec(QString(myQry));
             while (query.next()){
 
                 QString QVal = query.value(0).toString();
@@ -178,7 +178,7 @@ int remotesync::getVideoMenu(){
          rowCount = 0;
 
          QSqlQuery query;
-         query = QString(myQry);
+         query.exec(QString(myQry));
          while (query.next()){
 
              QString QVal = query.value(0).toString();
@@ -225,7 +225,7 @@ void remotesync::connectTracks(fileObj &folder, int lookID, int mode){
         }
         if(db.open()){
             QSqlQuery query;
-            query = QString(myQry);
+            query.exec(QString(myQry));
             while(query.next()){
                 QString QVal = query.value(0).toString();
                 QString QVal1 = query.value(1).toString();
@@ -273,7 +273,7 @@ void remotesync::connectTracks(fileObj &folder, fileObj &src, int lookID, int mo
 
 
                 QSqlQuery query;
-                query = QString(myQry);
+                query.exec(QString(myQry));
                 while(query.next()){
                     QString QVal = query.value(0).toString();
                     QString QVal1 = query.value(1).toString();

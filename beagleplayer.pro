@@ -8,7 +8,8 @@ QT       += core gui sql
 
 TARGET = beagleplayer
 TEMPLATE = app
-QT += network \
+QT += widgets  \
+        network \
         opengl
 
 SOURCES += \
