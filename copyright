@@ -3,11 +3,15 @@ Upstream-Name: beagletomb
 Source: https://github.com/hutchgrant/BeagleTomb
 
 Files: *
-Copyright: 2011-2012 Grant Hutchinson <h.g.utchinson@gmail.com>
+Copyright: 2011-2014 Grant Hutchinson <h.g.utchinson@gmail.com>
 License: GPL-3.0+
 
 Files: debian/*
-Copyright: 2011-2012 Grant Hutchinson <h.g.utchinson@gmail.com>
+Copyright: 2011-2014 Grant Hutchinson <h.g.utchinson@gmail.com>
+License: GPL-3.0+
+
+Files: src/qmpwidget/*
+Copyright: 2010 Jonas Gehring
 License: GPL-3.0+
 
 License: GPL-3.0+
