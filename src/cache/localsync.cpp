@@ -61,11 +61,11 @@ void localsync::scanDir(QString dir, int scantype){
         directories.next();
 
         if(scantype == 0 ){
-            localDir.set(count, 0,  0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+            localDir.set(count, count,  0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
             count++;
         }
         else{
-            localDir.set(count, 0, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+            localDir.set(count, count, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
             count++;
         }
     }

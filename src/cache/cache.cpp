@@ -47,7 +47,7 @@ void cache::writeMe(string qry){
 void cache::writeDB(fileObj *file, string type){
     qDebug() << "Test" << endl;
     int begin = 0;
-    if(type == "playlist_items" || "playlists"){
+    if(type == "playlist_items" || type == "playlists"){
         begin = file->getSize() - 1;
     }
     openDB();
@@ -55,14 +55,13 @@ void cache::writeDB(fileObj *file, string type){
         for(int x=begin; x< file->getSize(); x++){
             stringstream os;
             os << "INSERT INTO " << type << " (dir_par, dir_name, dir_path) VALUES ('" << file->getPar(x) << "', '" << file->getName(x) << "', '" <<  file->getPath(x) << "')";
-            writeMe(os.str());
-            qDebug() << os.str().c_str() << endl;
+            QSqlQuery myQry(db);
+            myQry.prepare(os.str().c_str());
+            myQry.exec();
         }
-        this->db.close();
-        closeDB();
-
+    this->db.close();
+    closeDB();
     }
-
 }
 
 /*
