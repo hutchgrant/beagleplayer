@@ -25,6 +25,7 @@
 #include "src/object/fileobj.h"
 #include "src/cache/cache.h"
 #include "newplaylist.h"
+#include "src/widgets/radiostat.h"
 namespace Ui {
 class playlist;
 }
@@ -34,17 +35,18 @@ class playlist : public QWidget
     Q_OBJECT
     
 public:
-
+    newplaylist plDialog;
+   
     cache *dbCon;
     fileObj pList, pListItems;
     fileObj pNewList, pNewItems;
+    fileObj pRadio;
 
-    newplaylist plDialog;
+    radiostat radStat;
 
     int PLMODE = 0, pListSelect = 0, pItemSelect = 0;
     int *curPLlist;
     string tempTrack = "", tempPath = "";
-
 
     explicit playlist(QWidget *parent = 0);
     virtual ~playlist();
@@ -52,6 +54,7 @@ public:
     void createNewPL();
     void fillPL();
     bool readPL();
+    bool readRadios();
 
     void init();
     void initCache(cache *ini_cache){
@@ -68,6 +71,27 @@ public slots:
         tempTrack = track;
         tempPath = path;
     }
+
+     /// if playlist mode is changed by another widget
+     void setPlaylistMode(string type){
+         if(type == "playlist"){
+             PLMODE = 1;
+             readPL();
+         }else if(type == "radio"){
+             PLMODE = 4;
+             readRadios();
+         }else if(type == "newPlayItem"){
+             PLMODE = 2;
+             readPL();
+         }else if(type == "newRadItem"){
+             PLMODE = 4;
+             readRadios();
+         }else{
+             PLMODE = 0;
+             readPL();
+         }
+         fillPL();  /// update list
+     }
 
 signals:
     void playlistChanged(fileObj &plItem, int * plItemList);

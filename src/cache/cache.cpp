@@ -45,7 +45,7 @@ void cache::writeMe(string qry){
  *  Write table with object
  */
 void cache::writeDB(fileObj *file, string type){
-    qDebug() << "Test" << endl;
+
     int begin = 0;
     if(type == "playlist_items" || type == "playlists"){
         begin = file->getSize() - 1;
@@ -58,10 +58,13 @@ void cache::writeDB(fileObj *file, string type){
             QSqlQuery myQry(db);
             myQry.prepare(os.str().c_str());
             myQry.exec();
+            qDebug() << os.str().c_str() << endl;
         }
-    this->db.close();
-    closeDB();
+        this->db.close();
+        closeDB();
+
     }
+
 }
 
 /*
@@ -125,8 +128,9 @@ void cache::addTables(){
     finalQry[3] = "create table videos (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
     finalQry[4] = "create table playlists (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
     finalQry[5] = "create table playlist_items (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
-
-    for(int i=0; i<7; i++){
+    finalQry[6] = "create table categories (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
+    finalQry[7] = "create table radios (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
+    for(int i=0; i<8; i++){
         writeMe(finalQry[i]);
      }
     this->db.close();

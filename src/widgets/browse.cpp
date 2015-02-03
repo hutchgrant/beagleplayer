@@ -21,6 +21,9 @@
 #include "browse.h"
 #include "ui_browse.h"
 
+/*
+ * Construct
+ */
 browse::browse(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::browse)
@@ -29,17 +32,22 @@ browse::browse(QWidget *parent) :
     MenuMode = 0;
     songCount = 0;
     vidCount = 0;
+    radCount = 0;
 }
 
+/*
+ * Deconstruct
+ */
 browse::~browse()
 {
     delete ui;
 }
+
 /*
  *  Initialize/update/re-read from cache.
  */
 void browse::Sync(int type){
-    Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100);
+    Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100), Radio.initFile(10), RadioCat.initFile(10);
 
     if(type == 2 || type == 3){    /// import new entries into local db for each folder and file
         QDir usrDir = QString(getenv("HOME"));
@@ -50,10 +58,24 @@ void browse::Sync(int type){
         else if(type == 3){  /// import video
             lclSync.Sync(usrDir, 1);
         }
+    }else if(type == 4){
+        radStat = new radiostat();
+        radStat->init(dbCon);
+        radStat->show();
+        if(radStat->exec()==QDialog::Accepted){
+            dbCon->readDB(Radio, "radios");
+            dbCon->readDB(RadioCat, "categories");
+            updateMenu();
+        }
+        /// get Radio Station
+        MenuMode = 2;  /// set Mode to radio
     }
     dbCon->readAll(Artist, Song, VidDir, Video);/// read from local database and sync to local objects
+    dbCon->readDB(Radio, "radios");
+    dbCon->readDB(RadioCat, "categories");
     updateMenu();
 }
+
 /*
  *  Update Left View List with Media file type, and their paths
  */
@@ -73,9 +95,15 @@ void browse::updateMenu(){
             curMenu << VidDir.getName(i);
         }
     }
+    else if(MenuMode == 2){ // radio stations + reminder: use categories later
+        for(int i=0; i <= RadioCat.getSize(); i++){
+            curMenu << RadioCat.getName(i);
+        }
+    }
     m_Model->setStringList(curMenu);
     ui->MenuList->setModel(m_Model);
 }
+
 /*
  *  Update Right View List with Media file tracks for a specific path
  */
@@ -85,6 +113,7 @@ void browse::updateTitle(int selected){
     t_Model = new QStringListModel(this);
     songCount = 0;
     vidCount = 0;
+    radCount = 0;
         if(MenuMode == 0 ){    /// set Song + local
             selID = Artist.getID(selected);
             curSongID = new int[Song.getSize()];
@@ -109,20 +138,39 @@ void browse::updateTitle(int selected){
             }
             emit curListChanged(Video, curVidID);
         }
-
+        else if(MenuMode == 2 ){    ///  set Radio
+            selID = RadioCat.getID(selected);
+            curRadID = new int[Radio.getSize()];
+            for(int i = 0; i<Radio.getSize(); i++){
+                if(Radio.getPar(i) == selID){
+                    curSong << Radio.getName(i);
+                    curRadID[radCount] = Radio.getID(i);
+                    radCount++;
+                }
+            }
+            emit curListChanged(Radio, curRadID);
+        }
     t_Model->setStringList(curSong);
     ui->TrackList->setModel(t_Model);
 }
 
+/*
+ *  When a Directory/Folder on the left hand browse menu is selected
+ */
 void browse::on_MenuList_clicked(const QModelIndex &index)
 {
     updateTitle(ui->MenuList->currentIndex().row());
 }
 
+/*
+ *  When a Track/Video/file on the right hand browse menu is selected(once)
+ */
 void browse::on_TrackList_clicked(const QModelIndex &index)
 {
     int selected = 0;
     selected = ui->TrackList->currentIndex().row();
+    qDebug() << selected << endl;
+
     emit selectionChanged(selected);
     /// submit new clicked listing
     if(MenuMode == 0){             /// listing local songs
@@ -140,8 +188,20 @@ void browse::on_TrackList_clicked(const QModelIndex &index)
             }
         }
     }  
+    else if(MenuMode == 2){         /// listing local videos
+        for(int i =0; i<=radCount; i++){
+            if(curRadID[selected]== Radio.getID(i)){
+                cout << Radio.getName(i) << " " << Radio.getPath(i) << " " << Radio.getID(i) << " " << Radio.getPar(i) << endl;
+
+                emit plItemChanged(Radio.getName(i), Radio.getPath(i), Radio.getID(i), Radio.getPar(i));
+            }
+        }
+    }
  }
 
+/*
+ *  When a Track/Video/file on the right hand browse menu is doubleClicked
+ */
 void browse::on_TrackList_doubleClicked(const QModelIndex &index)
 {
     emit FullSelection(ui->TrackList->currentIndex().row());

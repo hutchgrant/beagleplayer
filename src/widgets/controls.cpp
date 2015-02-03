@@ -32,7 +32,7 @@ controls::controls(QWidget *parent) :
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
     connect(vol, SIGNAL(volChanged(int)), this, SLOT(setVol(int)));
-
+    current.initFile(10);
 }
 
 /*
@@ -68,6 +68,7 @@ void controls::start(string finSong, string finPath)
   *  Sort the current list for
   */
 void controls::startSelected(){
+
     int finSongSize = 0;
     int finPathSize = 0;
     int selID = 0;
@@ -76,15 +77,14 @@ void controls::startSelected(){
 
     selID = curList[CurrentSelect];
 
-    finSongSize = strlen(checkSongObjByID(selID, current));
     finSong = new char[finSongSize + 1];
-    finSong = checkSongObjByID(selID, current);
+    finSong = checkSongObjByID(selID, &current);
 
 
     cout << "final song:" << finSong << endl;
-        finPathSize = strlen(checkSongObjPathByID(selID, current));
+        finPathSize = strlen(checkSongObjPathByID(selID, &current));
         finPath = new char[finPathSize + 1];
-        finPath = checkSongObjPathByID(selID, current);
+        finPath = checkSongObjPathByID(selID, &current);
         startLocal(finSong, finPath);
 }
 /*

@@ -53,7 +53,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
+          <iconset resource="../../res/BPres.qrc">
            <normaloff>:/res/RRWD_icon.png</normaloff>:/res/RRWD_icon.png</iconset>
          </property>
         </widget>
@@ -76,7 +76,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
+          <iconset resource="../../res/BPres.qrc">
            <normaloff>:/res/RWD_icon.png</normaloff>:/res/RWD_icon.png</iconset>
          </property>
         </widget>
@@ -93,7 +93,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
+          <iconset resource="../../res/BPres.qrc">
            <normaloff>:/res/STOP_icon.png</normaloff>:/res/STOP_icon.png</iconset>
          </property>
         </widget>
@@ -116,7 +116,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
+          <iconset resource="../../res/BPres.qrc">
            <normaloff>:/res/PAUSE_icon.png</normaloff>:/res/PAUSE_icon.png</iconset>
          </property>
         </widget>
@@ -133,7 +133,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
+          <iconset resource="../../res/BPres.qrc">
            <normaloff>:/res/FWD_icon.png</normaloff>:/res/FWD_icon.png</iconset>
          </property>
         </widget>
@@ -150,7 +150,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
+          <iconset resource="../../res/BPres.qrc">
            <normaloff>:/res/FFWD_icon.png</normaloff>:/res/FFWD_icon.png</iconset>
          </property>
         </widget>
@@ -167,7 +167,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../res/BTres.qrc">
+          <iconset resource="../../res/BPres.qrc">
            <normaloff>:/res/RPT_icon.png</normaloff>:/res/RPT_icon.png</iconset>
          </property>
         </widget>
@@ -195,7 +195,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../res/BTres.qrc"/>
+  <include location="../../res/BPres.qrc"/>
  </resources>
  <connections/>
 </ui>

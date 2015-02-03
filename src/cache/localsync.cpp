@@ -39,6 +39,7 @@ void localsync::Sync(QDir usrDir, int syncType)
             // scan main for directories
             dbCon.writeDB(&localDir, "songdirs");  // write song directories
             dbCon.readDB(localDir, "songdirs");  // re-read song directories with their new key ids
+            localDir.display();
             scanFiles(syncType);
             dbCon.writeDB(&localFile, "songs");  // write song files
         }
@@ -61,11 +62,11 @@ void localsync::scanDir(QString dir, int scantype){
         directories.next();
 
         if(scantype == 0 ){
-            localDir.set(count, count,  0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+            localDir.set(count, 0,  0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
             count++;
         }
         else{
-            localDir.set(count, count, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+            localDir.set(count, 0, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
             count++;
         }
     }

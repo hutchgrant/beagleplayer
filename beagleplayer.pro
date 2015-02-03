@@ -20,7 +20,8 @@ SOURCES += src/control/main.cpp\
     src/widgets/controls.cpp \
     src/widgets/volume.cpp \
     src/qmpwidget/qmpwidget.cpp \
-    src/cache/localsync.cpp
+    src/cache/localsync.cpp \
+    src/widgets/radiostat.cpp
 
 HEADERS  += src/control/beaglemain.h \
     src/widgets/browse.h \
@@ -32,14 +33,16 @@ HEADERS  += src/control/beaglemain.h \
     src/widgets/volume.h \
     src/qmpwidget/qmpwidget.h \
     src/qmpwidget/qmpyuvreader.h \
-    src/cache/localsync.h
+    src/cache/localsync.h \
+    src/widgets/radiostat.h
 
 FORMS    += src/control/beaglemain.ui \
     src/widgets/browse.ui \
     src/widgets/playlist.ui \
     src/widgets/newplaylist.ui \
     src/widgets/volume.ui \
-    src/widgets/controls.ui
+    src/widgets/controls.ui \
+    src/widgets/radiostat.ui
 
 OTHER_FILES += \
     src/qmpwidget/qmpwidget.pri

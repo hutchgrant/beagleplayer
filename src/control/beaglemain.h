@@ -30,6 +30,8 @@ private slots:
 
     void on_actionImport_Video_triggered();
 
+    void on_actionAdd_Radio_Station_triggered();
+
 private:
     Ui::beaglemain *ui;
     browse *brow;

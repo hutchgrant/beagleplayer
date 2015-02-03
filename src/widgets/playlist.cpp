@@ -52,6 +52,9 @@ bool playlist::readPL(){
    dbCon->readDB(pListItems, "playlist_items");
    return true;
 }
+bool playlist::readRadios(){
+    dbCon->readDB(pRadio, "radios");
+}
 
 void playlist::fillPL(){
     QStringList curList;
@@ -80,7 +83,14 @@ void playlist::fillPL(){
         }
         emit playlistChanged(pNewItems, curPLlist);
     }
-
+    else if(PLMODE == 3){            // radios
+        curPLlist = new int[pRadio.getSize()+10];
+        for(int i = 0; i<= pRadio.getSize(); i++){
+            curList << pRadio.getName(i);
+            curPLlist[i] = pRadio.getID(i);
+        }
+        emit playlistChanged(pRadio, curPLlist);
+    }
     pl_model = new QStringListModel(this);
     pl_model->setStringList(curList);
     ui->PLAYLIST->setModel(pl_model);
@@ -102,6 +112,10 @@ void playlist::createNewPL(){
         dbCon->writeDB(&pNewList, "playlists");
     }
 }
+
+/*
+ * Add New Radio station
+ */
 
 /*
  * Add to new playlist object, insert into playlist_items table
@@ -170,6 +184,13 @@ void playlist::on_add_tool_clicked()
         addToNewPL(tempTrack, tempPath);
         if(readPL()){
             fillPL();
+        }
+    }
+    else if(PLMODE == 3){ // add radio
+        /// Radio Menu Popup
+        radStat.show();
+        if(radStat.exec()==QDialog::Accepted){
+            qDebug() << "radio added" << endl;
         }
     }
 }

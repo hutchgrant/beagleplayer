@@ -40,6 +40,11 @@
             <string>Video</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Radio</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
@@ -129,6 +134,7 @@
     <property name="title">
      <string>Options</string>
     </property>
+    <addaction name="actionAdd_Radio_Station"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -167,6 +173,11 @@
   <action name="actionImport_Video">
    <property name="text">
     <string>Import Video</string>
+   </property>
+  </action>
+  <action name="actionAdd_Radio_Station">
+   <property name="text">
+    <string>Add Radio Station</string>
    </property>
   </action>
  </widget>

@@ -26,6 +26,7 @@
 #include "src/object/fileobj.h"
 #include "src/cache/cache.h"
 #include "src/cache/localsync.h"
+#include "src/widgets/radiostat.h"
 
 namespace Ui {
 class browse;
@@ -36,8 +37,7 @@ class browse : public QWidget
     Q_OBJECT
     
 public:
-    int songCount;
-    int vidCount;
+    int songCount, vidCount, radCount;
     localsync lclSync;
     cache *dbCon;
 
@@ -56,6 +56,7 @@ signals:
     void selectionChanged(int);                         //  a track was selected
     void FullSelection(int);                            // a track was double clicked
     void MenuSelection(int);                            // a Menu Item was selected
+    void playModeChanged(string);
 
 public slots:
     void updateTitle(int);                               // update Right ViewList
@@ -72,12 +73,14 @@ private slots:
 
 private:
     int MenuMode;   /// 0  = Artist , 1 = VidDir
-    fileObj Artist, Album, Song, VidDir, Video;
+    fileObj Artist, Album, Song, VidDir, Video, RadioCat, Radio;
     fileObj RemArtist, RemAlbum, RemSong, RemVidDir, RemVideo;
-    int *curSongID, *curVidID;
+    int *curSongID, *curVidID, *curRadID;
     Ui::browse *ui;
     QStringListModel *m_Model;
     QStringListModel *t_Model;
+
+    radiostat *radStat;
 };
 
 #endif // BROWSE_H

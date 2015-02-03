@@ -140,14 +140,13 @@ fileObj& fileObj::operator=(const fileObj& src){
 /*
   *  Search any Object for a track name by the using the ID
   */
-char* checkSongObjByID(int id, fileObj& src){
+char* checkSongObjByID(int id, fileObj *src){
     char *FinSong;
-    if(src.getSize() > 0){
-        for(int i = 0; i< src.getSize(); i++){
-            if(src.getID(i) == id){
-
-                FinSong = new char[strlen(src.getName(i))+1];
-                strcpy(FinSong,src.getName(i));
+    if(src->getSize() > 0){
+        for(int i = 0; i< src->getSize(); i++){
+            if(src->getID(i) == id){
+                FinSong = new char[strlen(src->getName(i))+1];
+                strcpy(FinSong,src->getName(i));
             }
         }
     }
@@ -157,13 +156,13 @@ char* checkSongObjByID(int id, fileObj& src){
 /*
   *  Search any Object for a track ID by the using the parent
   */
-int checkSongObjIDbyPar(int par, fileObj& src){
+int checkSongObjIDbyPar(int par, fileObj *src){
     int FinID = 0;
-    if(src.getSize() > 0){
-        for(int i = 0; i< src.getSize(); i++){
-            if(src.getPar(i) == par){
+    if(src->getSize() > 0){
+        for(int i = 0; i< src->getSize(); i++){
+            if(src->getPar(i) == par){
 
-                FinID = src.getID(i);
+                FinID = src->getID(i);
             }
         }
     }
@@ -173,13 +172,13 @@ int checkSongObjIDbyPar(int par, fileObj& src){
 /*
   *  Search any Object for a track Par by the using the ID
   */
-int checkSongObjParByID(int id, fileObj& src){
+int checkSongObjParByID(int id, fileObj *src){
     int FinPar;
-    if(src.getSize() > 0){
-        for(int i = 0; i< src.getSize(); i++){
-            if(src.getID(i) == id){
+    if(src->getSize() > 0){
+        for(int i = 0; i< src->getSize(); i++){
+            if(src->getID(i) == id){
 
-                FinPar = src.getPar(i);
+                FinPar = src->getPar(i);
             }
         }
     }
@@ -190,13 +189,13 @@ int checkSongObjParByID(int id, fileObj& src){
   *
   * Search any Object for a track Path by using the ID
   */
-char *checkSongObjPathByID(int id, fileObj& src){
+char *checkSongObjPathByID(int id, fileObj *src){
     char *finPath;
-    if(src.getSize() > 0){
-        for(int i =0; i< src.getSize(); i++){
-            if(src.getID(i) == id){
-                finPath = new char[strlen(src.getPath(i))+1];
-                finPath = src.getPath(i);
+    if(src->getSize() > 0){
+        for(int i =0; i< src->getSize(); i++){
+            if(src->getID(i) == id){
+                finPath = new char[strlen(src->getPath(i))+1];
+                finPath = src->getPath(i);
             }
         }
     }

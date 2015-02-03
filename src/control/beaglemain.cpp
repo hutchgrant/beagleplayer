@@ -56,14 +56,31 @@ void beaglemain::connectSignals(){
       connect(brow, SIGNAL(curListChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));  /// change control's playlist of tracks
       connect(brow,SIGNAL(FullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));  /// a full track selection was made (double0click)
       connect(brow,SIGNAL(selectionChanged(int)), cntrl, SLOT(setSelection(int)));  ///  a single track selection was made (single-click)
+
+      /// connect playlist signals
+      connect(brow,SIGNAL(playModeChanged(string)), playlst, SLOT(setPlaylistMode(string)));  ///  playlist list mode changed e.g. radio/playlist/newlist
 }
 
+/*
+ * Main Tool Bar, File-> Import Audio
+ */
 void beaglemain::on_actionImport_triggered()
 {
     brow->Sync(2);  /// import video dialog
 }
 
+/*
+ * Main Tool Bar, File-> Import Video
+ */
 void beaglemain::on_actionImport_Video_triggered()
 {
     brow->Sync(3); /// import audio dialog
+}
+
+/*
+ * Main Tool Bar, Options-> Add Radio Station
+ */
+void beaglemain::on_actionAdd_Radio_Station_triggered()
+{
+    brow->Sync(4);
 }
