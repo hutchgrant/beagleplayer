@@ -26,6 +26,7 @@ public:
     void connectSignals();
 
 private slots:
+
     void on_actionImport_triggered();
 
     void on_actionImport_Video_triggered();

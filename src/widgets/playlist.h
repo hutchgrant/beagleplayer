@@ -36,7 +36,8 @@ class playlist : public QWidget
     
 public:
     newplaylist plDialog;
-   
+
+    string plName = "";
     cache *dbCon;
     fileObj pList, pListItems;
     fileObj pNewList, pNewItems;
@@ -47,6 +48,7 @@ public:
     int PLMODE = 0, pListSelect = 0, pItemSelect = 0;
     int *curPLlist;
     string tempTrack = "", tempPath = "";
+    int tempPar, tempID;
 
     explicit playlist(QWidget *parent = 0);
     virtual ~playlist();
@@ -59,15 +61,14 @@ public:
     void init();
     void initCache(cache *ini_cache){
         dbCon = ini_cache;
-        readPL();
     }
-    void addToNewPL(string track, string path);
+    void addToNewPL(string, string);
     void addToCurrent(int parid, string track, string path);
 
 public slots:
     /// if a track was selected elsewhere,
-    /// Need that information immediately avail to playlist
-    void setTempTrack(string track, string path){
+    /// Need that information immediately avail to playlist  future: store playlist albums, using par+ id
+    void setTempTrack(string track, string path, int par, int id){
         tempTrack = track;
         tempPath = path;
     }

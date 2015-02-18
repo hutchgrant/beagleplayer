@@ -1,4 +1,10 @@
-beagleplayer (0.1.3-0ubuntu1) precise; urgency=low
+beagleplayer (0.1.3-0ubuntu1) precise; urgency=high
+
+  * Readded additional media play functionality such as radios and playlists
+
+ -- Grant Hutchinson <h.g.utchinson@gmail.com>  Mon, 17, Feb 23:22:21 -0400
+
+beagleplayer (0.1.3-0ubuntu1) precise; urgency=;pw
 
   * Removed remote capabilities, only utilizing what is necessary to play media
 

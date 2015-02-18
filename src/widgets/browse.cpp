@@ -169,31 +169,27 @@ void browse::on_TrackList_clicked(const QModelIndex &index)
 {
     int selected = 0;
     selected = ui->TrackList->currentIndex().row();
-    qDebug() << selected << endl;
-
     emit selectionChanged(selected);
     /// submit new clicked listing
     if(MenuMode == 0){             /// listing local songs
         for(int i=0; i<=Song.getSize(); i++){
             if(curSongID[selected] == Song.getID(i)){
                 cout << Song.getName(i) << " " << Song.getPath(i) << " " << Song.getID(i) << " " << Song.getPar(i) << endl;
-                emit plItemChanged(Song.getName(i), Song.getPath(i), Song.getID(i), Song.getPar(i));
+                emit trackChanged(Song.getName(i), Song.getPath(i), Song.getID(i), Song.getPar(i));
             }
         }
     }
     else if(MenuMode == 1){         /// listing local videos
         for(int i =0; i<=vidCount; i++){
             if(curVidID[selected]== Video.getID(i)){
-                emit plItemChanged(Video.getName(i), Video.getPath(i), Video.getID(i), Video.getPar(i));
+                emit trackChanged(Video.getName(i), Video.getPath(i), Video.getID(i), Video.getPar(i));
             }
         }
     }  
     else if(MenuMode == 2){         /// listing local videos
         for(int i =0; i<=radCount; i++){
             if(curRadID[selected]== Radio.getID(i)){
-                cout << Radio.getName(i) << " " << Radio.getPath(i) << " " << Radio.getID(i) << " " << Radio.getPar(i) << endl;
-
-                emit plItemChanged(Radio.getName(i), Radio.getPath(i), Radio.getID(i), Radio.getPar(i));
+                emit trackChanged(Radio.getName(i), Radio.getPath(i), Radio.getID(i), Radio.getPar(i));
             }
         }
     }

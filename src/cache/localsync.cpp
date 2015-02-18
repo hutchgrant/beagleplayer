@@ -39,7 +39,6 @@ void localsync::Sync(QDir usrDir, int syncType)
             // scan main for directories
             dbCon.writeDB(&localDir, "songdirs");  // write song directories
             dbCon.readDB(localDir, "songdirs");  // re-read song directories with their new key ids
-            localDir.display();
             scanFiles(syncType);
             dbCon.writeDB(&localFile, "songs");  // write song files
         }

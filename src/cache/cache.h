@@ -29,9 +29,10 @@ public:
     void setInitDB();
     void createCache();
 
-    void writeMe(string qry);
-    void writeDB(fileObj *file, string type);
+    int writeMe(string qry);
+    int writeDB(fileObj *file, string type);
 
+    int lastInsertID();
     void readDB(fileObj &file, string type);
     void readAll(fileObj &artist, fileObj &song, fileObj &viddirs, fileObj &videos);
 

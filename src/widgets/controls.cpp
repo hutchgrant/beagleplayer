@@ -26,13 +26,13 @@ controls::controls(QWidget *parent) :
     ui(new Ui::controls)
 {
     ui->setupUi(this);
-
+    current.initFile(100);
     CON_MODE = 0;
     widget.setSeekSlider(ui->trackSlider);
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
     connect(vol, SIGNAL(volChanged(int)), this, SLOT(setVol(int)));
-    current.initFile(10);
+
 }
 
 /*
@@ -68,15 +68,15 @@ void controls::start(string finSong, string finPath)
   *  Sort the current list for
   */
 void controls::startSelected(){
-
     int finSongSize = 0;
     int finPathSize = 0;
     int selID = 0;
     char *finPath;
     char *finSong;
-
+    current.display();
     selID = curList[CurrentSelect];
-
+    cout << selID << endl;
+    finSongSize = strlen(checkSongObjByID(selID, &current));
     finSong = new char[finSongSize + 1];
     finSong = checkSongObjByID(selID, &current);
 
@@ -98,6 +98,8 @@ void controls::changeCon(int mode){
   * Set Current qeue list when list changes
   */
 void controls::setCurList(fileObj &newList, int *newIDlist){
+    current = fileObj();
+    current.initFile(100);
     current = newList;
     curList = newIDlist;
 }

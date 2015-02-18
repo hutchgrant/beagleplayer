@@ -33,6 +33,11 @@ playlist::playlist(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::playlist)
 {
+    tempPar = 0;
+    tempPath = "";
+    tempTrack = "";
+    PLMODE = 0;
+
     ui->setupUi(this);
 }
 
@@ -48,6 +53,7 @@ playlist::~playlist()
 }
 
 bool playlist::readPL(){
+   init();
    dbCon->readDB(pList, "playlists");
    dbCon->readDB(pListItems, "playlist_items");
    return true;
@@ -66,14 +72,15 @@ void playlist::fillPL(){
     }
     else if(PLMODE == 1){            // browsing playlist items
         curPLlist = new int[pListItems.getSize() + 10];
-        for(int i = 0; i< pListItems.getSize(); i++){
+        for(int i = 0; i<= pListItems.getSize(); i++){
             if(pListItems.getPar(i) == pList.getID(pListSelect)){
                 curList << pListItems.getName(i);
-                curPLlist[count] = pListItems.getID(i);
+                curPLlist[i] = pListItems.getID(i);
                 count++;
             }
-             emit playlistChanged(pListItems, curPLlist);
         }
+        pListItems.display();
+        emit playlistChanged(pListItems, curPLlist);
     }
     else if(PLMODE == 2){            // new playlist items
         curPLlist = new int[pNewItems.getSize()+10];
@@ -85,7 +92,7 @@ void playlist::fillPL(){
     }
     else if(PLMODE == 3){            // radios
         curPLlist = new int[pRadio.getSize()+10];
-        for(int i = 0; i<= pRadio.getSize(); i++){
+        for(int i = 0; i< pRadio.getSize(); i++){
             curList << pRadio.getName(i);
             curPLlist[i] = pRadio.getID(i);
         }
@@ -108,8 +115,10 @@ void playlist::createNewPL(){
 
     plDialog.show();
     if(plDialog.exec()==QDialog::Accepted){
-        pNewList.set(pList.getSize(), 0, 0, plDialog.getName().c_str());
-        dbCon->writeDB(&pNewList, "playlists");
+        qDebug() << "New playlist created " << plDialog.getName().c_str();
+        pNewList.set(pNewList.getSize(), 0, 0, plDialog.getName().c_str());
+        pNewList.display();
+        pNewList.setID(pNewList.getSize(), dbCon->writeDB(&pNewList, "playlists"));
     }
 }
 
@@ -133,17 +142,22 @@ void playlist::addToCurrent(int parid, string track, string path){
     dbCon->writeDB(&pListItems, "playlist_items");
 }
 
-
-
 void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
 {
+    int selected = 0;
+    selected = ui->PLAYLIST->currentIndex().row();
+    tempPar = pList.getPar(selected);
+    tempID = pList.getID(selected);
+    tempPath = pList.getPath(selected);
+    tempTrack = pList.getName(selected);
     if(PLMODE == 0){
-        pListSelect = ui->PLAYLIST->currentIndex().row();
+        pListSelect = selected;
+        qDebug() << "selected playlist index "<< pListSelect;
         PLMODE = 1;
         fillPL();
     }
     else{
-        pItemSelect = ui->PLAYLIST->currentIndex().row();
+        pItemSelect = selected;
         emit playlistFullSelection(pItemSelect);
 
     }
@@ -151,11 +165,18 @@ void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
 
 void playlist::on_PLAYLIST_clicked(const QModelIndex &index)
 {
+    int selected = 0;
+    selected = ui->PLAYLIST->currentIndex().row();
+
+    tempPar = pList.getPar(selected);
+    tempID = pList.getID(selected);
+    tempPath = pList.getPath(selected);
+    tempTrack = pList.getName(selected);
     if(PLMODE == 0){
-        pListSelect = ui->PLAYLIST->currentIndex().row();
+        pListSelect = selected;
     }
     else if(PLMODE == 1){
-        pItemSelect = ui->PLAYLIST->currentIndex().row();
+        pItemSelect = selected;
         emit playlistSelection(pItemSelect);
     }
 }
@@ -185,6 +206,8 @@ void playlist::on_add_tool_clicked()
         if(readPL()){
             fillPL();
         }
+    }else if(PLMODE ==2){  // add to current playlst
+        addToCurrent(tempPar, tempTrack, tempPath);
     }
     else if(PLMODE == 3){ // add radio
         /// Radio Menu Popup

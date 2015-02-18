@@ -35,36 +35,54 @@ void cache::init(){
 /*
 * Write Any string to database
 */
-void cache::writeMe(string qry){
+int cache::writeMe(string qry){
        QSqlQuery myQry(db);
        myQry.prepare(qry.c_str());
        myQry.exec();
+       stringstream os;
+
+       os << "SELECT last_insert_rowid()";
+       myQry.prepare(os.str().c_str());
+       myQry.exec();
+       return myQry.lastInsertId().toInt();
 }
 
 /*
  *  Write table with object
  */
-void cache::writeDB(fileObj *file, string type){
-
-    int begin = 0;
-    if(type == "playlist_items" || type == "playlists"){
-        begin = file->getSize() - 1;
-    }
+int cache::writeDB(fileObj *file, string type){
+    int lastid = 0;
     openDB();
     if(this->db.open()){
-        for(int x=begin; x< file->getSize(); x++){
+        for(int x=0; x< file->getSize(); x++){
             stringstream os;
             os << "INSERT INTO " << type << " (dir_par, dir_name, dir_path) VALUES ('" << file->getPar(x) << "', '" << file->getName(x) << "', '" <<  file->getPath(x) << "')";
-            QSqlQuery myQry(db);
-            myQry.prepare(os.str().c_str());
-            myQry.exec();
+            lastid = writeMe(os.str());
             qDebug() << os.str().c_str() << endl;
         }
         this->db.close();
         closeDB();
-
     }
+    return lastid;
+}
 
+/*
+ *  Read Last Insert ID
+ */
+int cache::lastInsertID(){
+    openDB();
+    int lastid =0;
+    if(this->db.open()){
+         stringstream os;
+         os << "SELECT last_insert_rowid()";
+         QSqlQuery myQry(db);
+         myQry.prepare(os.str().c_str());
+         lastid = myQry.exec();
+         qDebug() << "lastid=" << lastid << endl;
+        this->db.close();
+        closeDB();
+    }
+    return lastid;
 }
 
 /*

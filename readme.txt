@@ -14,7 +14,7 @@ $  sudo apt-get install mplayer libqt4-dev libqt4-opengl libqt4-opengl-dev libqt
 ----------------------
 download and extract:
 ----------------------
-download beagleplayer.v.0.1.2.tar.gz 
+download beagleplayer.v.0.1.3.tar.gz 
  $ cd ~/Downloads
  $  tar -zxvf beagleplayer*.tar.gz 
 ----
