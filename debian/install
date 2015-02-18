@@ -1,0 +1,6 @@
+Makefile /opt/extras.ubuntu.com/beagleplayer
+beagleplayer.pro /opt/extras.ubuntu.com/beagleplayer/
+docs/*.* /opt/extras.ubuntu.com/beagleplayer/docs
+src/*.* /opt/extras.ubuntu.com/beagleplayer/src/
+res/*.* /opt/extras.ubuntu.com/beagleplayer/res/
+beagleplayer.desktop /usr/share/applications/
