@@ -124,9 +124,9 @@ fileObj& fileObj::operator=(const fileObj& src){
             delete [] fileID;
             delete [] filePar;
             delete [] filePath;
-            initFile(src.objSize+1);
+            initFile(src.objSize);
 
-            for(int i=0; i< src.objSize-1; i++){
+            for(int i=0; i< src.objSize; i++){
                 set(i,src.fileID[i], src.filePar[i], src.fileName[i].c_str(), src.filePath[i].c_str());
             }
             objSize = src.objSize;
@@ -201,3 +201,4 @@ char *checkSongObjPathByID(int id, fileObj *src){
     }
     return finPath;
 }
+

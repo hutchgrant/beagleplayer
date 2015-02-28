@@ -174,7 +174,6 @@ void browse::on_TrackList_clicked(const QModelIndex &index)
     if(MenuMode == 0){             /// listing local songs
         for(int i=0; i<=Song.getSize(); i++){
             if(curSongID[selected] == Song.getID(i)){
-                cout << Song.getName(i) << " " << Song.getPath(i) << " " << Song.getID(i) << " " << Song.getPar(i) << endl;
                 emit trackChanged(Song.getName(i), Song.getPath(i), Song.getID(i), Song.getPar(i));
             }
         }
@@ -202,3 +201,4 @@ void browse::on_TrackList_doubleClicked(const QModelIndex &index)
 {
     emit FullSelection(ui->TrackList->currentIndex().row());
 }
+

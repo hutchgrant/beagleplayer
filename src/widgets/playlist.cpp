@@ -28,7 +28,9 @@
  * PLMODE = 2  - Browse playlists by displaying only a newly created playlist's items
  */
 
-
+/*
+ *  Constructor
+ */
 playlist::playlist(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::playlist)
@@ -41,27 +43,43 @@ playlist::playlist(QWidget *parent) :
     ui->setupUi(this);
 }
 
+/*
+ *  Initializor
+ */
 void playlist::init(){
     pList.initFile(100);
     pListItems.initFile(100);
     curPLlist = new int[pListItems.getSize() + 10];
 }
 
+/*
+ *  Destructor
+ */
 playlist::~playlist()
 {
     delete ui;
 }
 
+/*
+ *  sync and initialize all playlists and playlist items from cache
+ */
 bool playlist::readPL(){
    init();
    dbCon->readDB(pList, "playlists");
    dbCon->readDB(pListItems, "playlist_items");
    return true;
 }
+
+/*
+ *  sync radios directly to playlist
+ */
 bool playlist::readRadios(){
     dbCon->readDB(pRadio, "radios");
 }
 
+/*
+ *  Fill Playlist Right Window
+ */
 void playlist::fillPL(){
     QStringList curList;
     int count = 0;
@@ -71,27 +89,27 @@ void playlist::fillPL(){
         }
     }
     else if(PLMODE == 1){            // browsing playlist items
-        curPLlist = new int[pListItems.getSize() + 10];
-        for(int i = 0; i<= pListItems.getSize(); i++){
+        curPLlist = new int[pListItems.getSize()];
+        for(int i = 0; i< pListItems.getSize(); i++){
             if(pListItems.getPar(i) == pList.getID(pListSelect)){
                 curList << pListItems.getName(i);
-                curPLlist[i] = pListItems.getID(i);
+                curPLlist[count] = pListItems.getID(i);
                 count++;
             }
         }
-        pListItems.display();
         emit playlistChanged(pListItems, curPLlist);
     }
     else if(PLMODE == 2){            // new playlist items
-        curPLlist = new int[pNewItems.getSize()+10];
-        for(int i = 0; i<= pNewItems.getSize(); i++){
+        curPLlist = new int[pNewItems.getSize()];
+        for(int i = 0; i< pNewItems.getSize(); i++){
             curList << pNewItems.getName(i);
-            curPLlist[i] = pNewItems.getID(i);
+            curPLlist[count] = pNewItems.getID(i);
+            count++;
         }
         emit playlistChanged(pNewItems, curPLlist);
     }
     else if(PLMODE == 3){            // radios
-        curPLlist = new int[pRadio.getSize()+10];
+        curPLlist = new int[pRadio.getSize()];
         for(int i = 0; i< pRadio.getSize(); i++){
             curList << pRadio.getName(i);
             curPLlist[i] = pRadio.getID(i);
@@ -121,11 +139,6 @@ void playlist::createNewPL(){
         pNewList.setID(pNewList.getSize(), dbCon->writeDB(&pNewList, "playlists"));
     }
 }
-
-/*
- * Add New Radio station
- */
-
 /*
  * Add to new playlist object, insert into playlist_items table
  */
@@ -163,6 +176,9 @@ void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
     }
 }
 
+/*
+ *  When any item is clicked in the playlist window, grab the index, setup window/controls
+ */
 void playlist::on_PLAYLIST_clicked(const QModelIndex &index)
 {
     int selected = 0;
@@ -181,6 +197,9 @@ void playlist::on_PLAYLIST_clicked(const QModelIndex &index)
     }
 }
 
+/*
+ *  browse/open playlists
+ */
 void playlist::on_open_tool_clicked()
 {
     PLMODE = 0;
@@ -189,6 +208,9 @@ void playlist::on_open_tool_clicked()
     }
 }
 
+/*
+ *  add to playlist, if none open, create a new one, else add to playlist
+ */
 void playlist::on_add_tool_clicked()
 {
     if(PLMODE==0){
@@ -217,3 +239,4 @@ void playlist::on_add_tool_clicked()
         }
     }
 }
+

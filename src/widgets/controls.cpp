@@ -73,9 +73,9 @@ void controls::startSelected(){
     int selID = 0;
     char *finPath;
     char *finSong;
-    current.display();
+
     selID = curList[CurrentSelect];
-    cout << selID << endl;
+
     finSongSize = strlen(checkSongObjByID(selID, &current));
     finSong = new char[finSongSize + 1];
     finSong = checkSongObjByID(selID, &current);
