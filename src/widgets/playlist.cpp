@@ -143,6 +143,8 @@ void playlist::createNewPL(){
  * Add to new playlist object, insert into playlist_items table
  */
 void playlist::addToNewPL(string track, string path){
+    pNewItems = fileObj();
+    pNewItems.initFile(10);
     pNewItems.set(pNewItems.getSize(), 0, pNewList.getID(pNewList.getSize()), track.c_str(), path.c_str());
     dbCon->writeDB(&pNewItems, "playlist_items");
 }
@@ -151,8 +153,10 @@ void playlist::addToNewPL(string track, string path){
  * Add to a current playlist
  */
 void playlist::addToCurrent(int parid, string track, string path){
-    pListItems.set(pListItems.getSize(), 0, parid, track.c_str(), path.c_str());
-    dbCon->writeDB(&pListItems, "playlist_items");
+    fileObj pNewList;
+    pNewList.initFile(10);
+    pNewList.set(0, 0, parid, track.c_str(), path.c_str());
+    dbCon->writeDB(&pNewList, "playlist_items");
 }
 
 void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
@@ -230,6 +234,9 @@ void playlist::on_add_tool_clicked()
         }
     }else if(PLMODE ==2){  // add to current playlst
         addToCurrent(tempPar, tempTrack, tempPath);
+        if(readPL()){
+            fillPL();
+        }
     }
     else if(PLMODE == 3){ // add radio
         /// Radio Menu Popup
