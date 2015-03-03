@@ -58,7 +58,6 @@ int cache::writeDB(fileObj *file, string type){
             stringstream os;
             os << "INSERT INTO " << type << " (dir_par, dir_name, dir_path) VALUES ('" << file->getPar(x) << "', '" << file->getName(x) << "', '" <<  file->getPath(x) << "')";
             lastid = writeMe(os.str());
-            qDebug() << os.str().c_str() << endl;
         }
         this->db.close();
         closeDB();
@@ -78,7 +77,6 @@ int cache::lastInsertID(){
          QSqlQuery myQry(db);
          myQry.prepare(os.str().c_str());
          lastid = myQry.exec();
-         qDebug() << "lastid=" << lastid << endl;
         this->db.close();
         closeDB();
     }

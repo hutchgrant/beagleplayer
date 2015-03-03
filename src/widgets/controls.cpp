@@ -32,7 +32,6 @@ controls::controls(QWidget *parent) :
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
     connect(vol, SIGNAL(volChanged(int)), this, SLOT(setVol(int)));
-
 }
 
 /*
@@ -63,7 +62,6 @@ void controls::start(string finSong, string finPath)
     widget.start(QStringList(final));
 }
 
-
 /*
   *  Sort the current list for
   */
@@ -80,13 +78,12 @@ void controls::startSelected(){
     finSong = new char[finSongSize + 1];
     finSong = checkSongObjByID(selID, &current);
 
-
-    cout << "final song:" << finSong << endl;
-        finPathSize = strlen(checkSongObjPathByID(selID, &current));
-        finPath = new char[finPathSize + 1];
-        finPath = checkSongObjPathByID(selID, &current);
-        startLocal(finSong, finPath);
+    finPathSize = strlen(checkSongObjPathByID(selID, &current));
+    finPath = new char[finPathSize + 1];
+    finPath = checkSongObjPathByID(selID, &current);
+    startLocal(finSong, finPath);
 }
+
 /*
   * Slot to Change connection Mode
   */
@@ -104,7 +101,6 @@ void controls::setCurList(fileObj &newList, int *newIDlist){
     curList = newIDlist;
 }
 
-
 /*
   * public slot for volume
   */
@@ -112,12 +108,6 @@ void controls::setVol(int vol){
     widget.setVolume(vol);
 
 }
-controls::~controls()
-{
-    widget.close();
-    delete ui;
-}
-
 
 void controls::on_PAUSE_clicked()
 {
@@ -144,4 +134,13 @@ void controls::on_PREV_clicked()
 {
     CurrentSelect--;
     startSelected();
+}
+
+/*
+ * Destructor
+ */
+controls::~controls()
+{
+    widget.close();
+    delete ui;
 }

@@ -45,6 +45,8 @@ public:
     void scanDir(QString dir, int scanType);
     void Sync(QDir usrDir, int syncType);
     string sanitizeName(QString filename);
+    void addItem(int itemType, int pos, int id, int par, QString fileName, QString filePath);
+
 
 private:
     QDir mydir;

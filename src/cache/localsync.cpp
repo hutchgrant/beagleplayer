@@ -20,6 +20,9 @@
 
 #include "localsync.h"
 
+/*
+ * Constructor
+ */
 localsync::localsync()
 {
 }
@@ -56,47 +59,39 @@ void localsync::Sync(QDir usrDir, int syncType)
          dbCon.writeDB(&localFile, secondTable);  // write song files
     }
 }
+
 /*
 * Scan User Directory for folders. Add all discovered folders
 */
-void localsync::scanDir(QString dir, int scantype){
+void localsync::scanDir(QString dir, int scanType){
     QDirIterator directories(dir, QDir::Dirs | QDir::NoDotAndDotDot);
     int count = 0;
-    string fileName = "", filePath = "";
-
     localDir = fileObj();
     localDir.initFile(100);
 
-    fileName = sanitizeName(directories.fileName());
-    filePath = sanitizeName(directories.filePath());
-    localDir.set(count, 0,  0, fileName.c_str(), filePath.c_str());
+    QDir impDir(dir);
+    addItem(scanType, count, 0, 0, impDir.dirName(), impDir.absolutePath());
     count++;
 
     while(directories.hasNext()){
         directories.next();
-        fileName = sanitizeName(directories.fileName());
-        filePath = sanitizeName(directories.filePath());
-        localDir.set(count, 0,  0, fileName.c_str(), filePath.c_str());
+        addItem(0, count, 0, 0, directories.fileName(), directories.filePath());
         count++;
 
         QDirIterator subdirect(directories.filePath(), QDir::Dirs | QDir::NoDotAndDotDot);
         while(subdirect.hasNext()){
             subdirect.next();
-            fileName = sanitizeName(subdirect.fileName());
-            filePath = sanitizeName(subdirect.filePath());
-            localDir.set(count, 0,  0, fileName.c_str(), filePath.c_str());
+            addItem(0, count, 0, 0, subdirect.fileName(), subdirect.filePath());
             count++;
         }
-
     }
 }
+
 /*
 * Scan User Directory for folders. Add all discovered files
 */
 void localsync::scanFiles(int scanType, int folderCount){
-    localDir.display();
     int itemcount = 0;
-    string fileName = "", filePath = "";
 
     localFile = fileObj();
     localFile.initFile(100);
@@ -108,17 +103,13 @@ void localsync::scanFiles(int scanType, int folderCount){
             dirWalk.next();
             if(scanType == 0){  // if scanning audio
                 if(dirWalk.fileInfo().completeSuffix() == "mp3" || dirWalk.fileInfo().completeSuffix() == "flac" || dirWalk.fileInfo().completeSuffix() == "wav"){
-                    fileName = sanitizeName(dirWalk.fileName());
-                    filePath = sanitizeName(dirWalk.filePath());
-                    localFile.set(itemcount,itemcount, localDir.getID(i), fileName.c_str(), filePath.c_str());
+                    addItem(1, itemcount, itemcount, localDir.getID(i), dirWalk.fileName(), dirWalk.filePath());
                     itemcount++;
                 }
             }
             else{   // if scanning video
                 if(dirWalk.fileInfo().suffix() == "avi" || dirWalk.fileInfo().suffix() == "mp4" || dirWalk.fileInfo().suffix() == "mkv"){
-                    fileName = sanitizeName(dirWalk.fileName());
-                    filePath = sanitizeName(dirWalk.filePath());
-                    localFile.set(itemcount,itemcount, localDir.getID(i),fileName.c_str(), filePath.c_str());
+                    addItem(1, itemcount, itemcount, localDir.getID(i), dirWalk.fileName(), dirWalk.filePath());
                     itemcount++;
                 }
             }
@@ -126,11 +117,32 @@ void localsync::scanFiles(int scanType, int folderCount){
     }
 }
 
+/*
+ *   Add a local file or local directory to object cache
+ */
+void localsync::addItem(int itemType, int pos, int id, int par, QString fileName, QString filePath){
+    string sfileName = "", sfilePath = "";
+
+    sfileName = sanitizeName(fileName);
+    sfilePath = sanitizeName(filePath);
+    if(itemType == 0){
+        localDir.set(pos, id,  par, sfileName.c_str(), sfilePath.c_str());
+    }else{
+        localFile.set(pos, id,  par, sfileName.c_str(), sfilePath.c_str());
+    }
+}
+
+/*
+ *  Sanitize any forbidden characters that would otherwise break our sql queries
+ */
 string localsync::sanitizeName(QString filename){
     filename.replace(QString("'"), QString("$_"));
     return filename.toStdString().c_str();
 }
 
+/*
+ * Destructor
+ */
 localsync::~localsync(){
 
 }
