@@ -21,12 +21,18 @@
 
 #include "fileobj.h"
 
+
+/*
+ * Constructor
+ */
 fileObj::fileObj()
 {
     initFile(INITSIZE);
 }
 
-
+/*
+ *  Copy Constructor
+ */
 fileObj::fileObj(const fileObj &src){
 
     if(src.objSize > 0){
@@ -45,6 +51,9 @@ fileObj::fileObj(const fileObj &src){
     }
 }
 
+/*
+ *  Initialize Object
+ */
 void fileObj::initFile(int initSZ){
     objSize = 0;
     InitSize = 0;
@@ -57,6 +66,9 @@ void fileObj::initFile(int initSZ){
     }
 }
 
+/*
+ *  Reinitialize Object
+ */
 void fileObj::REinitFile(int oldsize, int newsize){
     //set the new initialize size
     InitSize = oldsize+newsize;
@@ -92,10 +104,11 @@ void fileObj::REinitFile(int oldsize, int newsize){
     for(int i=0; i< tempObjSize; i++){
         set(i,idCopy[i], parCopy[i], nameCopy[i].c_str(), pathCopy[i].c_str());
     }
-
 }
 
-
+/*
+ *  Destructor
+ */
 fileObj::~fileObj(){
     delete [] fileName;
     delete [] fileID;
@@ -103,6 +116,9 @@ fileObj::~fileObj(){
     delete [] filePath;
 }
 
+/*
+ *  Display all var
+ */
 void fileObj::display(){
     cout << "obj size is " << objSize << endl;
     for(int i=0; i< objSize; i++){
@@ -114,6 +130,9 @@ void fileObj::display(){
     }
 }
 
+/*
+ *  Object copy operator
+ */
 fileObj& fileObj::operator=(const fileObj& src){
 
     if(this != &src){
@@ -134,7 +153,6 @@ fileObj& fileObj::operator=(const fileObj& src){
         }
     }
     return *this;
-
 }
 
 /*
@@ -161,7 +179,6 @@ int checkSongObjIDbyPar(int par, fileObj *src){
     if(src->getSize() > 0){
         for(int i = 0; i< src->getSize(); i++){
             if(src->getPar(i) == par){
-
                 FinID = src->getID(i);
             }
         }
@@ -177,7 +194,6 @@ int checkSongObjParByID(int id, fileObj *src){
     if(src->getSize() > 0){
         for(int i = 0; i< src->getSize(); i++){
             if(src->getID(i) == id){
-
                 FinPar = src->getPar(i);
             }
         }
@@ -186,7 +202,6 @@ int checkSongObjParByID(int id, fileObj *src){
 }
 
 /*
-  *
   * Search any Object for a track Path by using the ID
   */
 char *checkSongObjPathByID(int id, fileObj *src){

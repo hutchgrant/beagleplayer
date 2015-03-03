@@ -171,6 +171,7 @@ void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
         pListSelect = selected;
         qDebug() << "selected playlist index "<< pListSelect;
         PLMODE = 1;
+
         fillPL();
     }
     else{

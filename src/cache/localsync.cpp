@@ -38,8 +38,7 @@ void localsync::Sync(QDir usrDir, int syncType)
 
     if(usrDir != QString(getenv("HOME"))){
         curDir = usrDir.absolutePath();  // get chosen path
-        scanDir(curDir, syncType);
-        //sync to db
+        scanDir(curDir);
         if(syncType == 0){  /// sync Audio
             firstTable = "songdirs";
             secondTable = "songs";
@@ -48,12 +47,12 @@ void localsync::Sync(QDir usrDir, int syncType)
             secondTable = "videos";
         }
          // scan main for directories
-         dbCon.writeDB(&localDir, firstTable);  // write song directories
+         dbCon.writeDB(&localDir, firstTable);  // write directories
          FolderCount = localDir.getSize();
          /// reinit localDirectorie names, paths, ids,
          localDir = fileObj();
          localDir.initFile(100);
-         dbCon.readDB(localDir, firstTable);  // re-read song directories with their new key ids
+         dbCon.readDB(localDir, firstTable);  // re-read directories with their new key ids
          /// Scan + write files from each directory
          scanFiles(syncType, FolderCount);
          dbCon.writeDB(&localFile, secondTable);  // write song files
@@ -63,14 +62,14 @@ void localsync::Sync(QDir usrDir, int syncType)
 /*
 * Scan User Directory for folders. Add all discovered folders
 */
-void localsync::scanDir(QString dir, int scanType){
+void localsync::scanDir(QString dir){
     QDirIterator directories(dir, QDir::Dirs | QDir::NoDotAndDotDot);
     int count = 0;
     localDir = fileObj();
     localDir.initFile(100);
 
     QDir impDir(dir);
-    addItem(scanType, count, 0, 0, impDir.dirName(), impDir.absolutePath());
+    addItem(0, count, 0, 0, impDir.dirName(), impDir.absolutePath());
     count++;
 
     while(directories.hasNext()){

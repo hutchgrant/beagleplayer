@@ -42,7 +42,7 @@ public:
     localsync();
     virtual ~localsync();
     void scanFiles(int scanType, int folderCount);
-    void scanDir(QString dir, int scanType);
+    void scanDir(QString dir);
     void Sync(QDir usrDir, int syncType);
     string sanitizeName(QString filename);
     void addItem(int itemType, int pos, int id, int par, QString fileName, QString filePath);
