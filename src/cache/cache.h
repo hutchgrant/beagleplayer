@@ -37,6 +37,7 @@ public:
     void readAll(fileObj &artist, fileObj &song, fileObj &viddirs, fileObj &videos);
 
     void removeFrom(int key, string table);
+    string unsanitizeName(QString filename);
 
 private:
 };

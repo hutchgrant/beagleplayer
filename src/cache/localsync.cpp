@@ -28,6 +28,8 @@ localsync::localsync()
   */
 void localsync::Sync(QDir usrDir, int syncType)
 {
+    int FolderCount = 0;
+    string firstTable = "", secondTable = "";
     QString curDir = NULL;
     dbCon.init();
 
@@ -36,18 +38,22 @@ void localsync::Sync(QDir usrDir, int syncType)
         scanDir(curDir, syncType);
         //sync to db
         if(syncType == 0){  /// sync Audio
-            // scan main for directories
-            dbCon.writeDB(&localDir, "songdirs");  // write song directories
-            dbCon.readDB(localDir, "songdirs");  // re-read song directories with their new key ids
-            scanFiles(syncType);
-            dbCon.writeDB(&localFile, "songs");  // write song files
+            firstTable = "songdirs";
+            secondTable = "songs";
+        }else{
+            firstTable = "viddirs";
+            secondTable = "videos";
         }
-        else{  /// sync video
-            dbCon.writeDB(&localDir, "viddirs");  // write video directories
-            dbCon.readDB(localDir, "viddirs");  // re-read video directories with their new key ids
-            scanFiles(syncType);
-            dbCon.writeDB(&localFile, "videos");  // write song file
-        }
+         // scan main for directories
+         dbCon.writeDB(&localDir, firstTable);  // write song directories
+         FolderCount = localDir.getSize();
+         /// reinit localDirectorie names, paths, ids,
+         localDir = fileObj();
+         localDir.initFile(100);
+         dbCon.readDB(localDir, firstTable);  // re-read song directories with their new key ids
+         /// Scan + write files from each directory
+         scanFiles(syncType, FolderCount);
+         dbCon.writeDB(&localFile, secondTable);  // write song files
     }
 }
 /*
@@ -56,47 +62,73 @@ void localsync::Sync(QDir usrDir, int syncType)
 void localsync::scanDir(QString dir, int scantype){
     QDirIterator directories(dir, QDir::Dirs | QDir::NoDotAndDotDot);
     int count = 0;
+    string fileName = "", filePath = "";
+
+    localDir = fileObj();
     localDir.initFile(100);
+
+    fileName = sanitizeName(directories.fileName());
+    filePath = sanitizeName(directories.filePath());
+    localDir.set(count, 0,  0, fileName.c_str(), filePath.c_str());
+    count++;
+
     while(directories.hasNext()){
         directories.next();
+        fileName = sanitizeName(directories.fileName());
+        filePath = sanitizeName(directories.filePath());
+        localDir.set(count, 0,  0, fileName.c_str(), filePath.c_str());
+        count++;
 
-        if(scantype == 0 ){
-            localDir.set(count, 0,  0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+        QDirIterator subdirect(directories.filePath(), QDir::Dirs | QDir::NoDotAndDotDot);
+        while(subdirect.hasNext()){
+            subdirect.next();
+            fileName = sanitizeName(subdirect.fileName());
+            filePath = sanitizeName(subdirect.filePath());
+            localDir.set(count, 0,  0, fileName.c_str(), filePath.c_str());
             count++;
         }
-        else{
-            localDir.set(count, 0, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
-            count++;
-        }
+
     }
 }
 /*
 * Scan User Directory for folders. Add all discovered files
 */
-void localsync::scanFiles(int scanType){
-
+void localsync::scanFiles(int scanType, int folderCount){
+    localDir.display();
     int itemcount = 0;
+    string fileName = "", filePath = "";
+
+    localFile = fileObj();
     localFile.initFile(100);
 
-    for(int i=0; i<localDir.getSize(); i++){
+    for(int i=localDir.getSize(); i>localDir.getSize()-folderCount-1; i--){
         QDirIterator dirWalk(QString::fromStdString(localDir.getPath(i)), QDir::Files | QDir::NoSymLinks);
         while(dirWalk.hasNext())
         {
             dirWalk.next();
             if(scanType == 0){  // if scanning audio
                 if(dirWalk.fileInfo().completeSuffix() == "mp3" || dirWalk.fileInfo().completeSuffix() == "flac" || dirWalk.fileInfo().completeSuffix() == "wav"){
-                    localFile.set(itemcount,itemcount, localDir.getID(i), dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
+                    fileName = sanitizeName(dirWalk.fileName());
+                    filePath = sanitizeName(dirWalk.filePath());
+                    localFile.set(itemcount,itemcount, localDir.getID(i), fileName.c_str(), filePath.c_str());
                     itemcount++;
                 }
             }
             else{   // if scanning video
                 if(dirWalk.fileInfo().suffix() == "avi" || dirWalk.fileInfo().suffix() == "mp4" || dirWalk.fileInfo().suffix() == "mkv"){
-                    localFile.set(itemcount,itemcount, localDir.getID(i), dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
+                    fileName = sanitizeName(dirWalk.fileName());
+                    filePath = sanitizeName(dirWalk.filePath());
+                    localFile.set(itemcount,itemcount, localDir.getID(i),fileName.c_str(), filePath.c_str());
                     itemcount++;
                 }
             }
         }
     }
+}
+
+string localsync::sanitizeName(QString filename){
+    filename.replace(QString("'"), QString("$_"));
+    return filename.toStdString().c_str();
 }
 
 localsync::~localsync(){

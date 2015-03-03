@@ -47,6 +47,12 @@ browse::~browse()
  *  Initialize/update/re-read from cache.
  */
 void browse::Sync(int type){
+    Artist = fileObj();
+    Song = fileObj();
+    VidDir = fileObj();
+    Video =  fileObj();
+    Radio =  fileObj();
+
     Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100), Radio.initFile(10), RadioCat.initFile(10);
 
     if(type == 2 || type == 3){    /// import new entries into local db for each folder and file

@@ -41,9 +41,10 @@ class localsync
 public:
     localsync();
     virtual ~localsync();
-    void scanFiles(int scanType);
+    void scanFiles(int scanType, int folderCount);
     void scanDir(QString dir, int scanType);
     void Sync(QDir usrDir, int syncType);
+    string sanitizeName(QString filename);
 
 private:
     QDir mydir;

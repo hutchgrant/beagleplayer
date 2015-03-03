@@ -91,7 +91,7 @@ int cache::lastInsertID(){
 void cache::readDB(fileObj &file, string type){
     stringstream os;
     int fileCount = 0;
-
+    string fileName = "", filePath = "";
     openDB();
     if(this->db.open()){
         os << "SELECT * FROM "<< type << endl;
@@ -99,7 +99,10 @@ void cache::readDB(fileObj &file, string type){
         myQry.prepare(os.str().c_str());
         myQry.exec();
         while (myQry.next()){
-            file.set(fileCount, myQry.value(0).toInt(), myQry.value(1).toInt(), myQry.value(2).toString().toStdString().c_str(), myQry.value(3).toString().toStdString().c_str());
+            fileName = unsanitizeName(myQry.value(2).toString());
+            filePath = unsanitizeName(myQry.value(3).toString());
+
+            file.set(fileCount, myQry.value(0).toInt(), myQry.value(1).toInt(), fileName.c_str(), filePath.c_str());
             fileCount++;
         }
         this->db.close();
@@ -205,5 +208,7 @@ void cache::createCache(){
    QDir(q_main).mkdir(q_main);
 }
 
-/// update rows
-/// delete rows
+string cache::unsanitizeName(QString filename){
+    filename.replace(QString("$_"), QString("'"));
+    return filename.toStdString().c_str();
+}
