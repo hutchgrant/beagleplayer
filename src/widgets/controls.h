@@ -97,6 +97,7 @@ private slots:
 
     void stopTime(int);
     void rangeChange(int, int);
+    void sliderMoved(int);  // user seeked the f
 
 private:
         void adjustVol(int vol);

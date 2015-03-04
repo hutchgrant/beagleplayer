@@ -47,6 +47,7 @@ void controls::startLocal(char *finSong, char *finPath)
     totalSecCount = 0;
     totalMinCount = 0;
     totalHourCount = 0;
+    ui->trackSlider->setSliderPosition(0);
 
     char *final;
     final = new char[strlen(finPath) + 10];
@@ -58,6 +59,7 @@ void controls::startLocal(char *finSong, char *finPath)
     widget.start(QStringList(final));
     connect(&widget, SIGNAL(stateChanged(int)), this, SLOT(stopTime(int)));
     connect(ui->trackSlider, SIGNAL(rangeChanged(int, int)), this, SLOT(rangeChange(int, int)));
+    connect(ui->trackSlider, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)));
 }
 
 /*
@@ -89,6 +91,14 @@ void controls::rangeChange(int min, int max){
 
     totalMinCount = totalMinCount - (totalHourCount *60);
     totalSecCount = max - (totalMinCount * 60);
+}
+
+void controls::sliderMoved(int pos){
+    minCount = pos / 60;
+    hourCount = minCount / 60;
+
+    minCount = minCount - (hourCount *60);
+    secondCount = pos - (minCount * 60);
 }
 
 void controls::setTimer(){
