@@ -38,7 +38,7 @@ public:
     
 private slots:
     void on_volSlider_sliderMoved(int position);
-
+    void setPosition(int);
 signals:
     void volChanged(int);
 protected:

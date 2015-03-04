@@ -18,69 +18,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "controls.h"
-#include "ui_controls.h"
+#include "skincntrl.h"
+#include "ui_skincntrl.h"
 
-controls::controls(QWidget *parent) :
+skincntrl::skincntrl(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::controls)
+    ui(new Ui::skincntrl)
 {
     ui->setupUi(this);
-    current.initFile(100);
 
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
-    widget.setSeekSlider(ui->trackSlider);
 
     connect(vol, SIGNAL(volChanged(int)), this, SLOT(setVol(int)));
     connect(this, SIGNAL(setVolume(int)), vol, SLOT(setPosition(int)));
     connect(&timer, SIGNAL(timeout()), this, SLOT(setTime()));
     connect(ui->trackSlider, SIGNAL(rangeChanged(int, int)), this, SLOT(rangeChange(int, int)));
     connect(ui->trackSlider, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)));
-    connect(&widget, SIGNAL(stateChanged(int)), this, SLOT(stopTime(int)));
 }
 
-/*
-  *  Control for Start of local File
-  */
-void controls::startLocal(char *finSong, char *finPath)
-{
-    secondCount = 0;
-    minCount = 0;
-    hourCount = 0;
-
-    totalSecCount = 0;
-    totalMinCount = 0;
-    totalHourCount = 0;
-    ui->trackSlider->setSliderPosition(0);
-
-    char *final;
-    final = new char[strlen(finPath) + 10];
-    sprintf(final, "%s", finPath);
-    cout << "Final File Playing: " << final << endl;
-    ui->songTitle->setText(QString(finSong));
-
-    widget.show();
-    widget.start(QStringList(final));
-
-    emit songChanged(finSong);
-}
-
-/*
-  *  Control for Start of local File
-  */
-void controls::start(string finSong, string finPath)
-{
-    char *final;
-    final = new char[strlen(finPath.c_str()) + strlen(finSong.c_str()) + 10 ];
-    sprintf(final, "%s%s", finPath.c_str(),finSong.c_str());
-    cout << "Final File Playing: " << final << endl;
-    widget.show();
-    ui->songTitle->setText(QString(finSong.c_str()));
-    widget.start(QStringList(final));
-}
-
-void controls::stopTime(int state){
+void skincntrl::stopTime(int state){
     if(state == 5 || state == 0 || state == -1){ /// file paused/stopped/idle.
         timer.stop();
     }
@@ -89,16 +46,15 @@ void controls::stopTime(int state){
     }
 }
 
-void controls::rangeChange(int min, int max){
+void skincntrl::rangeChange(int min, int max){
     totalMinCount = max / 60;
     totalHourCount = totalMinCount / 60;
 
     totalMinCount = totalMinCount - (totalHourCount *60);
     totalSecCount = max - (totalMinCount * 60);
-    emit remConRange(max);
 }
 
-void controls::sliderMoved(int pos){
+void skincntrl::sliderMoved(int pos){
     minCount = pos / 60;
     hourCount = minCount / 60;
 
@@ -107,7 +63,7 @@ void controls::sliderMoved(int pos){
     emit remConSeek(pos);
 }
 
-void controls::setTimer(){
+void skincntrl::setTimer(){
     stringstream playtime;
     string sHour = "", sMin = "", sSec = "";
     string sTotalHour = "", sTotalMin = "", sTotalSec = "";
@@ -147,94 +103,77 @@ void controls::setTimer(){
     }else{
         sTotalSec = QString("%1").arg(totalSecCount).toStdString();
     }
-    if(widget.PlayingState){
         playtime <<  sHour << ":" << sMin << ":" << sSec << " / " <<  sTotalHour << ":" << sTotalMin << ":" << sTotalSec  ;
         ui->cntrl_time->setText(playtime.str().c_str());
-    }
-}
-/*
-  *  Sort the current list for
-  */
-void controls::startSelected(){
-    int finSongSize = 0;
-    int finPathSize = 0;
-    int selID = 0;
-    char *finPath;
-    char *finSong;
-
-    selID = curList[CurrentSelect];
-
-    finSongSize = strlen(checkSongObjByID(selID, &current));
-    finSong = new char[finSongSize + 1];
-    finSong = checkSongObjByID(selID, &current);
-
-    finPathSize = strlen(checkSongObjPathByID(selID, &current));
-    finPath = new char[finPathSize + 1];
-    finPath = checkSongObjPathByID(selID, &current);
-    startLocal(finSong, finPath);
 }
 
-/*
-  * Set Current qeue list when list changes
-  */
-void controls::setCurList(fileObj &newList, int *newIDlist){
-    current = fileObj();
-    current.initFile(100);
-    current = newList;
-    curList = newIDlist;
+
+void skincntrl::initTrack(){
+    secondCount = 0;
+    minCount = 0;
+    hourCount = 0;
+
+    totalSecCount = 0;
+    totalMinCount = 0;
+    totalHourCount = 0;
+    ui->trackSlider->setSliderPosition(0);
 }
 
 /*
   * public slot for volume
   */
-void controls::remoteSeek(int pos){
-    ui->trackSlider->setSliderPosition(pos);
-    minCount = pos / 60;
-    hourCount = minCount / 60;
-
-    minCount = minCount - (hourCount *60);
-    secondCount = pos - (minCount * 60);
+void skincntrl::setTrack(string track){
+    initTrack();
+    ui->songTitle->setText(track.c_str());
+    timer.start(1000);
 }
 
-void controls::setVol(int vol){
-    widget.setVolume(vol);
+void skincntrl::setSeekPos(int pos){
+    ui->trackSlider->setSliderPosition(pos);
+    sliderMoved(pos);
+}
+void skincntrl::setSeekRange(int max){
+    ui->trackSlider->setRange(0, max);
+}
+
+void skincntrl::setMainVol(int vol){
     emit setVolume(vol);
+}
+
+void skincntrl::setVol(int vol){
     emit remConVol(vol);
 }
 
-void controls::on_PAUSE_clicked()
+void skincntrl::on_PAUSE_clicked()
 {
-    widget.pause();
+    emit remConFile(2);
 }
 
-void controls::on_PLAY_clicked()
+void skincntrl::on_PLAY_clicked()
 {
-    widget.play();
+    emit remConFile(1);
 }
 
-void controls::on_STOP_clicked()
+void skincntrl::on_STOP_clicked()
 {
-    widget.stop();
     timer.stop();
+    emit remConFile(3);
 }
 
-void controls::on_NEXT_clicked()
+void skincntrl::on_NEXT_clicked()
 {
-    CurrentSelect++;
-    startSelected();
+    emit remConFile(4);
 }
 
-void controls::on_PREV_clicked()
+void skincntrl::on_PREV_clicked()
 {
-    CurrentSelect--;
-    startSelected();
+    emit remConFile(5);
 }
 
 /*
  * Destructor
  */
-controls::~controls()
+skincntrl::~skincntrl()
 {
-    widget.close();
     delete ui;
 }

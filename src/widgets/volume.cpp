@@ -32,6 +32,10 @@ void volume::on_volSlider_sliderMoved(int position)
     emit volChanged(curVol);
 }
 
+void volume::setPosition(int pos){
+    ui->volSlider->setSliderPosition(pos);
+}
+
 void volume::paintEvent(QPaintEvent * /* Event */ ){
 
     if(curVol > 60){

@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONTROLS_H
-#define CONTROLS_H
+#ifndef skincntrl_H
+#define skincntrl_H
 
 #include <QWidget>
 #include <QDebug>
@@ -29,10 +29,10 @@
 #include "src/widgets/volume.h"
 
 namespace Ui {
-class controls;
+class skincntrl;
 }
 
-class controls : public QWidget
+class skincntrl : public QWidget
 {
     Q_OBJECT
 
@@ -40,72 +40,22 @@ public:
 
     int secondCount, minCount, hourCount;
     int totalSecCount, totalMinCount, totalHourCount;
-    int pl_selected;
+    string track;
 
     QTimer timer;
-    fileObj current;    /// current fileObj List
-    QMPwidget widget;
 
-    controls(QWidget *parent = 0);
-    virtual ~controls();
+    skincntrl(QWidget *parent = 0);
+    virtual ~skincntrl();
 
     void startLocal(char *finSong, char *finPath);
     void start(string finSong, string finPath);
     void startSelected();
 
+    void initTrack();
     void setTimer();
-    void close(){
-        widget.close();
-    }
 
 public slots:
     void setVol(int vol);
-    void setSelection(int selection){
-        CurrentSelect = selection;
-    }
-
-    void setSelectionAndPlay(int selection){
-        CurrentSelect = selection;
-        startSelected();
-    }
-    void setCurList(fileObj &newlist, int * newIDlist);
-
-    /*
-     * Remote commands for signals from another widget!
-     * connect = 1  - play
-     * connect = 2 - pause
-     * connect = 3 - stop
-     * connect = 4 - next
-     * connect = 5 - prev
-     */
-    void remoteCommand(int connect){
-        if(connect == 3){
-            widget.stop();
-            timer.stop();
-            qDebug() << "remote stop";
-        }else if(connect == 2){
-            qDebug() << "remote pause";
-            timer.stop();
-            widget.pause();
-        }else if(connect == 1){
-            qDebug() << "remote play";
-            timer.start(1000);
-            widget.pause();
-        }else if(connect == 4){
-            qDebug() << "remote next";
-            CurrentSelect++;
-            startSelected();
-        }else if(connect == 5){
-            qDebug() << "remote prev";
-            CurrentSelect--;
-            startSelected();
-        }
-    }
-
-    void remoteVolume(int vol){
-        setVol(vol);
-    }
-    void remoteSeek(int pos);
 
 private slots:
 
@@ -131,29 +81,27 @@ private slots:
         }
         setTimer();
     }
+    void setTrack(string);
+    void setSeekPos(int);
+    void setSeekRange(int);
+    void setMainVol(int);
 
     void stopTime(int);
     void rangeChange(int, int);
     void sliderMoved(int);  // user seeked the f
-    void on_detach_clicked(){
-        emit detach();
-    }
 
 signals:
-    void detach();
-    void songChanged(string);
     void setVolume(int);
     void remConSeek(int);
-    void remConRange(int);
     void remConFile(int);
     void remConVol(int);
 private:
         void adjustVol(int vol);
         int CurrentSelect;  /// current selection number
         int *curList;       /// current cue list ID's
-        Ui::controls *ui;
+        Ui::skincntrl *ui;
         string name, path;
         volume *vol;
 };
 
-#endif // CONTROLS_H
+#endif // skincntrl_H

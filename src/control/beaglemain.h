@@ -6,6 +6,7 @@
 #include "src/cache/cache.h"
 #include "src/widgets/playlist.h"
 #include "src/widgets/controls.h"
+#include "src/widgets/skincntrl.h"
 
 namespace Ui {
 class beaglemain;
@@ -34,7 +35,7 @@ private slots:
     void on_actionAdd_Radio_Station_triggered();
 
     void detachControls(){
-        cntrl2->show();
+        detached->show();
     }
 
 private:
@@ -45,7 +46,7 @@ private:
 
     playlist *playlst;
     controls *cntrl;
-    controls *cntrl2;
+    skincntrl *detached;
 
 };
 

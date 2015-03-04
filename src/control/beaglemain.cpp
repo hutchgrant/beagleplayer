@@ -36,9 +36,8 @@ void beaglemain::addWidgets(){
    ui->playlist_layout->addWidget(playlst, 0, 0);
 
    /// Initialize potential detached window
-   cntrl2 = new controls();
-   cntrl2->setDetached(true);
-   cntrl2->hide();
+   detached = new skincntrl();
+   detached->hide();
 }
 
 /*
@@ -75,10 +74,17 @@ void beaglemain::connectSignals(){
       connect(playlst, SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
       connect(playlst, SIGNAL(playlistFullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
 
-      /// connect detached player controls
+      /// connect controls to detached player
       connect(cntrl, SIGNAL(detach()), this, SLOT(detachControls()) );
-      connect(cntrl2, SIGNAL(remConFile(int)), cntrl, SLOT(remoteCommand(int)));
-      connect(cntrl2, SIGNAL(remConVol(int)), cntrl, SLOT(remoteVolume(int)));
+      connect(cntrl, SIGNAL(songChanged(string)), detached, SLOT(setTrack(string)) );
+      connect(cntrl, SIGNAL(remConSeek(int)), detached, SLOT(setSeekPos(int)) );
+      connect(cntrl, SIGNAL(remConRange(int)), detached, SLOT(setSeekRange(int)));
+      connect(cntrl, SIGNAL(remConVol(int)), detached, SLOT(setMainVol(int)) );
+
+      /// connect detach player to controls
+      connect(detached, SIGNAL(remConSeek(int)), cntrl, SLOT(remoteSeek(int)));
+      connect(detached, SIGNAL(remConFile(int)), cntrl, SLOT(remoteCommand(int)));
+      connect(detached, SIGNAL(remConVol(int)), cntrl, SLOT(remoteVolume(int)));
 }
 
 
