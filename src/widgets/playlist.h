@@ -25,7 +25,8 @@
 #include "src/object/fileobj.h"
 #include "src/cache/cache.h"
 #include "newplaylist.h"
-#include "src/widgets/radiostat.h"
+
+
 namespace Ui {
 class playlist;
 }
@@ -41,9 +42,6 @@ public:
     cache *dbCon;
     fileObj pList, pListItems;
     fileObj pNewList, pNewItems;
-    fileObj pRadio;
-
-    radiostat radStat;
 
     int PLMODE = 0, pListSelect = 0, pItemSelect = 0;
     int *curPLlist;
@@ -56,43 +54,23 @@ public:
     void createNewPL();
     void fillPL();
     bool readPL();
-    bool readRadios();
 
     void init();
     void initCache(cache *ini_cache){
         dbCon = ini_cache;
+        readPL();
     }
-    void addToNewPL(string, string);
+    void addToNewPL(string track, string path);
     void addToCurrent(int parid, string track, string path);
 
 public slots:
     /// if a track was selected elsewhere,
-    /// Need that information immediately avail to playlist  future: store playlist albums, using par+ id
-    void setTempTrack(string track, string path, int par, int id){
+    /// Need that information immediately avail to playlist
+    void setTempTrack(string track, string path){
         tempTrack = track;
         tempPath = path;
     }
 
-     /// if playlist mode is changed by another widget
-     void setPlaylistMode(string type){
-         if(type == "playlist"){
-             PLMODE = 1;
-             readPL();
-         }else if(type == "radio"){
-             PLMODE = 4;
-             readRadios();
-         }else if(type == "newPlayItem"){
-             PLMODE = 2;
-             readPL();
-         }else if(type == "newRadItem"){
-             PLMODE = 4;
-             readRadios();
-         }else{
-             PLMODE = 0;
-             readPL();
-         }
-         fillPL();  /// update list
-     }
 
 signals:
     void playlistChanged(fileObj &plItem, int * plItemList);

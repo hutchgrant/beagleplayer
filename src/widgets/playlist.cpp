@@ -71,13 +71,6 @@ bool playlist::readPL(){
 }
 
 /*
- *  sync radios directly to playlist
- */
-bool playlist::readRadios(){
-    dbCon->readDB(pRadio, "radios");
-}
-
-/*
  *  Fill Playlist Right Window
  */
 void playlist::fillPL(){
@@ -107,14 +100,6 @@ void playlist::fillPL(){
             count++;
         }
         emit playlistChanged(pNewItems, curPLlist);
-    }
-    else if(PLMODE == 3){            // radios
-        curPLlist = new int[pRadio.getSize()];
-        for(int i = 0; i< pRadio.getSize(); i++){
-            curList << pRadio.getName(i);
-            curPLlist[i] = pRadio.getID(i);
-        }
-        emit playlistChanged(pRadio, curPLlist);
     }
     pl_model = new QStringListModel(this);
     pl_model->setStringList(curList);
@@ -237,13 +222,6 @@ void playlist::on_add_tool_clicked()
         addToCurrent(tempPar, tempTrack, tempPath);
         if(readPL()){
             fillPL();
-        }
-    }
-    else if(PLMODE == 3){ // add radio
-        /// Radio Menu Popup
-        radStat.show();
-        if(radStat.exec()==QDialog::Accepted){
-            qDebug() << "radio added" << endl;
         }
     }
 }

@@ -19,7 +19,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,6,0,2" columnstretch="25,1,0,9">
+     <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,6,0,3" columnstretch="25,0,0,9">
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
@@ -58,7 +58,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
+            <width>10</width>
             <height>20</height>
            </size>
           </property>
@@ -93,7 +93,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>40</height>
+            <height>5</height>
            </size>
           </property>
          </spacer>

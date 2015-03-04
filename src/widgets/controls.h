@@ -22,6 +22,8 @@
 #define CONTROLS_H
 
 #include <QWidget>
+#include <QDebug>
+#include <sstream>
 #include "src/object/fileobj.h"
 #include "src/qmpwidget/qmpwidget.h"
 #include "src/widgets/volume.h"
@@ -35,8 +37,12 @@ class controls : public QWidget
     Q_OBJECT
 
 public:
+
+    int secondCount, minCount, hourCount;
+    int totalSecCount, totalMinCount, totalHourCount;
+    QTimer timer;
     fileObj current;    /// current fileObj List
-    explicit controls(QWidget *parent = 0);
+    controls(QWidget *parent = 0);
     virtual ~controls();
     QMPwidget widget;
     int pl_selected;
@@ -48,6 +54,7 @@ public:
         widget.close();
     }
     void startSelected();
+    void setTimer();
 public slots:
     void setVol(int vol);
     void setSelection(int selection){
@@ -62,6 +69,7 @@ public slots:
 
     void changeCon(int mode);
 
+
 private slots:
 
     void on_PAUSE_clicked();
@@ -73,6 +81,22 @@ private slots:
     void on_NEXT_clicked();
 
     void on_PREV_clicked();
+
+    void setTime(){
+        secondCount++;
+        if(secondCount % 60 == 0){
+            secondCount = 0;
+            minCount++;
+        }
+        if(minCount % 60 == 0){
+            minCount = 0;
+            hourCount = minCount / 60;
+        }
+        setTimer();
+    }
+
+    void stopTime(int);
+    void rangeChange(int, int);
 
 private:
         void adjustVol(int vol);
