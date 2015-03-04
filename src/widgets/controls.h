@@ -40,21 +40,29 @@ public:
 
     int secondCount, minCount, hourCount;
     int totalSecCount, totalMinCount, totalHourCount;
+    int pl_selected;
+
+    bool detached;
+
     QTimer timer;
     fileObj current;    /// current fileObj List
+    QMPwidget widget;
+
     controls(QWidget *parent = 0);
     virtual ~controls();
-    QMPwidget widget;
-    int pl_selected;
 
     void startLocal(char *finSong, char *finPath);
     void start(string finSong, string finPath);
+    void startSelected();
 
+    void setTimer();
+    void setDetached(bool detach){
+        detached = detach;
+    }
     void close(){
         widget.close();
     }
-    void startSelected();
-    void setTimer();
+
 public slots:
     void setVol(int vol);
     void setSelection(int selection){
@@ -67,8 +75,41 @@ public slots:
     }
     void setCurList(fileObj &newlist, int * newIDlist);
 
-    void changeCon(int mode);
+    /*
+     * Remote commands for signals from another widget!
+     * connect = 1  - play
+     * connect = 2 - pause
+     * connect = 3 - stop
+     * connect = 4 - next
+     * connect = 5 - prev
+     */
+    void remoteCommand(int connect){
+        if(connect == 3){
+            widget.stop();
+            timer.stop();
+            qDebug() << "remote stop";
+        }else if(connect == 2){
+            qDebug() << "remote pause";
+            timer.stop();
+            widget.pause();
+        }else if(connect == 1){
+            qDebug() << "remote play";
+            timer.start(1000);
+            widget.pause();
+        }else if(connect == 4){
+            qDebug() << "remote next";
+            CurrentSelect++;
+            startSelected();
+        }else if(connect == 5){
+            qDebug() << "remote prev";
+            CurrentSelect--;
+            startSelected();
+        }
+    }
 
+    void remoteVolume(int vol){
+        widget.setVolume(vol);
+    }
 
 private slots:
 
@@ -98,11 +139,17 @@ private slots:
     void stopTime(int);
     void rangeChange(int, int);
     void sliderMoved(int);  // user seeked the f
+    void on_detach_clicked(){
+        emit detach();
+    }
 
+signals:
+    void detach();
+    void remConFile(int);
+    void remConVol(int);
 private:
         void adjustVol(int vol);
         int CurrentSelect;  /// current selection number
-        int CON_MODE;       /// connection mode
         int *curList;       /// current cue list ID's
         Ui::controls *ui;
         string name, path;

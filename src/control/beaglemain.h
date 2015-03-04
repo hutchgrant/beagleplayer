@@ -33,6 +33,10 @@ private slots:
 
     void on_actionAdd_Radio_Station_triggered();
 
+    void detachControls(){
+        cntrl2->show();
+    }
+
 private:
     Ui::beaglemain *ui;
     browse *brow;
@@ -41,6 +45,8 @@ private:
 
     playlist *playlst;
     controls *cntrl;
+    controls *cntrl2;
+
 };
 
 #endif // BEAGLEMAIN_H

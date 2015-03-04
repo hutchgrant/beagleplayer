@@ -34,6 +34,11 @@ void beaglemain::addWidgets(){
    ui->browse_layout->addWidget(brow, 0 ,0);
    ui->control_layout->addWidget(cntrl, 0 ,0);
    ui->playlist_layout->addWidget(playlst, 0, 0);
+
+   /// Initialize potential detached window
+   cntrl2 = new controls();
+   cntrl2->setDetached(true);
+   cntrl2->hide();
 }
 
 /*
@@ -69,7 +74,13 @@ void beaglemain::connectSignals(){
       connect(playlst, SIGNAL(playlistChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));
       connect(playlst, SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
       connect(playlst, SIGNAL(playlistFullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
+
+      /// connect detached player controls
+      connect(cntrl, SIGNAL(detach()), this, SLOT(detachControls()) );
+      connect(cntrl2, SIGNAL(remConFile(int)), cntrl, SLOT(remoteCommand(int)));
+      connect(cntrl2, SIGNAL(remConVol(int)), cntrl, SLOT(remoteVolume(int)));
 }
+
 
 /*
  * Main Tool Bar, File-> Import Audio

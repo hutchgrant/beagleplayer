@@ -27,10 +27,12 @@ controls::controls(QWidget *parent) :
 {
     ui->setupUi(this);
     current.initFile(100);
-    CON_MODE = 0;
-    widget.setSeekSlider(ui->trackSlider);
+    detached = false;
+
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
+    widget.setSeekSlider(ui->trackSlider);
+
     connect(vol, SIGNAL(volChanged(int)), this, SLOT(setVol(int)));
     connect(&timer, SIGNAL(timeout()), this, SLOT(setTime()));
 }
@@ -169,13 +171,6 @@ void controls::startSelected(){
 }
 
 /*
-  * Slot to Change connection Mode
-  */
-void controls::changeCon(int mode){
-    CON_MODE = mode;
-}
-
-/*
   * Set Current qeue list when list changes
   */
 void controls::setCurList(fileObj &newList, int *newIDlist){
@@ -190,35 +185,44 @@ void controls::setCurList(fileObj &newList, int *newIDlist){
   */
 void controls::setVol(int vol){
     widget.setVolume(vol);
-
+    emit remConVol(vol);
 }
 
 void controls::on_PAUSE_clicked()
 {
     widget.pause();
+    emit remConFile(2);
 }
 
 void controls::on_PLAY_clicked()
 {
     widget.play();
+    emit remConFile(1);
 }
 
 void controls::on_STOP_clicked()
 {
     widget.stop();
     timer.stop();
+    emit remConFile(3);
 }
 
 void controls::on_NEXT_clicked()
 {
     CurrentSelect++;
-    startSelected();
+    if(!detached){
+        startSelected();
+    }
+    emit remConFile(4);
 }
 
 void controls::on_PREV_clicked()
 {
     CurrentSelect--;
-    startSelected();
+    if(!detached){
+        startSelected();
+    }
+    emit remConFile(5);
 }
 
 /*
