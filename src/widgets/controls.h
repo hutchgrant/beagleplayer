@@ -49,6 +49,7 @@ public:
     controls(QWidget *parent = 0);
     virtual ~controls();
 
+    void initSlider();
     void startLocal(char *finSong, char *finPath);
     void start(string finSong, string finPath);
     void startSelected();

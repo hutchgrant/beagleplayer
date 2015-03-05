@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Open URL</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../res/BPres.qrc">
+    <normaloff>:/res/beagleplayer_icon.png</normaloff>:/res/beagleplayer_icon.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -47,7 +51,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../res/BPres.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

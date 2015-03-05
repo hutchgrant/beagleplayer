@@ -26,7 +26,7 @@ public:
 
     void initCache();
     void connectSignals();
-
+    void openDialog();
 private slots:
 
     void on_actionImport_triggered();
@@ -36,7 +36,7 @@ private slots:
     void on_actionAdd_Radio_Station_triggered();
 
     void detachControls(){
-        detached->show();
+        openDialog();
     }
 
     void on_actionOpen_File_triggered();

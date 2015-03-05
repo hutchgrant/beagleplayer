@@ -17,7 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Add Radio Station</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../res/BPres.qrc">
+    <normaloff>:/res/beagleplayer_icon.png</normaloff>:/res/beagleplayer_icon.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_4">
    <item>
@@ -270,7 +274,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../res/BPres.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>radioExit</sender>

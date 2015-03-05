@@ -41,19 +41,24 @@ controls::controls(QWidget *parent) :
 }
 
 /*
-  *  Control for Start of local File
-  */
-void controls::startLocal(char *finSong, char *finPath)
-{
+ * Init slider
+ */
+void controls::initSlider(){
     secondCount = 0;
     minCount = 0;
     hourCount = 0;
-
     totalSecCount = 0;
     totalMinCount = 0;
     totalHourCount = 0;
     ui->trackSlider->setSliderPosition(0);
+}
 
+/*
+  *  Control for Start of local File
+  */
+void controls::startLocal(char *finSong, char *finPath)
+{
+    initSlider();
     char *final;
     final = new char[strlen(finPath) + 10];
     sprintf(final, "%s", finPath);
@@ -71,6 +76,7 @@ void controls::startLocal(char *finSong, char *finPath)
   */
 void controls::start(string finSong, string finPath)
 {
+    initSlider();
     cout << "Final File Playing: " << finSong << endl;
     widget.show();
     ui->songTitle->setText(QString(finSong.c_str()));

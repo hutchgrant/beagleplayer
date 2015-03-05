@@ -58,11 +58,13 @@ void browse::Sync(int type){
     if(type == 2 || type == 3){    /// import new entries into local db for each folder and file
         QDir usrDir = QString(getenv("HOME"));
         usrDir = QFileDialog::getExistingDirectory(this, tr("Import a directory"), QDir::currentPath());  /// get folder import directory
-        if(type == 2){   /// import audio
-           lclSync.Sync(usrDir, 0);
-        }
-        else if(type == 3){  /// import video
-            lclSync.Sync(usrDir, 1);
+        if(usrDir.dirName() != NULL || usrDir.dirName() != ""){
+            if(type == 2){   /// import audio
+               lclSync.Sync(usrDir, 0);
+            }
+            else if(type == 3){  /// import video
+                lclSync.Sync(usrDir, 1);
+            }
         }
     }else if(type == 4){
         radStat = new radiostat();
@@ -73,36 +75,42 @@ void browse::Sync(int type){
             dbCon->readDB(RadioCat, "categories");
             updateMenu();
         }
-        /// get Radio Station
         MenuMode = 2;  /// set Mode to radio
     }else if(type == 0){
         QDir usrDir;
          usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath(), tr("Video/Audio (*.avi *.mp4 *.mp3 *.flac *.wav)"));
-         if(usrDir.dirName() != NULL){
+         if(usrDir.dirName() != NULL || usrDir.dirName() != ""){
             emit startTempTrack(usrDir.dirName().toStdString(), usrDir.path().toStdString());
          }
+         MenuMode = 0;  /// set Mode to audio
     }else if(type == -1){
         web = new QWebUrl();
         web->show();
         if(web->exec() == QDialog::Accepted){
-            emit startTempTrack("", web->url_input);
+            if(web->url_input != "http://" || web->url_input != ""){
+                emit startTempTrack("", web->url_input);
+            }
         }
     }
 
     if(type != 0 || type == -1){   /// don't sync if we're playing a temp file
-        dbCon->readAll(Artist, Song, VidDir, Video);/// read from local database and sync to local objects
-        dbCon->readDB(Radio, "radios");
-        dbCon->readDB(RadioCat, "categories");
+        syncCache();
+        updateMenu();
     }
 
-    updateMenu();
 }
-
+/*
+ * Sync all Objects from cache
+ */
+void browse::syncCache(){
+    dbCon->readAll(Artist, Song, VidDir, Video);/// read from local database and sync to local objects
+    dbCon->readDB(Radio, "radios");
+    dbCon->readDB(RadioCat, "categories");
+}
 /*
  *  Update Left View List with Media file type, and their paths
  */
 void browse::updateMenu(){
-
     QStringList curMenu;
     m_Model = new QStringListModel(this);
     if(MenuMode == 0 )  // artists + local

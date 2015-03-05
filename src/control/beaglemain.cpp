@@ -31,14 +31,14 @@ void beaglemain::addWidgets(){
    playlst = new playlist(this);
    cntrl = new controls(this);
    aBout = new about(this);
+   detached = new skincntrl();
+   detached->hide();
 
    ui->browse_layout->addWidget(brow, 0 ,0);
    ui->control_layout->addWidget(cntrl, 0 ,0);
    ui->playlist_layout->addWidget(playlst, 0, 0);
 
-   /// Initialize potential detached window
-   detached = new skincntrl();
-   detached->hide();
+
 }
 
 /*
@@ -51,6 +51,10 @@ void beaglemain::initCache(){
     playlst->initCache(&dbCache);
 
     brow->Sync(1);  /// initialize and fill DB cache objects
+}
+
+void beaglemain::openDialog(){
+    detached->show();
 }
 
 /*

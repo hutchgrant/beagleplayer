@@ -49,6 +49,7 @@ public:
     void initCache(cache *ini_cache){
         dbCon = ini_cache;
     }
+    void syncCache();
 
 signals:
 
