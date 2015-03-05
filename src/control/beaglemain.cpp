@@ -62,12 +62,8 @@ void beaglemain::connectSignals(){
       connect(brow,SIGNAL(FullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));  /// a full track selection was made (double0click)
       connect(brow,SIGNAL(selectionChanged(int)), cntrl, SLOT(setSelection(int)));  ///  a single track selection was made (single-click)
 
-        /// current selection into playlist
+      /// current selection into playlist
       connect(brow,SIGNAL(trackChanged(string, string, int, int)), playlst, SLOT(setTempTrack(string, string, int, int)));  ///  a single track selection was made (single-click)
-
-
-      /// connect playlist signals
-      connect(brow,SIGNAL(playModeChanged(string)), playlst, SLOT(setPlaylistMode(string)));  ///  playlist list mode changed e.g. radio/playlist/newlist
 
       // playlist
       connect(playlst, SIGNAL(playlistChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));

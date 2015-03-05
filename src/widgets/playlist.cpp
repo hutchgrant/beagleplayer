@@ -130,7 +130,9 @@ void playlist::createNewPL(){
 void playlist::addToNewPL(string track, string path){
     pNewItems = fileObj();
     pNewItems.initFile(10);
+    qDebug() << "adding track = " << track.c_str() << " path =" << path.c_str() << endl;
     pNewItems.set(pNewItems.getSize(), 0, pNewList.getID(pNewList.getSize()), track.c_str(), path.c_str());
+    pNewItems.display();
     dbCon->writeDB(&pNewItems, "playlist_items");
 }
 
@@ -138,7 +140,7 @@ void playlist::addToNewPL(string track, string path){
  * Add to a current playlist
  */
 void playlist::addToCurrent(int parid, string track, string path){
-    fileObj pNewList;
+    pNewList = fileObj();
     pNewList.initFile(10);
     pNewList.set(0, 0, parid, track.c_str(), path.c_str());
     dbCon->writeDB(&pNewList, "playlist_items");

@@ -56,7 +56,6 @@ signals:
     void selectionChanged(int);                         //  a track was selected
     void FullSelection(int);                            // a track was double clicked
     void MenuSelection(int);                            // a Menu Item was selected
-    void playModeChanged(string);
 
 public slots:
     void updateTitle(int);                               // update Right ViewList

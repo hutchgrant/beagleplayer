@@ -38,7 +38,7 @@ public:
 
     void removeFrom(int key, string table);
     string unsanitizeName(QString filename);
-
+    string sanitizeName(QString filename);
 private:
 };
 

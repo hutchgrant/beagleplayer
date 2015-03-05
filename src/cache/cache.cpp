@@ -53,10 +53,14 @@ int cache::writeMe(string qry){
 int cache::writeDB(fileObj *file, string type){
     int lastid = 0;
     openDB();
+    string fileName = "", filePath = "";
+
     if(this->db.open()){
         for(int x=0; x< file->getSize(); x++){
             stringstream os;
-            os << "INSERT INTO " << type << " (dir_par, dir_name, dir_path) VALUES ('" << file->getPar(x) << "', '" << file->getName(x) << "', '" <<  file->getPath(x) << "')";
+            fileName = sanitizeName(file->getName(x));
+            filePath = sanitizeName(file->getPath(x));
+            os << "INSERT INTO " << type << " (dir_par, dir_name, dir_path) VALUES ('" << file->getPar(x) << "', '" << fileName << "', '" <<  filePath << "')";
             lastid = writeMe(os.str());
         }
         this->db.close();
@@ -206,7 +210,18 @@ void cache::createCache(){
    QDir(q_main).mkdir(q_main);
 }
 
+/*
+ *  Remove any sanitize place holdings characters that would otherwise look ugly
+ */
 string cache::unsanitizeName(QString filename){
     filename.replace(QString("$_"), QString("'"));
+    return filename.toStdString().c_str();
+}
+
+/*
+ *  Sanitize any forbidden characters that would otherwise break our sql queries
+ */
+string cache::sanitizeName(QString filename){
+    filename.replace(QString("'"), QString("$_"));
     return filename.toStdString().c_str();
 }

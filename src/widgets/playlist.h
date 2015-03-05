@@ -66,9 +66,11 @@ public:
 public slots:
     /// if a track was selected elsewhere,
     /// Need that information immediately avail to playlist
-    void setTempTrack(string track, string path){
+    void setTempTrack(string track, string path, int id, int par){
         tempTrack = track;
         tempPath = path;
+        tempID = id;
+        tempPar = par;
     }
 
 

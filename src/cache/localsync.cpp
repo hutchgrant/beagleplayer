@@ -121,22 +121,11 @@ void localsync::scanFiles(int scanType, int folderCount){
  */
 void localsync::addItem(int itemType, int pos, int id, int par, QString fileName, QString filePath){
     string sfileName = "", sfilePath = "";
-
-    sfileName = sanitizeName(fileName);
-    sfilePath = sanitizeName(filePath);
     if(itemType == 0){
-        localDir.set(pos, id,  par, sfileName.c_str(), sfilePath.c_str());
+        localDir.set(pos, id,  par, fileName.toStdString().c_str(), filePath.toStdString().c_str());
     }else{
-        localFile.set(pos, id,  par, sfileName.c_str(), sfilePath.c_str());
+        localFile.set(pos, id,  par, fileName.toStdString().c_str(), filePath.toStdString().c_str());
     }
-}
-
-/*
- *  Sanitize any forbidden characters that would otherwise break our sql queries
- */
-string localsync::sanitizeName(QString filename){
-    filename.replace(QString("'"), QString("$_"));
-    return filename.toStdString().c_str();
 }
 
 /*
