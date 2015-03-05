@@ -66,7 +66,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Its primary goal is to be a small, minimalist, efficient, simplified ,media player, with the potential to expand for any given purpose.  The need for it began with beagleboard's less than average CPU time years ago, plus the addition of a need for remote music player.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Currently, beagleplayer's purpose is for audio, video, radio, playlist, browsing abilities and playback.  In the future, beagleplayer will have it's own remote server complete with an JSON API.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Currently, beagleplayer's purpose is for audio, video, radio, playlist, browsing abilities and playback.  In the future, beagleplayer will have its own local and remote HTTP servers with JSON APIs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -83,11 +83,6 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
   </layout>
-  <zorder>graphicsView</zorder>
-  <zorder>buttonBox</zorder>
-  <zorder>textBrowser</zorder>
-  <zorder>about_title</zorder>
-  <zorder>about_text</zorder>
  </widget>
  <resources>
   <include location="../../res/BPres.qrc"/>

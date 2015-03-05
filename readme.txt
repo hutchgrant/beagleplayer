@@ -1,4 +1,4 @@
-beagleplayer 0.1.3 Release instructions
+beagleplayer 0.1.4 Release instructions
 
 An Audio, Video, Radio, Playlist client for mplayer. Beagleplayer is ideal for quick easy browsing of your media library.
 
@@ -15,7 +15,7 @@ $  sudo apt-get install mplayer libqt4-dev libqt4-opengl libqt4-opengl-dev libqt
 ----------------------
 download and extract:
 ----------------------
-download beagleplayer.v.0.1.3.tar.gz 
+download beagleplayer.v.0.1.4.tar.gz 
  $ cd ~/Downloads
  $  tar -zxvf beagleplayer*.tar.gz 
 ----
