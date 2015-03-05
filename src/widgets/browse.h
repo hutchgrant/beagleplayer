@@ -27,6 +27,7 @@
 #include "src/cache/cache.h"
 #include "src/cache/localsync.h"
 #include "src/widgets/radiostat.h"
+#include "src/widgets/qweburl.h"
 
 namespace Ui {
 class browse;
@@ -80,6 +81,7 @@ private:
     QStringListModel *m_Model;
     QStringListModel *t_Model;
 
+    QWebUrl *web;
     radiostat *radStat;
 };
 

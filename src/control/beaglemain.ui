@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>beaglemain</string>
+   <string>Beagleplayer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../res/BPres.qrc">
+    <normaloff>:/res/beagleplayer_icon.png</normaloff>:/res/beagleplayer_icon.png</iconset>
   </property>
   <widget class="QWidget" name="main">
    <property name="enabled">
@@ -128,8 +132,10 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen_File"/>
-    <addaction name="actionImport_Video"/>
+    <addaction name="actionOpen_URL"/>
+    <addaction name="separator"/>
     <addaction name="actionImport"/>
+    <addaction name="actionImport_Video"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -184,7 +190,7 @@
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>about</string>
+    <string>About</string>
    </property>
   </action>
   <action name="actionOpen_File">
@@ -192,8 +198,15 @@
     <string>Open File</string>
    </property>
   </action>
+  <action name="actionOpen_URL">
+   <property name="text">
+    <string>Open URL</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../../res/BPres.qrc"/>
+ </resources>
  <connections/>
 </ui>

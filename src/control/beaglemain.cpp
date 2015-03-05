@@ -30,6 +30,7 @@ void beaglemain::addWidgets(){
    brow = new browse(this);
    playlst = new playlist(this);
    cntrl = new controls(this);
+   aBout = new about(this);
 
    ui->browse_layout->addWidget(brow, 0 ,0);
    ui->control_layout->addWidget(cntrl, 0 ,0);
@@ -112,4 +113,14 @@ void beaglemain::on_actionAdd_Radio_Station_triggered()
 void beaglemain::on_actionOpen_File_triggered()
 {
     brow->Sync(0);
+}
+
+void beaglemain::on_actionAbout_triggered()
+{
+    aBout->show();
+}
+
+void beaglemain::on_actionOpen_URL_triggered()
+{
+    brow->Sync(-1);
 }

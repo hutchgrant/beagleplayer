@@ -77,11 +77,19 @@ void browse::Sync(int type){
         MenuMode = 2;  /// set Mode to radio
     }else if(type == 0){
         QDir usrDir;
-         usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath());
-         emit startTempTrack(usrDir.dirName().toStdString(), usrDir.path().toStdString());
+         usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath(), tr("Images (*.avi *.mp4 *.mp3 *.flac *.wav)"));
+         if(usrDir.dirName() != NULL){
+            emit startTempTrack(usrDir.dirName().toStdString(), usrDir.path().toStdString());
+         }
+    }else if(type == -1){
+        web = new QWebUrl();
+        web->show();
+        if(web->exec() == QDialog::Accepted){
+            emit startTempTrack("", web->url_input);
+        }
     }
 
-    if(type != 0){
+    if(type != 0 || type == -1){   /// don't sync if we're playing a temp file
         dbCon->readAll(Artist, Song, VidDir, Video);/// read from local database and sync to local objects
         dbCon->readDB(Radio, "radios");
         dbCon->readDB(RadioCat, "categories");

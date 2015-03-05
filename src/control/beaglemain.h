@@ -7,6 +7,7 @@
 #include "src/widgets/playlist.h"
 #include "src/widgets/controls.h"
 #include "src/widgets/skincntrl.h"
+#include "src/widgets/about.h"
 
 namespace Ui {
 class beaglemain;
@@ -40,6 +41,10 @@ private slots:
 
     void on_actionOpen_File_triggered();
 
+    void on_actionAbout_triggered();
+
+    void on_actionOpen_URL_triggered();
+
 private:
     Ui::beaglemain *ui;
     browse *brow;
@@ -49,7 +54,7 @@ private:
     playlist *playlst;
     controls *cntrl;
     skincntrl *detached;
-
+    about *aBout;
 };
 
 #endif // BEAGLEMAIN_H
