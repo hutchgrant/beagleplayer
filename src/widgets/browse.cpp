@@ -75,10 +75,18 @@ void browse::Sync(int type){
         }
         /// get Radio Station
         MenuMode = 2;  /// set Mode to radio
+    }else if(type == 0){
+        QDir usrDir;
+         usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath());
+         emit startTempTrack(usrDir.dirName().toStdString(), usrDir.path().toStdString());
     }
-    dbCon->readAll(Artist, Song, VidDir, Video);/// read from local database and sync to local objects
-    dbCon->readDB(Radio, "radios");
-    dbCon->readDB(RadioCat, "categories");
+
+    if(type != 0){
+        dbCon->readAll(Artist, Song, VidDir, Video);/// read from local database and sync to local objects
+        dbCon->readDB(Radio, "radios");
+        dbCon->readDB(RadioCat, "categories");
+    }
+
     updateMenu();
 }
 

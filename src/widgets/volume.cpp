@@ -1,6 +1,30 @@
+/*
+ *  Written By: Grant Hutchinson
+ *  License: GPLv3.
+ *  h.g.utchinson@gmail.com
+ *  Copyright (C) 2012 by Grant Hutchinson
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "volume.h"
 #include "ui_volume.h"
 #include <QPainter>
+
+/*
+ * Constructor
+ */
 volume::volume(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::volume)
@@ -9,11 +33,17 @@ volume::volume(QWidget *parent) :
     curVol = 50;
 }
 
+/*
+ * Destructor
+ */
 volume::~volume()
 {
     delete ui;
 }
 
+/*
+ *  When the volume slider is selected, emit the volume change to the control widget
+ */
 void volume::on_volSlider_sliderMoved(int position)
 {
     if(position <= 0 ){
@@ -32,10 +62,16 @@ void volume::on_volSlider_sliderMoved(int position)
     emit volChanged(curVol);
 }
 
+/*
+ *  Set the volume slider based on a slot received integer
+ */
 void volume::setPosition(int pos){
     ui->volSlider->setSliderPosition(pos);
 }
 
+/*
+ * Basic example of a QPainter volume display, based on slider
+ */
 void volume::paintEvent(QPaintEvent * /* Event */ ){
 
     if(curVol > 60){

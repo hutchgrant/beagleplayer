@@ -38,6 +38,8 @@ private slots:
         detached->show();
     }
 
+    void on_actionOpen_File_triggered();
+
 private:
     Ui::beaglemain *ui;
     browse *brow;

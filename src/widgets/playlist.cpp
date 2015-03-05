@@ -124,6 +124,7 @@ void playlist::createNewPL(){
         pNewList.setID(pNewList.getSize(), dbCon->writeDB(&pNewList, "playlists"));
     }
 }
+
 /*
  * Add to new playlist object, insert into playlist_items table
  */
@@ -146,6 +147,9 @@ void playlist::addToCurrent(int parid, string track, string path){
     dbCon->writeDB(&pNewList, "playlist_items");
 }
 
+/*
+ *  Playlist item double clicked, grab the index, setup the window/controls
+ */
 void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
 {
     int selected = 0;
@@ -156,15 +160,12 @@ void playlist::on_PLAYLIST_doubleClicked(const QModelIndex &index)
     tempTrack = pList.getName(selected);
     if(PLMODE == 0){
         pListSelect = selected;
-        qDebug() << "selected playlist index "<< pListSelect;
         PLMODE = 1;
-
         fillPL();
     }
     else{
         pItemSelect = selected;
         emit playlistFullSelection(pItemSelect);
-
     }
 }
 

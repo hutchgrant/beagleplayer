@@ -1,3 +1,23 @@
+/*
+ *  Written By: Grant Hutchinson
+ *  License: GPLv3.
+ *  h.g.utchinson@gmail.com
+ *  Copyright (C) 2012 by Grant Hutchinson
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "radiostat.h"
 #include "ui_radiostat.h"
 
@@ -13,9 +33,7 @@ radiostat::radiostat(QWidget *parent) :
     categoryCreate = false;
     rad.initFile(10);
     cat.initFile(10);
-
-    /// hide new category element
-    ui->radio_cat_new->setVisible(false);
+    ui->radio_cat_new->setVisible(false); /// hide new category element
 }
 
 /*
@@ -56,7 +74,7 @@ void radiostat::fillCategories(){
     // clear cat
     ui->radio_cat_in->clear();
     cat.initFile(10);
-    ///read db
+    // read db
     cah->readDB(cat, "categories");
     // fill
     for(int i=0; i< cat.getSize(); i++){
@@ -71,18 +89,16 @@ void radiostat::on_radio_cat_add_clicked()
 {
     if(!categoryCreate){
         categoryCreate = true;
-        ui->radio_cat_new->setVisible(true);        /// unhide new category editline input
-        ui->radio_cat_add->setText("save");/// change "add" button to "save category" etc
+        ui->radio_cat_new->setVisible(true);
+        ui->radio_cat_add->setText("save");
     }else{
         fileObj catCreate;
         catCreate.set(0,0,0,ui->radio_cat_new->text().toStdString().c_str());
-        /// save results to database
         cah->writeDB(&catCreate, "categories");
-        /// reset dialog layout
+         /// reset dialog layout
         categoryCreate = false;
         ui->radio_cat_new->setVisible(false);
         ui->radio_cat_add->setText("add");
-        /// refill categories
         fillCategories();
     }
 }
@@ -92,23 +108,18 @@ void radiostat::on_radio_cat_add_clicked()
  */
 void radiostat::on_radio_list_clicked(const QModelIndex &index)
 {
-    /// get Selected Radio
     int select = 0;
-    select = ui->radio_list->currentIndex().row();
+    select = ui->radio_list->currentIndex().row();    /// get Selected Radio
 
     /// determine parent ID of the selected radio
-
     /// determine the ID of the selected category
     for(int i =0; i< cat.getSize(); i++){
         if(cat.getID(i) ==  rad.getPar(select)){
-            //// set category to that index
-            ui->radio_cat_in->setCurrentIndex(i);
+            ui->radio_cat_in->setCurrentIndex(i);   /// set category to index
         }
     }
-    /// set name
-    ui->radio_name_in->setText(rad.getName(select));
-    /// set url
-    ui->radio_url_in->setText(rad.getPath(select));
+    ui->radio_name_in->setText(rad.getName(select)); /// set radio Name
+    ui->radio_url_in->setText(rad.getPath(select));  /// set radio URL
 }
 
 /*

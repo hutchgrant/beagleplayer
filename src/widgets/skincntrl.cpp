@@ -21,6 +21,9 @@
 #include "skincntrl.h"
 #include "ui_skincntrl.h"
 
+/*
+ * Constructor
+ */
 skincntrl::skincntrl(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::skincntrl)
@@ -37,6 +40,9 @@ skincntrl::skincntrl(QWidget *parent) :
     connect(ui->trackSlider, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)));
 }
 
+/*
+ *  Stop/start the media play timer based on the control widget's state
+ */
 void skincntrl::stopTime(int state){
     if(state == 5 || state == 0 || state == -1){ /// file paused/stopped/idle.
         timer.stop();
@@ -46,6 +52,10 @@ void skincntrl::stopTime(int state){
     }
 }
 
+/*
+ *  Set the media play timer's max time based on the sliderRange given by qmpwidget
+ *  The max range is provided in seconds, we only need to divide it into hours, min, seconds
+ */
 void skincntrl::rangeChange(int min, int max){
     totalMinCount = max / 60;
     totalHourCount = totalMinCount / 60;
@@ -54,6 +64,11 @@ void skincntrl::rangeChange(int min, int max){
     totalSecCount = max - (totalMinCount * 60);
 }
 
+
+/*
+ *  Set the media play timer's min time based on a position the slider is moved to.
+ *  This integer is in seconds, we only need to divide it into hours, min, seconds
+ */
 void skincntrl::sliderMoved(int pos){
     minCount = pos / 60;
     hourCount = minCount / 60;
@@ -62,14 +77,15 @@ void skincntrl::sliderMoved(int pos){
     secondCount = pos - (minCount * 60);
     emit remConSeek(pos);
 }
-
+/*
+ *  Convert all our min/max ranges to a clean stringstream for display
+ */
 void skincntrl::setTimer(){
     stringstream playtime;
     string sHour = "", sMin = "", sSec = "";
     string sTotalHour = "", sTotalMin = "", sTotalSec = "";
-    /*
-     *  Set the default and current timer for file's time position
-     */
+
+    /// Set the default and current timer for file's time position
     if(hourCount < 10){
         sHour = "0" +  QString("%1").arg(hourCount).toStdString();
     }else{
@@ -85,9 +101,8 @@ void skincntrl::setTimer(){
     }else{
         sSec = QString("%1").arg(secondCount).toStdString();
     }
-    /*
-     *  Set the default and current timer for file's end position
-     */
+
+    /// Set the default and current timer for file's end position
     if(totalHourCount < 10){
         sTotalHour = "0" +  QString("%1").arg(totalHourCount).toStdString();
     }else{
@@ -120,51 +135,57 @@ void skincntrl::initTrack(){
 }
 
 /*
-  * public slot for volume
+  * public slots
   */
+/// Set Track to control widget's track name
 void skincntrl::setTrack(string track){
     initTrack();
     ui->songTitle->setText(track.c_str());
     timer.start(1000);
 }
-
+/// Set slider to the seek position of the control widget
 void skincntrl::setSeekPos(int pos){
     ui->trackSlider->setSliderPosition(pos);
     sliderMoved(pos);
 }
+/// Set the max range of media file timer, based on the control widget
 void skincntrl::setSeekRange(int max){
     ui->trackSlider->setRange(0, max);
 }
-
+/// Set the volume of the volume widget, based on the control widget
 void skincntrl::setMainVol(int vol){
     emit setVolume(vol);
 }
 
+/*
+* public signals
+*/
+/// Set the Control widget, based on the volume
 void skincntrl::setVol(int vol){
     emit remConVol(vol);
 }
-
+/// Set the Control widget to PAUSE
 void skincntrl::on_PAUSE_clicked()
 {
     emit remConFile(2);
 }
-
+/// Set the Control widget to PLAY
 void skincntrl::on_PLAY_clicked()
 {
     emit remConFile(1);
 }
-
+/// Set the Control widget to STOP, and stop the timer
 void skincntrl::on_STOP_clicked()
 {
     timer.stop();
     emit remConFile(3);
 }
-
+/// Set the Control widget to move to the NEXT track
 void skincntrl::on_NEXT_clicked()
 {
     emit remConFile(4);
 }
-
+/// Set the Control widget to move to the NEXT track
 void skincntrl::on_PREV_clicked()
 {
     emit remConFile(5);

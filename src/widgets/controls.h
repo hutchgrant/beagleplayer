@@ -63,7 +63,9 @@ public slots:
     void setSelection(int selection){
         CurrentSelect = selection;
     }
-
+    void setTempTrackAndPlay(string track, string path){
+        start(track, path);
+    }
     void setSelectionAndPlay(int selection){
         CurrentSelect = selection;
         startSelected();

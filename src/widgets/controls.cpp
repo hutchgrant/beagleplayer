@@ -71,13 +71,10 @@ void controls::startLocal(char *finSong, char *finPath)
   */
 void controls::start(string finSong, string finPath)
 {
-    char *final;
-    final = new char[strlen(finPath.c_str()) + strlen(finSong.c_str()) + 10 ];
-    sprintf(final, "%s%s", finPath.c_str(),finSong.c_str());
-    cout << "Final File Playing: " << final << endl;
+    cout << "Final File Playing: " << finSong << endl;
     widget.show();
     ui->songTitle->setText(QString(finSong.c_str()));
-    widget.start(QStringList(final));
+    widget.start(QStringList(finPath.c_str()));
 }
 
 void controls::stopTime(int state){

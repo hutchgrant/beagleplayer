@@ -64,6 +64,7 @@ void beaglemain::connectSignals(){
 
       /// current selection into playlist
       connect(brow,SIGNAL(trackChanged(string, string, int, int)), playlst, SLOT(setTempTrack(string, string, int, int)));  ///  a single track selection was made (single-click)
+      connect(brow, SIGNAL(startTempTrack(string,string)), cntrl, SLOT(setTempTrackAndPlay(string, string)));
 
       // playlist
       connect(playlst, SIGNAL(playlistChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));
@@ -106,4 +107,9 @@ void beaglemain::on_actionImport_Video_triggered()
 void beaglemain::on_actionAdd_Radio_Station_triggered()
 {
     brow->Sync(4);
+}
+
+void beaglemain::on_actionOpen_File_triggered()
+{
+    brow->Sync(0);
 }

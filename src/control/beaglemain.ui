@@ -127,8 +127,9 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionImport"/>
+    <addaction name="actionOpen_File"/>
     <addaction name="actionImport_Video"/>
+    <addaction name="actionImport"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -140,6 +141,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOptions"/>
@@ -178,6 +180,16 @@
   <action name="actionAdd_Radio_Station">
    <property name="text">
     <string>Add Radio Station</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>about</string>
+   </property>
+  </action>
+  <action name="actionOpen_File">
+   <property name="text">
+    <string>Open File</string>
    </property>
   </action>
  </widget>
