@@ -2,7 +2,7 @@
 #include "ui_beaglemain.h"
 
 /*
- * Construct
+ * Constructor
  */
 beaglemain::beaglemain(QWidget *parent) :
     QMainWindow(parent),
@@ -16,7 +16,7 @@ beaglemain::beaglemain(QWidget *parent) :
 }
 
 /*
- * Destruct
+ * Destructor
  */
 beaglemain::~beaglemain()
 {
@@ -50,6 +50,9 @@ void beaglemain::initCache(){
     brow->Sync(1);  /// initialize and fill DB cache objects
 }
 
+/*
+ *  Update Mode_Change widget at top with any given mode
+ */
 void beaglemain::changeMode(int mode){
     ui->Mode_Change->setCurrentIndex(mode);
 }
@@ -68,7 +71,7 @@ void beaglemain::connectSignals(){
       connect(brow,SIGNAL(trackChanged(string, string, int, int)), playlst, SLOT(setTempTrack(string, string, int, int)));  ///  a single track selection was made (single-click)
       connect(brow, SIGNAL(startTempTrack(string,string)), cntrl, SLOT(setTempTrackAndPlay(string, string)));
 
-      // playlist
+      /// playlist
       connect(playlst, SIGNAL(playlistChanged(fileObj&,int*,int)), cntrl, SLOT(setCurList(fileObj&,int*,int)));
       connect(playlst, SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
       connect(playlst, SIGNAL(playlistFullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));

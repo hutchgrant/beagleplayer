@@ -198,7 +198,7 @@ void playlist::on_open_tool_clicked()
 }
 
 /*
- *  add to playlist, if none open, create a new one, else add to playlist
+ *  When playlist button " + " is clicked, add to playlist, if none open, create a new one, else add to playlist
  */
 void playlist::on_add_tool_clicked()
 {
@@ -225,7 +225,9 @@ void playlist::on_add_tool_clicked()
     }
 }
 
-
+/*
+ *  When playlist remove button " - " is clicked, remove folder/files/file
+ */
 void playlist::on_remove_tool_clicked()
 {
     int selected = 0;

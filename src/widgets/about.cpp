@@ -1,6 +1,9 @@
 #include "about.h"
 #include "ui_about.h"
 
+/*
+ * Constructor
+ */
 about::about(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::about)
@@ -21,7 +24,9 @@ about::about(QWidget *parent) :
    scn->addPixmap(someImage);
    ui->graphicsView->show();
 }
-
+/*
+ * Destructor
+ */
 about::~about()
 {
     delete ui;

@@ -21,6 +21,9 @@
 #include "controls.h"
 #include "ui_controls.h"
 
+/*
+ * Constructor
+ */
 controls::controls(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::controls)
@@ -83,6 +86,9 @@ void controls::start(string finSong, string finPath)
     widget.start(QStringList(finPath.c_str()));
 }
 
+/*
+ * Stop Timer if widget stops
+ */
 void controls::stopTime(int state){
     if(state == 5 || state == 0 || state == -1){ /// file paused/stopped/idle.
         timer.stop();
@@ -92,6 +98,9 @@ void controls::stopTime(int state){
     }
 }
 
+/*
+ * Set Timer Max Range based on the range of widget slider
+ */
 void controls::rangeChange(int min, int max){
     totalMinCount = max / 60;
     totalHourCount = totalMinCount / 60;
@@ -101,6 +110,9 @@ void controls::rangeChange(int min, int max){
     emit remConRange(max);
 }
 
+/*
+ * When the slider moves, calculate the new time, set detached slider position too.
+ */
 void controls::sliderMoved(int pos){
     minCount = pos / 60;
     hourCount = minCount / 60;
@@ -163,9 +175,7 @@ void controls::setCurList(fileObj &newList, int *newIDlist, int amount){
     curAmount = amount;
 }
 
-/*
-  * public slot for volume
-  */
+////  slot for seeking from detached track slider
 void controls::remoteSeek(int pos){
     ui->trackSlider->setSliderPosition(pos);
     minCount = pos / 60;
@@ -175,40 +185,44 @@ void controls::remoteSeek(int pos){
     secondCount = pos - (minCount * 60);
 }
 
+////  slot for seeking too the detached volume slider
 void controls::setVol(int vol){
     widget.setVolume(vol);
     emit setVolume(vol);
     emit remConVol(vol);
 }
-
+//// pause media widget
 void controls::on_PAUSE_clicked()
 {
     widget.pause();
 }
-
+//// play media widget
 void controls::on_PLAY_clicked()
 {
     widget.play();
 }
-
+//// stop media widget + timer
 void controls::on_STOP_clicked()
 {
     widget.stop();
     timer.stop();
 }
-
+//// select next media file, start playback
 void controls::on_NEXT_clicked()
 {
-    CurrentSelect++;
-    startSelected();
+    if(CurrentSelect < curAmount-1){
+         CurrentSelect++;
+        startSelected();
+    }
 }
-
+//// select previous media file, start playback
 void controls::on_PREV_clicked()
 {
-    CurrentSelect--;
-    startSelected();
+     if(CurrentSelect > 0){
+             CurrentSelect--;
+             startSelected();
+     }
 }
-
 
 /*
  *  Return the display timer, based on hour, min, second for min and max ranges
@@ -218,9 +232,8 @@ string controls::getTimeDisplay(int hourCount, int minCount, int secondCount, in
     string sHour = "", sMin = "", sSec = "";
     string sTotalHour = "", sTotalMin = "", sTotalSec = "";
     stringstream playtime;
-    /*
-     *  Set the default and current timer for file's time position
-     */
+
+    /// Set the default and current timer for file's time position
     if(hourCount < 10){
         sHour = "0" +  QString("%1").arg(hourCount).toStdString();
     }else{
@@ -236,9 +249,8 @@ string controls::getTimeDisplay(int hourCount, int minCount, int secondCount, in
     }else{
         sSec = QString("%1").arg(secondCount).toStdString();
     }
-    /*
-     *  Set the default and current timer for file's end position
-     */
+
+    /// Set the default and current timer for file's end position
     if(totalHourCount < 10){
         sTotalHour = "0" +  QString("%1").arg(totalHourCount).toStdString();
     }else{

@@ -78,6 +78,9 @@ void skincntrl::sliderMoved(int pos){
     emit remConSeek(pos);
 }
 
+/*
+ *  Control the Shuffle, timer display and functionality
+ */
 void skincntrl::playlistControl(){
     string playtime;
     controls cont;
@@ -88,6 +91,9 @@ void skincntrl::playlistControl(){
     ui->cntrl_time->setText(playtime.c_str());
 }
 
+/*
+ *  Initialize timer
+ */
 void skincntrl::initTrack(){
     secondCount = 0;
     minCount = 0;

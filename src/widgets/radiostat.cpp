@@ -22,7 +22,7 @@
 #include "ui_radiostat.h"
 
 /*
- *  Construct
+ *  Constructor
  */
 radiostat::radiostat(QWidget *parent) :
     QDialog(parent),
@@ -46,7 +46,7 @@ void radiostat::init(cache *ca){
 }
 
 /*
- *  Deconstruct
+ *  Destructor
  */
 radiostat::~radiostat()
 {
@@ -133,10 +133,6 @@ void radiostat::on_radio_save_clicked()
     stationName = ui->radio_name_in->text().toStdString();
     stationURL = ui->radio_url_in->text().toStdString();
     stationCat = ui->radio_cat_in->currentText().toStdString();
-
-    qDebug() << "station = " << stationName.c_str()
-             << "url = " << stationURL.c_str()
-             << "category = " << stationCat.c_str() << endl;
 
     /// determine the ID of the selected category
     for(int i =0; i< cat.getSize(); i++){

@@ -1,5 +1,27 @@
+/*
+ *  Written By: Grant Hutchinson
+ *  License: GPLv3.
+ *  h.g.utchinson@gmail.com
+ *  Copyright (C) 2012 by Grant Hutchinson
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "cache.h"
 
+/*
+ * Constructor
+ */
 cache::cache()
 {
     cache_dir = "/.cache/beagleplayer2/";
@@ -7,21 +29,33 @@ cache::cache()
     db_file = cache_dir + "test.db";
     locate_file = cache_dir + "cache_locate.txt";
 }
+/*
+ * Destructor
+ */
 cache::~cache(){
 
 }
 
-//// Open SQlite connection
+/*
+ * Open SQLite DB
+ */
 void cache::openDB(){
    this->db = QSqlDatabase::addDatabase("QSQLITE", "beagle_cache");
    this->db.setDatabaseName(db_file.c_str());
 }
-//// Close SQlite connection
+
+/*
+ * Close SQLite DB
+ */
+
 void cache::closeDB(){
     this->db = QSqlDatabase();
     QSqlDatabase::removeDatabase("beagle_cache");
 }
-//// Initialize Cache Control
+
+/*
+ * Initialize DB cache from text file, ensure tables are written
+ */
 void cache::init(){
     if(!initDB()){
         createCache();
@@ -208,7 +242,9 @@ void cache::setInitDB(){
    myfile.close();
 }
 
-/// create initial cache folders
+/*
+ * Create local cache directory
+ */
 void cache::createCache(){
    QString q_main = cache_dir.c_str();
    QDir(q_main).mkdir(q_main);

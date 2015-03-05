@@ -22,7 +22,7 @@
 #include "ui_browse.h"
 
 /*
- * Construct
+ * Constructor
  */
 browse::browse(QWidget *parent) :
     QWidget(parent),
@@ -36,7 +36,7 @@ browse::browse(QWidget *parent) :
 }
 
 /*
- * Deconstruct
+ * Destructor
  */
 browse::~browse()
 {
