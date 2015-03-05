@@ -53,7 +53,8 @@ public:
     void start(string finSong, string finPath);
     void startSelected();
 
-    void setTimer();
+    string getTimeDisplay(int hourCount, int minCount, int secondCount, int totalHourCount, int totalMinCount, int totalSecCount);
+    void playlistControl();
     void close(){
         widget.close();
     }
@@ -70,7 +71,7 @@ public slots:
         CurrentSelect = selection;
         startSelected();
     }
-    void setCurList(fileObj &newlist, int * newIDlist);
+    void setCurList(fileObj &newlist, int * newIDlist,int amt);
 
     /*
      * Remote commands for signals from another widget!
@@ -131,7 +132,7 @@ private slots:
             minCount = 0;
             hourCount = minCount / 60;
         }
-        setTimer();
+        playlistControl();
     }
 
     void stopTime(int);
@@ -153,6 +154,7 @@ private:
         void adjustVol(int vol);
         int CurrentSelect;  /// current selection number
         int *curList;       /// current cue list ID's
+        int curAmount;
         Ui::controls *ui;
         string name, path;
         volume *vol;

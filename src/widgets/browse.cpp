@@ -77,7 +77,7 @@ void browse::Sync(int type){
         MenuMode = 2;  /// set Mode to radio
     }else if(type == 0){
         QDir usrDir;
-         usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath(), tr("Images (*.avi *.mp4 *.mp3 *.flac *.wav)"));
+         usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath(), tr("Video/Audio (*.avi *.mp4 *.mp3 *.flac *.wav)"));
          if(usrDir.dirName() != NULL){
             emit startTempTrack(usrDir.dirName().toStdString(), usrDir.path().toStdString());
          }
@@ -146,7 +146,7 @@ void browse::updateTitle(int selected){
                     songCount++;
                 }
             }
-           emit curListChanged(Song, curSongID);
+           emit curListChanged(Song, curSongID, songCount);
         }
         else if(MenuMode == 1 ){    ///  set Video + local
             selID = VidDir.getID(selected);
@@ -158,7 +158,7 @@ void browse::updateTitle(int selected){
                     vidCount++;
                 }
             }
-            emit curListChanged(Video, curVidID);
+            emit curListChanged(Video, curVidID, vidCount);
         }
         else if(MenuMode == 2 ){    ///  set Radio
             selID = RadioCat.getID(selected);
@@ -170,7 +170,7 @@ void browse::updateTitle(int selected){
                     radCount++;
                 }
             }
-            emit curListChanged(Radio, curRadID);
+            emit curListChanged(Radio, curRadID, radCount);
         }
     t_Model->setStringList(curSong);
     ui->TrackList->setModel(t_Model);

@@ -27,7 +27,7 @@ controls::controls(QWidget *parent) :
 {
     ui->setupUi(this);
     current.initFile(100);
-
+    curAmount = 0;
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
     widget.setSeekSlider(ui->trackSlider);
@@ -104,51 +104,26 @@ void controls::sliderMoved(int pos){
     emit remConSeek(pos);
 }
 
-void controls::setTimer(){
-    stringstream playtime;
-    string sHour = "", sMin = "", sSec = "";
-    string sTotalHour = "", sTotalMin = "", sTotalSec = "";
-    /*
-     *  Set the default and current timer for file's time position
-     */
-    if(hourCount < 10){
-        sHour = "0" +  QString("%1").arg(hourCount).toStdString();
+/*
+ *  Playlist Control
+ */
+void controls::playlistControl(){
+    string playtime;
+    playtime = this->getTimeDisplay(hourCount, minCount, secondCount, totalHourCount, totalMinCount, totalSecCount);
+    if(widget.PlayingState == 3){
+        ui->cntrl_time->setText(playtime.c_str());
+        if(hourCount >= totalHourCount && minCount >= totalMinCount && secondCount >= totalSecCount){
+            timer.stop();
+            CurrentSelect++;
+            if(CurrentSelect < curAmount){
+                startSelected();
+            }
+        }
     }else{
-        sHour = QString("%1").arg(hourCount).toStdString();
-    }
-    if(minCount < 10){
-        sMin = "0" +  QString("%1").arg(minCount).toStdString();
-    }else{
-        sMin = QString("%1").arg(minCount).toStdString();
-    }
-    if(secondCount < 10){
-        sSec = "0" +  QString("%1").arg(secondCount).toStdString();
-    }else{
-        sSec = QString("%1").arg(secondCount).toStdString();
-    }
-    /*
-     *  Set the default and current timer for file's end position
-     */
-    if(totalHourCount < 10){
-        sTotalHour = "0" +  QString("%1").arg(totalHourCount).toStdString();
-    }else{
-        sTotalHour = QString("%1").arg(totalHourCount).toStdString();
-    }
-    if(totalMinCount < 10){
-        sTotalMin = "0" +  QString("%1").arg(totalMinCount).toStdString();
-    }else{
-        sTotalMin = QString("%1").arg(totalMinCount).toStdString();
-    }
-    if(totalSecCount < 10){
-        sTotalSec = "0" +  QString("%1").arg(totalSecCount).toStdString();
-    }else{
-        sTotalSec = QString("%1").arg(totalSecCount).toStdString();
-    }
-    if(widget.PlayingState){
-        playtime <<  sHour << ":" << sMin << ":" << sSec << " / " <<  sTotalHour << ":" << sTotalMin << ":" << sTotalSec  ;
-        ui->cntrl_time->setText(playtime.str().c_str());
+        timer.stop();
     }
 }
+
 /*
   *  Sort the current list for
   */
@@ -174,11 +149,12 @@ void controls::startSelected(){
 /*
   * Set Current qeue list when list changes
   */
-void controls::setCurList(fileObj &newList, int *newIDlist){
+void controls::setCurList(fileObj &newList, int *newIDlist, int amount){
     current = fileObj();
     current.initFile(100);
     current = newList;
     curList = newIDlist;
+    curAmount = amount;
 }
 
 /*
@@ -225,6 +201,55 @@ void controls::on_PREV_clicked()
 {
     CurrentSelect--;
     startSelected();
+}
+
+
+/*
+ *  Return the display timer, based on hour, min, second for min and max ranges
+ * convert int ranges to stringstream
+ */
+string controls::getTimeDisplay(int hourCount, int minCount, int secondCount, int totalHourCount, int totalMinCount, int totalSecCount){
+    string sHour = "", sMin = "", sSec = "";
+    string sTotalHour = "", sTotalMin = "", sTotalSec = "";
+    stringstream playtime;
+    /*
+     *  Set the default and current timer for file's time position
+     */
+    if(hourCount < 10){
+        sHour = "0" +  QString("%1").arg(hourCount).toStdString();
+    }else{
+        sHour = QString("%1").arg(hourCount).toStdString();
+    }
+    if(minCount < 10){
+        sMin = "0" +  QString("%1").arg(minCount).toStdString();
+    }else{
+        sMin = QString("%1").arg(minCount).toStdString();
+    }
+    if(secondCount < 10){
+        sSec = "0" +  QString("%1").arg(secondCount).toStdString();
+    }else{
+        sSec = QString("%1").arg(secondCount).toStdString();
+    }
+    /*
+     *  Set the default and current timer for file's end position
+     */
+    if(totalHourCount < 10){
+        sTotalHour = "0" +  QString("%1").arg(totalHourCount).toStdString();
+    }else{
+        sTotalHour = QString("%1").arg(totalHourCount).toStdString();
+    }
+    if(totalMinCount < 10){
+        sTotalMin = "0" +  QString("%1").arg(totalMinCount).toStdString();
+    }else{
+        sTotalMin = QString("%1").arg(totalMinCount).toStdString();
+    }
+    if(totalSecCount < 10){
+        sTotalSec = "0" +  QString("%1").arg(totalSecCount).toStdString();
+    }else{
+        sTotalSec = QString("%1").arg(totalSecCount).toStdString();
+    }
+    playtime <<  sHour << ":" << sMin << ":" << sSec << " / " <<  sTotalHour << ":" << sTotalMin << ":" << sTotalSec  ;
+    return playtime.str().c_str();
 }
 
 /*

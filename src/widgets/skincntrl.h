@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QDebug>
 #include <sstream>
+#include "src/widgets/controls.h"
 #include "src/object/fileobj.h"
 #include "src/qmpwidget/qmpwidget.h"
 #include "src/widgets/volume.h"
@@ -50,6 +51,7 @@ public:
     void startLocal(char *finSong, char *finPath);
     void start(string finSong, string finPath);
     void startSelected();
+    void playlistControl();
 
     void initTrack();
     void setTimer();
@@ -79,8 +81,9 @@ private slots:
             minCount = 0;
             hourCount = minCount / 60;
         }
-        setTimer();
+        playlistControl();
     }
+
     void setTrack(string);
     void setSeekPos(int);
     void setSeekRange(int);

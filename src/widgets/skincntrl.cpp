@@ -77,51 +77,16 @@ void skincntrl::sliderMoved(int pos){
     secondCount = pos - (minCount * 60);
     emit remConSeek(pos);
 }
-/*
- *  Convert all our min/max ranges to a clean stringstream for display
- */
-void skincntrl::setTimer(){
-    stringstream playtime;
-    string sHour = "", sMin = "", sSec = "";
-    string sTotalHour = "", sTotalMin = "", sTotalSec = "";
 
-    /// Set the default and current timer for file's time position
-    if(hourCount < 10){
-        sHour = "0" +  QString("%1").arg(hourCount).toStdString();
-    }else{
-        sHour = QString("%1").arg(hourCount).toStdString();
+void skincntrl::playlistControl(){
+    string playtime;
+    controls cont;
+    if(hourCount >= totalHourCount && minCount >= totalMinCount && secondCount >= totalSecCount){
+       timer.stop();
     }
-    if(minCount < 10){
-        sMin = "0" +  QString("%1").arg(minCount).toStdString();
-    }else{
-        sMin = QString("%1").arg(minCount).toStdString();
-    }
-    if(secondCount < 10){
-        sSec = "0" +  QString("%1").arg(secondCount).toStdString();
-    }else{
-        sSec = QString("%1").arg(secondCount).toStdString();
-    }
-
-    /// Set the default and current timer for file's end position
-    if(totalHourCount < 10){
-        sTotalHour = "0" +  QString("%1").arg(totalHourCount).toStdString();
-    }else{
-        sTotalHour = QString("%1").arg(totalHourCount).toStdString();
-    }
-    if(totalMinCount < 10){
-        sTotalMin = "0" +  QString("%1").arg(totalMinCount).toStdString();
-    }else{
-        sTotalMin = QString("%1").arg(totalMinCount).toStdString();
-    }
-    if(totalSecCount < 10){
-        sTotalSec = "0" +  QString("%1").arg(totalSecCount).toStdString();
-    }else{
-        sTotalSec = QString("%1").arg(totalSecCount).toStdString();
-    }
-        playtime <<  sHour << ":" << sMin << ":" << sSec << " / " <<  sTotalHour << ":" << sTotalMin << ":" << sTotalSec  ;
-        ui->cntrl_time->setText(playtime.str().c_str());
+    playtime = cont.getTimeDisplay(hourCount, minCount, secondCount, totalHourCount, totalMinCount, totalSecCount);
+    ui->cntrl_time->setText(playtime.c_str());
 }
-
 
 void skincntrl::initTrack(){
     secondCount = 0;

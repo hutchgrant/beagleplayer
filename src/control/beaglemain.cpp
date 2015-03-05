@@ -59,7 +59,7 @@ void beaglemain::initCache(){
 void beaglemain::connectSignals(){
       /// Browse  + control base signals
       connect(ui->Mode_Change, SIGNAL(currentIndexChanged(int)), brow, SLOT(updateMode(int)));   /// change from audio/video mode
-      connect(brow, SIGNAL(curListChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));  /// change control's playlist of tracks
+      connect(brow, SIGNAL(curListChanged(fileObj&,int*,int)), cntrl, SLOT(setCurList(fileObj&,int*,int)));  /// change control's playlist of tracks
       connect(brow,SIGNAL(FullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));  /// a full track selection was made (double0click)
       connect(brow,SIGNAL(selectionChanged(int)), cntrl, SLOT(setSelection(int)));  ///  a single track selection was made (single-click)
 
@@ -68,7 +68,7 @@ void beaglemain::connectSignals(){
       connect(brow, SIGNAL(startTempTrack(string,string)), cntrl, SLOT(setTempTrackAndPlay(string, string)));
 
       // playlist
-      connect(playlst, SIGNAL(playlistChanged(fileObj&,int*)), cntrl, SLOT(setCurList(fileObj&,int*)));
+      connect(playlst, SIGNAL(playlistChanged(fileObj&,int*,int)), cntrl, SLOT(setCurList(fileObj&,int*,int)));
       connect(playlst, SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
       connect(playlst, SIGNAL(playlistFullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
 
