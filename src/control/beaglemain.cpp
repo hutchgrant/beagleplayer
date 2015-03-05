@@ -30,7 +30,7 @@ void beaglemain::addWidgets(){
    brow = new browse(this);
    playlst = new playlist(this);
    cntrl = new controls(this);
-   aBout = new about(this);
+   aBout = new about();
    detached = new skincntrl();
    detached->hide();
 

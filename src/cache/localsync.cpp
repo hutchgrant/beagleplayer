@@ -29,7 +29,7 @@ localsync::localsync()
 /*
   * When Add is clicked
   */
-void localsync::Sync(QDir usrDir, int syncType)
+bool localsync::Sync(QDir usrDir, int syncType)
 {
     int FolderCount = 0;
     string firstTable = "", secondTable = "";
@@ -56,6 +56,11 @@ void localsync::Sync(QDir usrDir, int syncType)
          /// Scan + write files from each directory
          scanFiles(syncType, FolderCount);
          dbCon.writeDB(&localFile, secondTable);  // write song files
+         /// reinit localfiles names, paths, ids,
+         localFile = fileObj();
+         localFile.initFile(100);
+         dbCon.readDB(localFile, secondTable);  // write song files
+         return true;
     }
 }
 
