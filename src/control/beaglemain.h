@@ -26,24 +26,37 @@ public:
 
     void initCache();
     void connectSignals();
-    void openDialog();
+    void changeMode(int mode);
 private slots:
 
-    void on_actionImport_triggered();
-
-    void on_actionImport_Video_triggered();
-
-    void on_actionAdd_Radio_Station_triggered();
-
     void detachControls(){
-        openDialog();
+        detached->show();
     }
-
-    void on_actionOpen_File_triggered();
-
-    void on_actionAbout_triggered();
-
-    void on_actionOpen_URL_triggered();
+    /*
+     * Main Tool Bar, File-> Import Audio
+     */
+    void importAudio(){
+        changeMode(0);
+        brow->Sync(2);  /// import video dialog
+    }
+    void importVideo(){
+        changeMode(1);
+        brow->Sync(3); /// import audio dialog
+    }
+    void openFile(){
+        brow->Sync(0);
+    }
+    void openURL(){
+        brow->Sync(-1);
+    }
+    void addRadio()
+    {
+        changeMode(2);
+        brow->Sync(4);
+    }
+    void aboutDialog(){
+        aBout->show();
+    }
 
 private:
     Ui::beaglemain *ui;

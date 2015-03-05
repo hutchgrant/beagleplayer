@@ -65,6 +65,7 @@ public slots:
     void updateMenu();                                   // update Left ViewList
     void updateMode(int mode){                          // update view mode
         MenuMode = mode;
+        syncCache();
         updateMenu();
     }
 private slots:

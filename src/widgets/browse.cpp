@@ -52,37 +52,38 @@ void browse::Sync(int type){
     VidDir = fileObj();
     Video =  fileObj();
     Radio =  fileObj();
-
-    Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100), Radio.initFile(10), RadioCat.initFile(10);
-
+    if(type != -1 || type != 0){  /// we're performing a sync, the objs need init
+        Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100), Radio.initFile(10), RadioCat.initFile(10);
+    }
     if(type == 2 || type == 3){    /// import new entries into local db for each folder and file
         QDir usrDir = QString(getenv("HOME"));
-        usrDir = QFileDialog::getExistingDirectory(this, tr("Import a directory"), QDir::currentPath());  /// get folder import directory
+        QFileDialog iDirect;
+
+        usrDir = iDirect.getExistingDirectory(this, tr("Import a directory"), usrDir.absolutePath());
         if(usrDir.dirName() != NULL || usrDir.dirName() != ""){
+
+        qDebug() << "test" << usrDir.absolutePath() << endl;
             if(type == 2){   /// import audio
                lclSync.Sync(usrDir, 0);
+               MenuMode = 0;
             }
             else if(type == 3){  /// import video
                 lclSync.Sync(usrDir, 1);
+                MenuMode = 1;
             }
         }
     }else if(type == 4){
         radStat = new radiostat();
         radStat->init(dbCon);
         radStat->show();
-        if(radStat->exec()==QDialog::Accepted){
-            dbCon->readDB(Radio, "radios");
-            dbCon->readDB(RadioCat, "categories");
-            updateMenu();
-        }
         MenuMode = 2;  /// set Mode to radio
+        updateTitle(0);
     }else if(type == 0){
         QDir usrDir;
          usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath(), tr("Video/Audio (*.avi *.mp4 *.mp3 *.flac *.wav)"));
          if(usrDir.dirName() != NULL || usrDir.dirName() != ""){
             emit startTempTrack(usrDir.dirName().toStdString(), usrDir.path().toStdString());
          }
-         MenuMode = 0;  /// set Mode to audio
     }else if(type == -1){
         web = new QWebUrl();
         web->show();
@@ -93,7 +94,7 @@ void browse::Sync(int type){
         }
     }
 
-    if(type != 0 || type == -1){   /// don't sync if we're playing a temp file
+    if(type != 0 || type != -1 || type != 4){   /// don't sync if we're playing a temp file
         syncCache();
         updateMenu();
     }

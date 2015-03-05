@@ -16,7 +16,7 @@ beaglemain::beaglemain(QWidget *parent) :
 }
 
 /*
- * Deconstruct
+ * Destruct
  */
 beaglemain::~beaglemain()
 {
@@ -37,8 +37,6 @@ void beaglemain::addWidgets(){
    ui->browse_layout->addWidget(brow, 0 ,0);
    ui->control_layout->addWidget(cntrl, 0 ,0);
    ui->playlist_layout->addWidget(playlst, 0, 0);
-
-
 }
 
 /*
@@ -46,15 +44,14 @@ void beaglemain::addWidgets(){
  */
 void beaglemain::initCache(){
     dbCache.init();  /// determine db location, if exists, if not create it
-
     brow->initCache(&dbCache);
     playlst->initCache(&dbCache);
 
     brow->Sync(1);  /// initialize and fill DB cache objects
 }
 
-void beaglemain::openDialog(){
-    detached->show();
+void beaglemain::changeMode(int mode){
+    ui->Mode_Change->setCurrentIndex(mode);
 }
 
 /*
@@ -87,44 +84,14 @@ void beaglemain::connectSignals(){
       connect(detached, SIGNAL(remConSeek(int)), cntrl, SLOT(remoteSeek(int)));
       connect(detached, SIGNAL(remConFile(int)), cntrl, SLOT(remoteCommand(int)));
       connect(detached, SIGNAL(remConVol(int)), cntrl, SLOT(remoteVolume(int)));
+
+      /// connect toolbar actions
+      connect(ui->actionImport, SIGNAL(triggered()), this, SLOT(importAudio()));
+      connect(ui->actionImport_Video, SIGNAL(triggered()), this, SLOT(importVideo()));
+      connect(ui->actionAdd_Radio_Station, SIGNAL(triggered()), this, SLOT(addRadio()));
+      connect(ui->actionOpen_File, SIGNAL(triggered()), this, SLOT(openFile()));
+      connect(ui->actionOpen_URL, SIGNAL(triggered()), this, SLOT(openURL()));
+      connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
 }
 
 
-/*
- * Main Tool Bar, File-> Import Audio
- */
-void beaglemain::on_actionImport_triggered()
-{
-    brow->Sync(2);  /// import video dialog
-}
-
-/*
- * Main Tool Bar, File-> Import Video
- */
-void beaglemain::on_actionImport_Video_triggered()
-{
-    brow->Sync(3); /// import audio dialog
-}
-
-/*
- * Main Tool Bar, Options-> Add Radio Station
- */
-void beaglemain::on_actionAdd_Radio_Station_triggered()
-{
-    brow->Sync(4);
-}
-
-void beaglemain::on_actionOpen_File_triggered()
-{
-    brow->Sync(0);
-}
-
-void beaglemain::on_actionAbout_triggered()
-{
-    aBout->show();
-}
-
-void beaglemain::on_actionOpen_URL_triggered()
-{
-    brow->Sync(-1);
-}

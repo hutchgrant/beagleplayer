@@ -118,9 +118,7 @@ void playlist::createNewPL(){
 
     plDialog.show();
     if(plDialog.exec()==QDialog::Accepted){
-        qDebug() << "New playlist created " << plDialog.getName().c_str();
         pNewList.set(pNewList.getSize(), 0, 0, plDialog.getName().c_str());
-        pNewList.display();
         pNewList.setID(pNewList.getSize(), dbCon->writeDB(&pNewList, "playlists"));
     }
 }
@@ -131,9 +129,7 @@ void playlist::createNewPL(){
 void playlist::addToNewPL(string track, string path){
     pNewItems = fileObj();
     pNewItems.initFile(10);
-    qDebug() << "adding track = " << track.c_str() << " path =" << path.c_str() << endl;
     pNewItems.set(pNewItems.getSize(), 0, pNewList.getID(pNewList.getSize()), track.c_str(), path.c_str());
-    pNewItems.display();
     dbCon->writeDB(&pNewItems, "playlist_items");
 }
 
