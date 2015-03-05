@@ -88,6 +88,8 @@ private slots:
     void on_add_tool_clicked();
     //void on_remove_tool_clicked();
 
+    void on_remove_tool_clicked();
+
 private:
     Ui::playlist *ui;
     QStringListModel *pl_model;

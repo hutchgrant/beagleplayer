@@ -11,7 +11,8 @@ about::about(QWidget *parent) :
     QGraphicsScene *scn = new QGraphicsScene(ui->graphicsView);
    ui->graphicsView->setScene( scn );
 
-   QPixmap someImage("/home/skynet/Desktop/beagleplayer/res/beagleplayer_icon.png");
+
+   QPixmap someImage("://res/beagleplayer_icon.png");
    QFont myFont;
    myFont.setBold(true);
    myFont.setFamily("Serif");

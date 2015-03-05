@@ -36,7 +36,7 @@ public:
     void readDB(fileObj &file, string type);
     void readAll(fileObj &artist, fileObj &song, fileObj &viddirs, fileObj &videos);
 
-    void removeFrom(int key, string table);
+    void removeFrom(int key, string table, bool parent);
     string unsanitizeName(QString filename);
     string sanitizeName(QString filename);
 private:

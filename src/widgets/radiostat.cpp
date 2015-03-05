@@ -168,6 +168,6 @@ void radiostat::on_radio_cat_rem_clicked()
 {
     int select = 0;
     select = ui->radio_cat_in->currentIndex();
-    cah->removeFrom(cat.getID(select), "categories");
+    cah->removeFrom(cat.getID(select), "categories", false);
     fillCategories();
 }

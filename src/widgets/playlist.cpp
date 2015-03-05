@@ -229,3 +229,23 @@ void playlist::on_add_tool_clicked()
     }
 }
 
+
+void playlist::on_remove_tool_clicked()
+{
+    int selected = 0;
+    selected = ui->PLAYLIST->currentIndex().row();
+
+    if(PLMODE == 0){
+        dbCon->removeFrom(pList.getID(selected), "playlists", false);
+        for(int x=0; x< pListItems.getSize(); x++){
+            if(pListItems.getPar(x) == pList.getID(selected)){
+                dbCon->removeFrom(pListItems.getPar(selected), "playlist_items", true);
+            }
+        }
+    }else{
+        dbCon->removeFrom( curPLlist[selected], "playlist_items", false);
+    }
+    if(readPL()){
+        fillPL();
+    }
+}

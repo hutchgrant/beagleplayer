@@ -125,11 +125,15 @@ void cache::readAll(fileObj &songdir, fileObj &songs, fileObj &viddir, fileObj &
 /*
  *  Delete from any table
  */
-void cache::removeFrom(int key, string table){
+void cache::removeFrom(int key, string table, bool parent){
     stringstream os;
     openDB();
     if(this->db.open()){
-        os << "DELETE FROM "<< table << " WHERE key=" << key << endl;
+        if(!parent){
+            os << "DELETE FROM "<< table << " WHERE key=" << key << endl;
+        }else{
+            os << "DELETE FROM "<< table << " WHERE dir_par=" << key << endl;
+        }
         QSqlQuery myQry(db);
         myQry.prepare(os.str().c_str());
         myQry.exec();
