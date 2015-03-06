@@ -72,7 +72,7 @@ public slots:
         CurrentSelect = selection;
         startSelected();
     }
-    void setCurList(fileObj &newlist, int * newIDlist,int amt);
+    void setCurList(fileObj &newlist, int * newIDlist,int amt, bool range);
 
     /*
      * Remote commands for signals from another widget!
@@ -156,6 +156,7 @@ private:
         int CurrentSelect;  /// current selection number
         int *curList;       /// current cue list ID's
         int curAmount;
+        bool curRange;
         Ui::controls *ui;
         string name, path;
         volume *vol;

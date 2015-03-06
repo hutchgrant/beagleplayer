@@ -31,6 +31,8 @@ controls::controls(QWidget *parent) :
     ui->setupUi(this);
     current.initFile(100);
     curAmount = 0;
+    curRange = false;
+
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
     widget.setSeekSlider(ui->trackSlider);
@@ -130,7 +132,7 @@ void controls::playlistControl(){
     playtime = this->getTimeDisplay(hourCount, minCount, secondCount, totalHourCount, totalMinCount, totalSecCount);
     if(widget.PlayingState == 3){
         ui->cntrl_time->setText(playtime.c_str());
-        if(hourCount >= totalHourCount && minCount >= totalMinCount && secondCount >= totalSecCount){
+        if(hourCount >= totalHourCount && minCount >= totalMinCount && secondCount >= totalSecCount && !curRange){
             timer.stop();
             CurrentSelect++;
             if(CurrentSelect < curAmount){
@@ -167,12 +169,13 @@ void controls::startSelected(){
 /*
   * Set Current qeue list when list changes
   */
-void controls::setCurList(fileObj &newList, int *newIDlist, int amount){
+void controls::setCurList(fileObj &newList, int *newIDlist, int amount, bool range){
     current = fileObj();
     current.initFile(100);
     current = newList;
     curList = newIDlist;
     curAmount = amount;
+    curRange = range;
 }
 
 ////  slot for seeking from detached track slider

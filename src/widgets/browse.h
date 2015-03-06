@@ -53,7 +53,7 @@ public:
 
 signals:
 
-    void curListChanged(fileObj &filelist, int *itemList, int amt);
+    void curListChanged(fileObj &filelist, int *itemList, int amt, bool ignoreRange);
     void trackChanged(string plName, string plPath, int plID, int plPar);
     void selectionChanged(int);                         //  a track was selected
     void FullSelection(int);                            // a track was double clicked

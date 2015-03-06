@@ -154,7 +154,7 @@ void browse::updateTitle(int selected){
                     songCount++;
                 }
             }
-           emit curListChanged(Song, curSongID, songCount);
+           emit curListChanged(Song, curSongID, songCount, false);
         }
         else if(MenuMode == 1 ){    ///  set Video + local
             selID = VidDir.getID(selected);
@@ -166,7 +166,7 @@ void browse::updateTitle(int selected){
                     vidCount++;
                 }
             }
-            emit curListChanged(Video, curVidID, vidCount);
+            emit curListChanged(Video, curVidID, vidCount, false);
         }
         else if(MenuMode == 2 ){    ///  set Radio
             selID = RadioCat.getID(selected);
@@ -178,7 +178,7 @@ void browse::updateTitle(int selected){
                     radCount++;
                 }
             }
-            emit curListChanged(Radio, curRadID, radCount);
+            emit curListChanged(Radio, curRadID, radCount, true);
         }
     t_Model->setStringList(curSong);
     ui->TrackList->setModel(t_Model);
