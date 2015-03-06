@@ -43,13 +43,13 @@ public:
     int pl_selected;
 
     QTimer timer;
-    fileObj current;    /// current fileObj List
     QMPwidget widget;
 
     controls(QWidget *parent = 0);
     virtual ~controls();
 
     void initSlider();
+    void initPlaylist();
     void startLocal(char *finSong, char *finPath);
     void start(string finSong, string finPath);
     void startSelected();
@@ -70,6 +70,7 @@ public slots:
     }
     void setSelectionAndPlay(int selection){
         CurrentSelect = selection;
+        initPlaylist();
         startSelected();
     }
     void setCurList(fileObj &newlist, int * newIDlist,int amt, bool range);
@@ -154,9 +155,11 @@ signals:
 private:
         void adjustVol(int vol);
         int CurrentSelect;  /// current selection number
-        int *curList;       /// current cue list ID's
-        int curAmount;
-        bool curRange;
+        int *curList, *announcedList;       /// current cue list ID's
+        int curAmount, announcedAmount; /// init for playlist size
+        bool curRange, announcedRange; /// init for ignoring range
+        fileObj current, announced;    /// current fileObj List
+
         Ui::controls *ui;
         string name, path;
         volume *vol;

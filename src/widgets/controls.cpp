@@ -31,7 +31,9 @@ controls::controls(QWidget *parent) :
     ui->setupUi(this);
     current.initFile(100);
     curAmount = 0;
+    announcedAmount = 0;
     curRange = false;
+    announcedRange = false;
 
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
@@ -57,6 +59,21 @@ void controls::initSlider(){
     totalHourCount = 0;
     ui->trackSlider->setSliderPosition(0);
 }
+
+/*
+ * Init playlist
+ */
+void controls::initPlaylist(){
+    curRange = announcedRange;
+    curAmount = announcedAmount;
+    curList = new int[announcedAmount];
+    curList = announcedList;
+
+    current = fileObj();
+    current.initFile(100);
+    current = announced;
+}
+
 
 /*
   *  Control for Start of local File
@@ -170,12 +187,13 @@ void controls::startSelected(){
   * Set Current qeue list when list changes
   */
 void controls::setCurList(fileObj &newList, int *newIDlist, int amount, bool range){
-    current = fileObj();
-    current.initFile(100);
-    current = newList;
-    curList = newIDlist;
-    curAmount = amount;
-    curRange = range;
+    announced = fileObj();
+    announced.initFile(100);
+    announced = newList;
+    announcedList = newIDlist;
+    announcedAmount = amount;
+    announcedRange = range;
+
 }
 
 ////  slot for seeking from detached track slider
