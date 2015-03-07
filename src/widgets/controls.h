@@ -27,6 +27,7 @@
 #include "src/object/fileobj.h"
 #include "src/qmpwidget/qmpwidget.h"
 #include "src/widgets/volume.h"
+#include "src/widgets/detached.h"
 
 namespace Ui {
 class controls;
@@ -112,6 +113,10 @@ public slots:
     }
     void remoteSeek(int pos);
 
+    QString getTrack(){
+        return  QString(current.getName(CurrentSelect));
+    }
+
 private slots:
 
     void on_PAUSE_clicked();
@@ -141,11 +146,15 @@ private slots:
     void rangeChange(int, int);
     void sliderMoved(int);  // user seeked the f
     void on_detach_clicked(){
-        emit detach();
+       // emit detachControls();
+        detach->setOrientation(Html5ApplicationViewer::ScreenOrientationAuto);
+        detach->setMaximumSize(QSize(640, 480));
+        detach->showMaximized();
+        detach->loadFile(QLatin1String("html/index.html"));
     }
 
 signals:
-    void detach();
+    void detachControls();
     void songChanged(string);
     void setVolume(int);
     void remConSeek(int);
@@ -159,7 +168,7 @@ private:
         int curAmount, announcedAmount; /// init for playlist size
         bool curRange, announcedRange; /// init for ignoring range
         fileObj current, announced;    /// current fileObj List
-
+        detached *detach;
         Ui::controls *ui;
         string name, path;
         volume *vol;

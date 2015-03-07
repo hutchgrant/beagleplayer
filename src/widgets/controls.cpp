@@ -29,6 +29,7 @@ controls::controls(QWidget *parent) :
     ui(new Ui::controls)
 {
     ui->setupUi(this);
+    detach = new detached();
     current.initFile(100);
     curAmount = 0;
     announcedAmount = 0;
@@ -45,6 +46,17 @@ controls::controls(QWidget *parent) :
     connect(ui->trackSlider, SIGNAL(rangeChanged(int, int)), this, SLOT(rangeChange(int, int)));
     connect(ui->trackSlider, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)));
     connect(&widget, SIGNAL(stateChanged(int)), this, SLOT(stopTime(int)));
+
+    connect(this, SIGNAL(songChanged(string)), detach, SLOT(setTrack(string)));
+    connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
+    connect(this, SIGNAL(remConRange(int)), detach, SLOT(setRange(int)));
+    connect(this, SIGNAL(remConVol(int)), detach, SLOT(setVolume(int)) );
+
+    /// connect detach player to controls
+    connect(detach, SIGNAL(remConSeek(int)), this, SLOT(remoteSeek(int)));
+    connect(detach, SIGNAL(remConFile(int)), this, SLOT(remoteCommand(int)));
+    connect(detach, SIGNAL(remConVol(int)), this, SLOT(remoteVolume(int)));
+
 }
 
 /*
