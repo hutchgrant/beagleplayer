@@ -6,11 +6,11 @@ An Audio, Video, Radio, Playlist client for mplayer. Beagleplayer is ideal for q
 dependencies:
 
 Recommend with Qt5
-$ sudo apt-get install mplayer libqt5network5 libsqlite3-dev qtbase5-dev qt5-qmake libqt5opengl5-dev g++ qt5-default
+$ sudo apt-get install mplayer libqt5network5 libsqlite3-dev qtbase5-dev qt5-qmake libqt5opengl5-dev g++ qt5-default libqt5webkit5 libqt5webkit5-dev
 
 
 with Qt4
-$  sudo apt-get install mplayer libqt4-dev libqt4-opengl libqt4-opengl-dev libqt4-network libqt4-sql libqt4-sql-sqlite gcc g++ make qt4-qmake
+$  sudo apt-get install mplayer libqt4-dev libqt4-opengl libqt4-opengl-dev libqt4-network libqt4-sql libqt4-sql-sqlite gcc g++ make qt4-qmake libqt4-webkit
 
 ----------------------
 download and extract:

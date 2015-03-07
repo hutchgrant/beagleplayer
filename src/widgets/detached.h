@@ -13,6 +13,7 @@ class detached : public Html5ApplicationViewer
 
 public:
 
+    QString jQueryUI = "", jQuery="";
     string trackName;
     int volume, min, max, state;
 
@@ -22,6 +23,23 @@ public:
 private slots:
     void addToJavaScript();
 public slots:
+    /* Commands to remotely signal player controls
+     * connect = 1  - play
+     * connect = 2 - pause
+     * connect = 3 - stop
+     * connect = 4 - next
+     * connect = 5 - prev
+     */
+    void remoteCmd(int cmd){
+        qDebug() << "button clicked!" << endl;
+        emit remConFile(cmd);
+    }
+    void remoteVol(int vol){
+        emit remConVol(vol);
+    }
+    void remoteSeek(int pos){
+        emit remConSeek(pos);
+    }
 
     void setTrack(string track){
         qDebug() << "track set = " << track.c_str() << endl;
@@ -30,7 +48,6 @@ public slots:
     void setSeekPos(int pos){
         this->min = pos;
     }
-
     void setVolume(int vol){
         this->volume = vol;
     }

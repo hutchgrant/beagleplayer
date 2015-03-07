@@ -148,7 +148,7 @@ private slots:
     void on_detach_clicked(){
        // emit detachControls();
         detach->setOrientation(Html5ApplicationViewer::ScreenOrientationAuto);
-        detach->setMaximumSize(QSize(640, 480));
+        detach->setMaximumSize(QSize(1000, 1000));
         detach->showMaximized();
         detach->loadFile(QLatin1String("html/index.html"));
     }
