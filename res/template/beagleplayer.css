@@ -14,27 +14,34 @@ padding:2px;
 }
 
 .main {
-
 }
 
 .track_head {
-
+float:left;
+width:100%;
+margin-left:35%
 }
 
-.track_title {
-
+#track_title {
+margin-left:-5%;
+width:350px;
+font-size:24px;
 }
 
 .track_seek {
-
+float:left;
 }
 
 .track_buttons {
-
+margin-top:20px;
+float:left;
+margin-left:22%
 }
 
 .track_volume {
-
+margin-top:20px;
+float:left;
+margin-left:30%
 }
 
 #seek_amount {
@@ -45,6 +52,13 @@ font-weight:bold;
 
 #seek_slider {
 
+}
+
+#seek_range {
+float:left;
+}
+#seek_time {
+float:left;
 }
 
 #vol_amount {

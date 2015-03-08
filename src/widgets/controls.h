@@ -139,6 +139,7 @@ private slots:
             minCount = 0;
             hourCount = minCount / 60;
         }
+        emit remConSeek(secondCount);
         playlistControl();
     }
 
@@ -147,8 +148,8 @@ private slots:
     void sliderMoved(int);  // user seeked the f
     void on_detach_clicked(){
        // emit detachControls();
-        detach->setOrientation(Html5ApplicationViewer::ScreenOrientationAuto);
-        detach->setMaximumSize(QSize(1000, 1000));
+        detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
+        detach->setMaximumSize(QSize(640, 480));
         detach->showMaximized();
         detach->loadUrl(QUrl("qrc:///template/template/template.html"));
     }

@@ -23,12 +23,20 @@ jQuery( document ).ready(function($) {
     var TrackPos = 0;
     var TrackRange = 0;
     var TrackVolume = 0;
+    var TrackState = "idle";
+
+
+    var hours = 0, minutes= 0, seconds = 0;
+    var totalHours= 0, totalMinutes= 0, totalSeconds= 0;
+    var min= 0;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
-    var firstRun;
+    var timerInterval;
 
     var trackTitle = document.getElementById("track_title");
+    var seekTime = document.getElementById("seek_time");
+    var seekRange = document.getElementById("seek_range");
 
     var prevButton = document.getElementById('prev');
     var stopButton = document.getElementById('stop');
@@ -56,20 +64,26 @@ jQuery( document ).ready(function($) {
 
   function checkWidget(){
 
+
       TrackName = detached.getTrack();
       trackTitle.innerHTML = TrackName;
+      if(TrackName != ""){
+          TrackState = "play";
+      }
 
       TrackPos = detached.getSeekPos();
       $( seekSlider ).slider( "value", TrackPos );
-      $( seekSlider ).slider('option', 'value',TrackPos);
-       $( seekSlider ).slider('option','slide')
-                   .call($( seekSlider ),null,{ handle: $('.ui-slider-handle', $( seekSlider )), value: TrackPos });
 
       TrackRange = detached.getRange();    // { min: 0, max : 100 }; // Get Track Min/Max Range Time
       $( seekSlider ).slider( "option", "max", TrackRange );
 
       TrackVolume = detached.getVolume();
        $( volSlider ).slider( "value", TrackVolume );
+
+      if(TrackState == "play"){
+          calcMinMax();
+          calcRange();
+      }
   }
 
     function addEvents(){
@@ -78,14 +92,17 @@ jQuery( document ).ready(function($) {
         }, false);
 
         pauseButton.addEventListener('click', function() {
+            TrackState = "pause";
             sendRemoteCmd(4);
         }, false);
 
         stopButton.addEventListener('click', function() {
+            TrackState = "stop";
             sendRemoteCmd(2);
         }, false);
 
         playButton.addEventListener('click', function() {
+            TrackState = "play";
             sendRemoteCmd(1);
         }, false);
 
@@ -97,6 +114,47 @@ jQuery( document ).ready(function($) {
         detached.remoteCmd(cmd)
     }
 
+    function calcRange(){
+        console.log("Total Range: " + TrackRange);
+        totalMinutes = parseInt(TrackRange / 60);
+        console.log("Total Minutes: " + totalMinutes);
+
+        totalHours = parseInt(totalMinutes / 60);
+        console.log("Total hours: " + totalHours);
+
+        totalMinutes = parseInt(totalMinutes - (totalHours * 60));
+        console.log("Total Minutes after hours subtracted: " + totalMinutes);
+
+        totalSeconds = parseInt(TrackRange - (totalMinutes * 60));
+        console.log("Total Seconds After minutes and hours subtracted: " + totalSeconds);
+
+        seekRange.innerHTML = totalHours + ":" + totalMinutes + ":" + totalSeconds
+    }
+
+    function calcMinMax(){
+
+        /// we need to call every second, iterates every 0.5 for slider visuals
+        if(timerInterval){
+            timerInterval = false;
+        }else{
+            if(TrackPos > seconds){
+                seconds = TrackPos
+            }
+            seconds++;
+            min = seconds;
+            if(seconds % 60 == 0){
+                 seconds = 0;
+                 minutes++;
+            }
+            if(min % 60 == 0){
+                minutes = 0 ;
+                hours++;
+            }
+            seekTime.innerHTML = hours + ":" + minutes + ":" + seconds
+            timerInterval = true;
+        }
+    }
+
     /* INIT */
     TrackName = detached.getTrack();
     trackTitle.innerHTML = TrackName;
@@ -104,8 +162,7 @@ jQuery( document ).ready(function($) {
     TrackVolume = detached.getVolume();
 
     addEvents();
-
-    createSlider(0,0,100,seekSlider, seekVal);
+    createSlider(0,0,TrackRange,seekSlider, seekVal);
     createSlider(TrackVolume,0,100,volSlider, volVal);
 
     var timer=setInterval(function () {checkWidget()}, 500);

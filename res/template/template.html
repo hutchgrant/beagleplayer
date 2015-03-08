@@ -15,19 +15,24 @@
         <link rel="stylesheet" href="qrc:///template/template/beagleplayer.css">
     </head>
     <body>
-    <frame src="qrc:///html/template.html"> </frame>
         <div class="main">
-        <div class="track_head center">
+        <div class="track_head">
             <h1 id="track_title">Track</h1>
-            <div class="track_seek center">
-                <p>
-                <h4>00:00:00</h4>
-                  <input type="text" id="seek_amount" readonly>
-                  <div id="seek_slider"></div>
-                </p>
+            <div class="track_seek">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-1" id="seek_time">00:00:00</div>
+                        <div class="col-md-1" style="float:left">/</div>
+                        <div class="col-md-1" id="seek_range">00:00:00</div>
+                    </div>
+                    <div class="row">
+                      <input type="text" id="seek_amount" hidden>
+                      <div id="seek_slider"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="track_buttons center">
+        <div class="track_buttons">
             <ul class="buttons">
                <li class="track_button"><button id="prev">Prev</button></li>
                <li class="track_button"><button id="stop">Stop</button></li>

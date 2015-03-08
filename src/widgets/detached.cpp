@@ -31,8 +31,7 @@ detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
     QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 
-    QObject::connect(webView()->page()->mainFrame(),
-            SIGNAL(javaScriptWindowObjectCleared()), SLOT(addToJavaScript()));
+    connect(webView()->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), SLOT(addToJavaScript()));
 }
 
 void detached::addToJavaScript() {
