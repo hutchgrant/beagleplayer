@@ -13,7 +13,6 @@ class detached : public Html5ApplicationViewer
 
 public:
 
-    QString jQueryUI = "", jQuery="";
     string trackName;
     int volume, min, max, state;
 
@@ -22,7 +21,6 @@ public:
 
 private slots:
     void addToJavaScript();
-    void addJquery(bool add);
 public slots:
     /* Commands to remotely signal player controls
      * connect = 1  - play
