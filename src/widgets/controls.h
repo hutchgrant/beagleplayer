@@ -150,7 +150,7 @@ private slots:
         detach->setOrientation(Html5ApplicationViewer::ScreenOrientationAuto);
         detach->setMaximumSize(QSize(1000, 1000));
         detach->showMaximized();
-        detach->loadFile(QLatin1String("html/index.html"));
+        detach->loadUrl(QUrl("qrc:///html/html/index.html"));
     }
 
 signals:

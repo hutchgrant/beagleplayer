@@ -1,0 +1,61 @@
+body {
+margin: 0;
+font-size: 2em;
+background-color: white;
+}
+.track_button {
+display:inline;
+padding:2px;
+}
+
+.buttons {
+ display:inline;
+ list-style-type: none;
+}
+
+.main {
+
+}
+
+.track_head {
+
+}
+
+.track_title {
+
+}
+
+.track_seek {
+
+}
+
+.track_buttons {
+
+}
+
+.track_volume {
+
+}
+
+#seek_amount {
+border:0; 
+color:#f6931f; 
+font-weight:bold;
+}
+
+#seek_slider {
+
+}
+
+#vol_amount {
+border:0; 
+color:#f6931f; 
+font-weight:bold;
+}
+
+#vol_slider {
+
+}
+
+
+
