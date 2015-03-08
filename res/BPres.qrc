@@ -14,11 +14,7 @@
         <file>OPEN_icon.png</file>
         <file>REMOVE_icon.png</file>
     </qresource>
-    <qresource prefix="/html">
-        <file>html/index.html</file>
-    </qresource>
     <qresource prefix="/js">
-        <file>html/js/beagleplayer.js</file>
         <file>html/js/jquery-ui.min.js</file>
         <file>html/js/jquery-2.1.3.min.js</file>
         <file>html/js/bootstrap-slider.js</file>
@@ -50,6 +46,10 @@
         <file>html/css/images/ui-bg_highlight-soft_75_cccccc_1x100.png</file>
         <file>html/css/images/ui-bg_inset-soft_95_fef1ec_1x100.png</file>
         <file>html/css/images/ui-icons_ffffff_256x240.png</file>
-        <file>html/css/beagleplayer.css</file>
+    </qresource>
+    <qresource prefix="/template">
+        <file>template/beagleplayer.css</file>
+        <file>template/beagleplayer.js</file>
+        <file>template/template.html</file>
     </qresource>
 </RCC>
