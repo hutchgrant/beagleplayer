@@ -28,7 +28,10 @@ appearance::appearance(QWidget *parent) :
     ui(new Ui::appearance)
 {
     ui->setupUi(this);
-    themes = new fileObj();
+    themes = fileObj();
+    themes.initFile(100);
+    selectTheme = 0;
+    defaultTheme = 0;
 }
 
 /*
@@ -37,11 +40,12 @@ appearance::appearance(QWidget *parent) :
 void appearance::getThemes(){
     int themeCount = 0;
     int count = 0;
-    fileObj themeDir = fileObj();
+    fileObj themeDir;
+    themeDir.initFile(100);
     QDirIterator directories(QDir::currentPath().append("/res/themes/"), QDir::Dirs | QDir::NoDotAndDotDot);
     while(directories.hasNext()){
         directories.next();
-        themeDir.set(0, count, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
+        themeDir.set(count, count, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
         count++;
     }
 
@@ -51,9 +55,7 @@ void appearance::getThemes(){
         {
            dirWalk.next();
            if(dirWalk.fileInfo().completeSuffix() == "theme"){
-              qDebug() << dirWalk.fileName() << endl;
-              qDebug() << dirWalk.filePath() << endl;
-              themes->set(themeCount,0,0,dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
+              themes.set(themeCount,themeCount,0,dirWalk.fileName().toStdString().c_str(), dirWalk.filePath().toStdString().c_str());
               themeCount++;
            }
         }
@@ -106,14 +108,85 @@ void appearance::parseTheme(string filename){
  *  Fill Themes in list
  */
 void appearance::fillThemes(){
-  //  cah->readDB(themes, "themes");
     QStringList themeMenu;
     t_Model = new QStringListModel(this);
-    for(int i=0; i <= themes->getSize(); i++){
-            themeMenu << themes->getName(i);
+    for(int i=0; i <= themes.getSize(); i++){
+            themeMenu << themes.getName(i);
      }
     t_Model->setStringList(themeMenu);
     ui->theme_list->setModel(t_Model);
+}
+
+/*
+ *  Signal when theme list is clicked
+ */
+void appearance::on_theme_list_clicked(const QModelIndex &index)
+{
+    selectTheme = ui->theme_list->currentIndex().row();
+    parseTheme(themes.getPath(selectTheme));
+}
+
+/*
+ *  Signal when appearance window Apply || Reset || Cancel is selected
+ */
+void appearance::on_buttonBox_clicked(QAbstractButton *button)
+{
+    string buttonText = "";
+    buttonText = button->text().toStdString();
+    if(buttonText == "Reset"){
+        reset();
+    }else if(buttonText == "Apply"){
+        apply(themes.getName(selectTheme), themes.getPath(selectTheme));
+    }
+}
+
+/*
+ *  Reset appearance to default theme
+ */
+void appearance::reset(){
+    apply(themes.getName(defaultTheme), themes.getPath(defaultTheme));  // set to default index
+}
+
+/*
+ *  Apply selected theme, storing its path and name in local db cache
+ */
+void appearance::apply(string file, string path){
+    fileObj addTheme;
+    addTheme.initFile(100);
+    addTheme.set(0,0,0,file.c_str(), path.c_str());
+    cah->updateDB(&addTheme, "theme");
+    this->hide();
+}
+
+/*
+ *  Set Current selected theme, to the theme stored in local cache
+ */
+void appearance::setCurrent(){
+    string path = "";
+    cah->readDB(themes, "theme");
+    if(themes.getSize() == 0){
+        if(createDefaultTheme()){
+            cah->readDB(themes, "theme");
+        }
+    }
+    path = themes.getPath(defaultTheme);
+    parseTheme(path);
+    path = path.replace(path.end()-5, path.end(),"png");
+    setThemeImg(path);
+    emit themeChanged(path);
+}
+
+/*
+ * Add the default theme to the local cache
+ */
+bool appearance::createDefaultTheme(){
+    fileObj addTheme;
+    addTheme.initFile(100);
+    addTheme.set(0,0,0,"default", QDir::current().absolutePath().append("/res/themes/default/default.theme").toStdString().c_str());
+    if(cah->writeDB(&addTheme, "theme") >=0){
+        return true;
+    }
+    return false;
 }
 
 /*

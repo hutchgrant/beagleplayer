@@ -30,10 +30,11 @@ public:
     void createCache();
 
     int writeMe(string qry);
-    int writeDB(fileObj *file, string type);
+    int writeDB(fileObj *file, string table);
+    int updateDB(fileObj *file, string table);
 
     int lastInsertID();
-    void readDB(fileObj &file, string type);
+    void readDB(fileObj &file, string table);
     void readAll(fileObj &artist, fileObj &song, fileObj &viddirs, fileObj &videos);
 
     void removeFrom(int key, string table, bool parent);

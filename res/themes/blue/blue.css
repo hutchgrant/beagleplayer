@@ -1,0 +1,75 @@
+body {
+margin: 0;
+font-size: 2em;
+background-color: blue;
+}
+.track_button {
+display:inline;
+padding:2px;
+}
+
+.buttons {
+ display:inline;
+ list-style-type: none;
+}
+
+.main {
+}
+
+.track_head {
+float:left;
+width:100%;
+margin-left:35%
+}
+
+#track_title {
+margin-left:-5%;
+width:350px;
+font-size:24px;
+}
+
+.track_seek {
+float:left;
+}
+
+.track_buttons {
+margin-top:20px;
+float:left;
+margin-left:22%
+}
+
+.track_volume {
+margin-top:20px;
+float:left;
+margin-left:30%
+}
+
+#seek_amount {
+border:0; 
+color:#f6931f; 
+font-weight:bold;
+}
+
+#seek_slider {
+
+}
+
+#seek_range {
+float:left;
+}
+#seek_time {
+float:left;
+}
+
+#vol_amount {
+border:0; 
+color:#f6931f; 
+font-weight:bold;
+}
+
+#vol_slider {
+
+}
+
+
+

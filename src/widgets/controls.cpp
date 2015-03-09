@@ -29,7 +29,10 @@ controls::controls(QWidget *parent) :
     ui(new Ui::controls)
 {
     ui->setupUi(this);
+
+    themePath = "";
     detach = new detached();
+
     current.initFile(100);
     curAmount = 0;
     announcedAmount = 0;

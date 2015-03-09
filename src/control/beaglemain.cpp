@@ -42,9 +42,14 @@ void beaglemain::addWidgets(){
  * Initialize the Database and location, once, for all widgets
  */
 void beaglemain::initCache(){
+
+    /// Appearance (theme)
+    connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
+
     dbCache.init();  /// determine db location, if exists, if not create it
     brow->initCache(&dbCache);
     playlst->initCache(&dbCache);
+    theme->init(&dbCache);
 
     brow->Sync(1);  /// initialize and fill DB cache objects
 }
@@ -83,6 +88,7 @@ void beaglemain::connectSignals(){
       connect(ui->actionOpen_URL, SIGNAL(triggered()), this, SLOT(openURL()));
       connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
       connect(ui->actionAppearance, SIGNAL(triggered()), this, SLOT(themeDialog()));
+
 }
 
 

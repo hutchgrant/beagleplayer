@@ -191,11 +191,35 @@ void cache::addTables(){
     finalQry[5] = "create table playlist_items (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
     finalQry[6] = "create table categories (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
     finalQry[7] = "create table radios (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
-    for(int i=0; i<8; i++){
+    finalQry[8] = "create table theme (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
+
+    for(int i=0; i<9; i++){
         writeMe(finalQry[i]);
      }
     this->db.close();
     closeDB();
+}
+
+/*
+ *  Update from table to object
+ */
+int cache::updateDB(fileObj *file, string type){
+    int lastid = 0;
+    openDB();
+    string fileName = "", filePath = "";
+
+    if(this->db.open()){
+        for(int x=0; x< file->getSize(); x++){
+            stringstream os;
+            fileName = sanitizeName(file->getName(x));
+            filePath = sanitizeName(file->getPath(x));
+            os << "UPDATE " << type << " SET dir_par='" << file->getPar(x) << "', dir_name='" << fileName << "', dir_path='" <<  filePath << "'";
+            lastid = writeMe(os.str());
+        }
+        this->db.close();
+        closeDB();
+    }
+    return lastid;
 }
 
 /*

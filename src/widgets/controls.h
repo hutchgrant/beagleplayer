@@ -118,6 +118,12 @@ public slots:
         return  QString(current.getName(CurrentSelect));
     }
 
+    /*  THEME  */
+    void setTheme(string path){
+        path.replace(path.end()-3, path.end(), "html");
+        themePath = path;
+    }
+
 private slots:
 
     void on_PAUSE_clicked();
@@ -153,7 +159,7 @@ private slots:
         detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
         detach->setMaximumSize(QSize(640, 480));
         detach->showMaximized();
-        detach->loadUrl(QUrl("qrc:///themes/themes/default/default.html"));
+        detach->loadFile(themePath.c_str());
     }
 
 signals:
@@ -171,6 +177,8 @@ private:
         int *curList, *announcedList;       /// current cue list ID's
         int curAmount, announcedAmount; /// init for playlist size
         bool curRange, announcedRange; /// init for ignoring range
+        string themePath;
+
         fileObj current, announced;    /// current fileObj List
         detached *detach;
         Ui::controls *ui;

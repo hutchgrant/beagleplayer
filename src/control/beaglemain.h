@@ -59,7 +59,6 @@ private slots:
         aBout->show();
     }
     void themeDialog(){
-        theme->init(&dbCache);
         theme->show();
     }
 
