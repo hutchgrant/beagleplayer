@@ -117,6 +117,8 @@ void controls::start(string finSong, string finPath)
     widget.show();
     ui->songTitle->setText(QString(finSong.c_str()));
     widget.start(QStringList(finPath.c_str()));
+
+    emit songChanged(finSong);
 }
 
 /*
@@ -226,7 +228,6 @@ void controls::remoteSeek(int pos){
     secondCount = pos - (minCount * 60);
     overallPos = pos;
     ui->trackSlider->setSliderPosition(overallPos);
-
 }
 
 ////  slot for seeking too the detached volume slider

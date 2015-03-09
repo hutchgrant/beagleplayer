@@ -8,6 +8,7 @@
 #include "src/widgets/controls.h"
 #include "src/widgets/skincntrl.h"
 #include "src/widgets/about.h"
+#include "src/widgets/appearance.h"
 
 namespace Ui {
 class beaglemain;
@@ -57,6 +58,10 @@ private slots:
     void aboutDialog(){
         aBout->show();
     }
+    void themeDialog(){
+        theme->init(&dbCache);
+        theme->show();
+    }
 
 private:
     Ui::beaglemain *ui;
@@ -68,6 +73,7 @@ private:
     controls *cntrl;
     skincntrl *detached;
     about *aBout;
+    appearance *theme;
 };
 
 #endif // BEAGLEMAIN_H

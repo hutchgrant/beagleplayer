@@ -142,6 +142,7 @@
      <string>Options</string>
     </property>
     <addaction name="actionAdd_Radio_Station"/>
+    <addaction name="actionAppearance"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -186,6 +187,11 @@
   <action name="actionOpen_URL">
    <property name="text">
     <string>Open URL</string>
+   </property>
+  </action>
+  <action name="actionAppearance">
+   <property name="text">
+    <string>Appearance</string>
    </property>
   </action>
  </widget>

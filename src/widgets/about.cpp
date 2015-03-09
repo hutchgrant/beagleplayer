@@ -9,10 +9,8 @@ about::about(QWidget *parent) :
     ui(new Ui::about)
 {
     ui->setupUi(this);
-    QPainter paint;
-
     QGraphicsScene *scn = new QGraphicsScene(ui->graphicsView);
-   ui->graphicsView->setScene( scn );
+    ui->graphicsView->setScene( scn );
 
 
    QPixmap someImage("://res/beagleplayer_icon.png");

@@ -31,6 +31,7 @@ void beaglemain::addWidgets(){
    playlst = new playlist(this);
    cntrl = new controls(this);
    aBout = new about();
+   theme = new appearance();
 
    ui->browse_layout->addWidget(brow, 0 ,0);
    ui->control_layout->addWidget(cntrl, 0 ,0);
@@ -81,6 +82,7 @@ void beaglemain::connectSignals(){
       connect(ui->actionOpen_File, SIGNAL(triggered()), this, SLOT(openFile()));
       connect(ui->actionOpen_URL, SIGNAL(triggered()), this, SLOT(openURL()));
       connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
+      connect(ui->actionAppearance, SIGNAL(triggered()), this, SLOT(themeDialog()));
 }
 
 
