@@ -15,6 +15,7 @@ public:
 
     string trackName;
     int volume, min, max, state;
+    bool songChange;
 
     explicit detached(QWidget *parent = 0);
     virtual ~detached();
@@ -42,6 +43,7 @@ public slots:
     }
 
     void setTrack(string track){
+        this->songChange = true;
         this->trackName = track;
     }
     void setSeekPos(int pos){
@@ -59,7 +61,12 @@ public slots:
 
     QString getTrack(){
         return QString(trackName.c_str());
+        this->songChange = false;
     }
+    bool getPlaylistMove(){
+        return this->songChange;
+    }
+
     int getVolume(){
         return this->volume;
     }
@@ -68,6 +75,9 @@ public slots:
     }
     int getSeekPos(){
         return this->min;
+    }
+    int getState(){
+        return this->state;
     }
 
 signals:

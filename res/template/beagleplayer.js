@@ -23,16 +23,15 @@ jQuery( document ).ready(function($) {
     var TrackPos = 0;
     var TrackRange = 0;
     var TrackVolume = 0;
-    var TrackState = "idle";
-
+    var TrackState = 5;
+    var TrackChange = false;
 
     var hours = 0, minutes= 0, seconds = 0;
     var totalHours= 0, totalMinutes= 0, totalSeconds= 0;
-    var min= 0;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
-    var timerInterval;
+    var timerInterval =false;
 
     var trackTitle = document.getElementById("track_title");
     var seekTime = document.getElementById("seek_time");
@@ -63,12 +62,14 @@ jQuery( document ).ready(function($) {
     }
 
   function checkWidget(){
-
-
+      TrackState = detached.getState();
       TrackName = detached.getTrack();
       trackTitle.innerHTML = TrackName;
-      if(TrackName != ""){
-          TrackState = "play";
+
+      TrackChange = detached.getPlaylistMove();
+      if(TrackChange ){
+          seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
+          seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
       }
 
       TrackPos = detached.getSeekPos();
@@ -79,10 +80,21 @@ jQuery( document ).ready(function($) {
 
       TrackVolume = detached.getVolume();
        $( volSlider ).slider( "value", TrackVolume );
-
-      if(TrackState == "play"){
-          calcMinMax();
-          calcRange();
+    console.log("track state = " + TrackState);
+      if(parseInt(TrackState) === 3){
+          calcRange(TrackPos, seekTime);
+          calcRange(TrackRange, seekRange);
+      }else if(parseInt(TrackState) === 5){
+          TrackName = "";
+          TrackPos = 0;
+          TrackRange = 0;
+          TrackVolume = 0;
+          TrackState = 5;
+          seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
+          seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
+      }else{
+          seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
+          seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
       }
   }
 
@@ -92,17 +104,14 @@ jQuery( document ).ready(function($) {
         }, false);
 
         pauseButton.addEventListener('click', function() {
-            TrackState = "pause";
             sendRemoteCmd(4);
         }, false);
 
         stopButton.addEventListener('click', function() {
-            TrackState = "stop";
             sendRemoteCmd(2);
         }, false);
 
         playButton.addEventListener('click', function() {
-            TrackState = "play";
             sendRemoteCmd(1);
         }, false);
 
@@ -114,44 +123,39 @@ jQuery( document ).ready(function($) {
         detached.remoteCmd(cmd)
     }
 
-    function calcRange(){
-        console.log("Total Range: " + TrackRange);
-        totalMinutes = parseInt(TrackRange / 60);
-        console.log("Total Minutes: " + totalMinutes);
-
-        totalHours = parseInt(totalMinutes / 60);
-        console.log("Total hours: " + totalHours);
-
-        totalMinutes = parseInt(totalMinutes - (totalHours * 60));
-        console.log("Total Minutes after hours subtracted: " + totalMinutes);
-
-        totalSeconds = parseInt(TrackRange - (totalMinutes * 60));
-        console.log("Total Seconds After minutes and hours subtracted: " + totalSeconds);
-
-        seekRange.innerHTML = totalHours + ":" + totalMinutes + ":" + totalSeconds
-    }
-
-    function calcMinMax(){
-
+    function calcRange(pos, range){
         /// we need to call every second, iterates every 0.5 for slider visuals
         if(timerInterval){
             timerInterval = false;
         }else{
-            if(TrackPos > seconds){
-                seconds = TrackPos
+            totalMinutes = parseInt(pos) / 60;
+
+            console.log("Minutes = " + totalMinutes);
+
+            totalHours = (parseInt(totalMinutes) / 60);
+            console.log("hours = " + totalMinutes);
+
+            totalMinutes = parseInt(totalMinutes - (parseInt(totalHours) * 60));
+
+            totalSeconds = parseInt(pos - (parseInt(totalMinutes) * 60));
+
+            var strSec = "", strMin = "", strHr = "";
+            if(parseInt(totalSeconds) < 10){
+                strSec = "0" + parseInt(totalSeconds);
+            }else{
+                strSec = parseInt(totalSeconds);
             }
-            seconds++;
-            min = seconds;
-            if(seconds % 60 == 0){
-                 seconds = 0;
-                 minutes++;
+            if(parseInt(totalMinutes) < 10){
+                strMin = "0" + parseInt(totalMinutes);
+            }else{
+                strMin = parseInt(totalMinutes);
             }
-            if(min % 60 == 0){
-                minutes = 0 ;
-                hours++;
+            if(parseInt(totalHours) < 10){
+                strHr = "0" + parseInt(totalHours);
+            }else{
+                strHr = parseInt(totalHours);
             }
-            seekTime.innerHTML = hours + ":" + minutes + ":" + seconds
-            timerInterval = true;
+            range.innerHTML = strHr + ":" + strMin + ":" + strSec;
         }
     }
 

@@ -27,6 +27,7 @@ detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
     min = 0;
     max = 0;
     state = 0;
+    songChange = false;
 
     QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);

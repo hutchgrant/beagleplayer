@@ -51,6 +51,7 @@ controls::controls(QWidget *parent) :
     connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
     connect(this, SIGNAL(remConRange(int)), detach, SLOT(setRange(int)));
     connect(this, SIGNAL(remConVol(int)), detach, SLOT(setVolume(int)) );
+    connect(this, SIGNAL(remConState(int)), detach, SLOT(setState(int)) );
 
     /// connect detach player to controls
     connect(detach, SIGNAL(remConSeek(int)), this, SLOT(remoteSeek(int)));
@@ -161,15 +162,22 @@ void controls::playlistControl(){
     playtime = this->getTimeDisplay(hourCount, minCount, secondCount, totalHourCount, totalMinCount, totalSecCount);
     if(widget.PlayingState == 3){
         ui->cntrl_time->setText(playtime.c_str());
+
         if(hourCount >= totalHourCount && minCount >= totalMinCount && secondCount >= totalSecCount && !curRange){
             timer.stop();
             CurrentSelect++;
             if(CurrentSelect < curAmount){
                 startSelected();
+                emit remConState(3);
+            }else{
+                emit remConState(5);
             }
+        }else{
+            emit remConState(3);
         }
     }else{
         timer.stop();
+        emit remConState(5);
     }
 }
 
@@ -228,17 +236,20 @@ void controls::setVol(int vol){
 void controls::on_PAUSE_clicked()
 {
     widget.pause();
+    emit remConState(5);
 }
 //// play media widget
 void controls::on_PLAY_clicked()
 {
     widget.play();
+    emit remConState(3);
 }
 //// stop media widget + timer
 void controls::on_STOP_clicked()
 {
     widget.stop();
     timer.stop();
+    emit remConState(5);
 }
 //// select next media file, start playback
 void controls::on_NEXT_clicked()
@@ -246,6 +257,7 @@ void controls::on_NEXT_clicked()
     if(CurrentSelect < curAmount-1){
          CurrentSelect++;
         startSelected();
+        emit remConState(3);
     }
 }
 //// select previous media file, start playback
@@ -254,6 +266,7 @@ void controls::on_PREV_clicked()
      if(CurrentSelect > 0){
              CurrentSelect--;
              startSelected();
+             emit remConState(3);
      }
 }
 

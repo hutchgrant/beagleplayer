@@ -162,6 +162,7 @@ signals:
     void remConRange(int);
     void remConFile(int);
     void remConVol(int);
+    void remConState(int);
 private:
         void adjustVol(int vol);
         int CurrentSelect;  /// current selection number
