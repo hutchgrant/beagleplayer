@@ -70,6 +70,7 @@ void controls::initSlider(){
     totalSecCount = 0;
     totalMinCount = 0;
     totalHourCount = 0;
+    overallPos = 0;
     ui->trackSlider->setSliderPosition(0);
 }
 
@@ -151,7 +152,7 @@ void controls::sliderMoved(int pos){
 
     minCount = minCount - (hourCount *60);
     secondCount = pos - (minCount * 60);
-    emit remConSeek(pos);
+    overallPos = pos;
 }
 
 /*
@@ -218,12 +219,14 @@ void controls::setCurList(fileObj &newList, int *newIDlist, int amount, bool ran
 
 ////  slot for seeking from detached track slider
 void controls::remoteSeek(int pos){
-    ui->trackSlider->setSliderPosition(pos);
     minCount = pos / 60;
     hourCount = minCount / 60;
 
     minCount = minCount - (hourCount *60);
     secondCount = pos - (minCount * 60);
+    overallPos = pos;
+    ui->trackSlider->setSliderPosition(overallPos);
+
 }
 
 ////  slot for seeking too the detached volume slider

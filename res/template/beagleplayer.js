@@ -68,8 +68,7 @@ jQuery( document ).ready(function($) {
 
       TrackChange = detached.getPlaylistMove();
       if(TrackChange ){
-          seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
-          seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
+          defaultRange();
       }
 
       TrackPos = detached.getSeekPos();
@@ -80,7 +79,6 @@ jQuery( document ).ready(function($) {
 
       TrackVolume = detached.getVolume();
        $( volSlider ).slider( "value", TrackVolume );
-    console.log("track state = " + TrackState);
       if(parseInt(TrackState) === 3){
           calcRange(TrackPos, seekTime);
           calcRange(TrackRange, seekRange);
@@ -90,13 +88,16 @@ jQuery( document ).ready(function($) {
           TrackRange = 0;
           TrackVolume = 0;
           TrackState = 5;
-          seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
-          seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
+          defaultRange();
       }else{
-          seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
-          seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
+          defaultRange();
       }
   }
+
+    function defaultRange(){
+        seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
+        seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
+    }
 
     function addEvents(){
         prevButton.addEventListener('click', function() {
@@ -104,11 +105,11 @@ jQuery( document ).ready(function($) {
         }, false);
 
         pauseButton.addEventListener('click', function() {
-            sendRemoteCmd(4);
+            sendRemoteCmd(2);
         }, false);
 
         stopButton.addEventListener('click', function() {
-            sendRemoteCmd(2);
+            sendRemoteCmd(3);
         }, false);
 
         playButton.addEventListener('click', function() {
@@ -129,14 +130,9 @@ jQuery( document ).ready(function($) {
             timerInterval = false;
         }else{
             totalMinutes = parseInt(pos) / 60;
-
-            console.log("Minutes = " + totalMinutes);
-
             totalHours = (parseInt(totalMinutes) / 60);
-            console.log("hours = " + totalMinutes);
 
             totalMinutes = parseInt(totalMinutes - (parseInt(totalHours) * 60));
-
             totalSeconds = parseInt(pos - (parseInt(totalMinutes) * 60));
 
             var strSec = "", strMin = "", strHr = "";

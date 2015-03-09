@@ -41,6 +41,7 @@ public:
 
     int secondCount, minCount, hourCount;
     int totalSecCount, totalMinCount, totalHourCount;
+    int overallPos;
     int pl_selected;
 
     QTimer timer;
@@ -139,7 +140,8 @@ private slots:
             minCount = 0;
             hourCount = minCount / 60;
         }
-        emit remConSeek(secondCount);
+        overallPos++;
+        emit remConSeek(overallPos);
         playlistControl();
     }
 
