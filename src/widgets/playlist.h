@@ -37,8 +37,8 @@ class playlist : public QWidget
     
 public:
     newplaylist plDialog;
-
-    string plName = "";
+    int PlayMode;
+    string plName;
     cache *dbCon;
     fileObj pList, pListItems;
     fileObj pNewList, pNewItems;
@@ -66,16 +66,17 @@ public:
 public slots:
     /// if a track was selected elsewhere,
     /// Need that information immediately avail to playlist
-    void setTempTrack(string track, string path, int id, int par){
+    void setTempTrack(string track, string path, int id, int par, int mode){
         tempTrack = track;
         tempPath = path;
         tempID = id;
         tempPar = par;
+        PlayMode = mode;
     }
 
 
 signals:
-    void playlistChanged(fileObj &plItem, int * plItemList, int amt, bool ignoreRange);
+    void playlistChanged(fileObj &plItem, int * plItemList, int amt, bool ignoreRange, int mode);
     void playlistSelection(int selected);
     void playlistFullSelection(int selected);
 

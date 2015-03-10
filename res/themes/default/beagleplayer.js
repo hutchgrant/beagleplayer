@@ -25,6 +25,7 @@ jQuery( document ).ready(function($) {
     var TrackRange = 0;
     var TrackVolume = 0;
     var TrackState = 5;
+    var TrackMode = 0;
     var TrackChange = false;
 
     var hours = 0, minutes= 0, seconds = 0;
@@ -51,6 +52,9 @@ jQuery( document ).ready(function($) {
     var fullScreen = document.getElementById('full');
     var openButton = document.getElementById('open');
 
+     /*
+      * Create seek+volume sliders
+     */
     function createSlider(init, min, max, sliderName, sliderVal){
       $( sliderName ).slider({
         range: "min",
@@ -68,42 +72,39 @@ jQuery( document ).ready(function($) {
       });
       $( sliderVal ).val( $( sliderName ).slider( "value" ) );
     }
-
+  /*
+   * Repeatedly check widgets, to see if any of our var have changed
+  */
   function checkWidget(){
+      TrackMode = detached.getMode();
       TrackState = detached.getState();
+      TrackChange = detached.getPlaylistMove();
+      if(TrackChange == true){
+          defaultRange();
+          videoStarted = false;
+      }
+
       TrackName = detached.getTrack();
       trackTitle.innerHTML = TrackName;
       TrackPath = detached.getPath();
-      TrackChange = detached.getPlaylistMove();
-      if(TrackChange){
-          defaultRange();
-      }
-
       TrackPos = detached.getSeekPos();
-      $( seekSlider ).slider( "value", TrackPos );
-
-      TrackRange = detached.getRange();    // { min: 0, max : 100 }; // Get Track Min/Max Range Time
-      $( seekSlider ).slider( "option", "max", TrackRange );
-
       TrackVolume = detached.getVolume();
+
+      $( seekSlider ).slider( "value", TrackPos );
+      $( seekSlider ).slider( "option", "max", TrackRange );
        $( volSlider ).slider( "value", TrackVolume );
+
       if(parseInt(TrackState) === 1){
-          calcRange(TrackPos, seekTime);
-          calcRange(TrackRange, seekRange);
           if(!videoStarted){
-              trackVideo.setAttribute("src",TrackPath);
-              trackVideo.setAttribute("type","video/mp4");
-              trackVideo.load();
-              videoStarted = true;
-              pastPaused = false;
-              togglePlayer();
-              trackVideo.play();
+                loadAndStart();
           }else{
               if(pastPaused){
                   trackVideo.play();
                   pastPaused = false;
               }
           }
+          calcRange(TrackPos, seekTime);
+          calcRange(TrackRange, seekRange);
       }else if(parseInt(TrackState) === 3){
           videoStarted = false;
           TrackName = "";
@@ -113,7 +114,7 @@ jQuery( document ).ready(function($) {
           TrackVolume = 0;
           TrackState = 5;
           defaultRange();
-          html5();
+          trackVideo.pause();
           pastPaused = true;
       }else if(parseInt(TrackState) === 2){
           trackVideo.pause();
@@ -122,11 +123,33 @@ jQuery( document ).ready(function($) {
           defaultRange();
       }
   }
+    /*
+     * Load the media file into the <video> tag, initialize player
+     */
+    function loadAndStart(){
+        trackVideo.setAttribute("src",TrackPath);
+        if(parseInt(TrackMode) === 0){
+            trackVideo.setAttribute("type","audio/mp3");
+        }else{
+            trackVideo.setAttribute("type","video/mp4");
+            togglePlayer();
+        }
+        // TrackRange = trackVideo.duration;
+        trackVideo.load();
+        videoStarted = true;
+        pastPaused = false;
+        trackVideo.play();
+    }
+    /*
+     * Initialize media timer with default range
+     */
     function defaultRange(){
         seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
         seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
     }
-
+    /*
+     * Add event listeners to our buttons and player
+     */
     function addEvents(){
         prevButton.addEventListener('click', function() {
             videoStarted = false;  // reload media src
@@ -162,12 +185,19 @@ jQuery( document ).ready(function($) {
            ///  sendRemoteCmd(2);
         }, false);
         trackVideo.addEventListener("durationchange", function() {
+            TrackRange = trackVideo.duration;
              detached.remoteRange(trackVideo.duration);
         }, false);
     }
+    /*
+     * Send Remote signals to qt widget
+     */
     function sendRemoteCmd(cmd){
         detached.remoteCmd(cmd);
     }
+    /*
+     * Toggle <video> size
+     */
     function toggleFullScreen(){
         if(!fullScreened){
             trackVideo.setAttribute("width", 2000);
@@ -179,6 +209,9 @@ jQuery( document ).ready(function($) {
             fullScreened = false;
         }
     }
+    /*
+     * Toggle <video> display visibility
+     */
     function togglePlayer(){
         if(!playerVisible){
             trackVideo.style.display = "block";
@@ -188,7 +221,9 @@ jQuery( document ).ready(function($) {
             playerVisible = false;
         }
     }
-
+     /*
+      * Calculate a timer's range
+      */
     function calcRange(pos, range){
         /// we need to call every second, iterates every 0.5 for slider visuals
         if(timerInterval){
@@ -219,14 +254,13 @@ jQuery( document ).ready(function($) {
             range.innerHTML = strHr + ":" + strMin + ":" + strSec;
         }
     }
-    function goFullscreen() {
-        trackVideo.webkitEnterFullscreen();
-    }
+     function goFullscreen() {
+         trackVideo.webkitEnterFullscreen();
+     }
     /* INIT */
     TrackPath = detached.getPath();
     TrackName = detached.getTrack();
     trackTitle.innerHTML = TrackName;
-    TrackRange = detached.getRange();
     TrackVolume = detached.getVolume();
 
     addEvents();
@@ -234,5 +268,4 @@ jQuery( document ).ready(function($) {
     createSlider(TrackVolume,0,100,volSlider, volVal);
 
     var timer=setInterval(function () {checkWidget()}, 500);
-
 });

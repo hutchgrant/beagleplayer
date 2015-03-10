@@ -14,7 +14,7 @@ class detached : public Html5ApplicationViewer
 public:
 
     string trackName, trackPath;
-    int volume, min, max, state;
+    int volume, min, max, state, mode;
     bool songChange;
 
     explicit detached(QWidget *parent = 0);
@@ -45,10 +45,14 @@ public slots:
         emit remConRange(max);
     }
 
-    void setTrack(string track, string path){
+    /*
+     * Object setters
+     */
+    void setTrack(string track, string path, int mode){
         this->songChange = true;
         this->trackName = track;
         this->trackPath = path;
+        this->mode = mode;
     }
     void setSeekPos(int pos){
         this->min = pos;
@@ -63,20 +67,25 @@ public slots:
         this->state = mediaState;
     }
 
+    /*
+     * Object getters
+     */
     QString getPath(){
         return QString(this->trackPath.c_str());
     }
-
     QString getTrack(){
-        return QString(trackName.c_str());
+        return QString(this->trackName.c_str());
+    }
+    int getMode(){
+        return this->mode;
     }
     bool getPlaylistMove(){
-        return this->songChange;
         if(this->songChange){
             this->songChange = false;
+            return true;
         }
+        return false;
     }
-
     int getVolume(){
         return this->volume;
     }

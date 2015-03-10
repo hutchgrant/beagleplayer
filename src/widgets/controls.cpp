@@ -29,7 +29,7 @@ controls::controls(QWidget *parent) :
     ui(new Ui::controls)
 {
     ui->setupUi(this);
-
+    PlayMode = 0;
     themePath = "";
     curAmount = 0;
     announcedAmount = 0;
@@ -50,7 +50,7 @@ controls::controls(QWidget *parent) :
 
     connect(ui->trackSlider, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)));
 
-    connect(this, SIGNAL(songChanged(string, string)), detach, SLOT(setTrack(string, string)));
+    connect(this, SIGNAL(songChanged(string, string, int)), detach, SLOT(setTrack(string, string, int)));
     connect(this, SIGNAL(remConState(int)), detach, SLOT(setState(int)) );
 
     connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
@@ -103,7 +103,7 @@ void controls::start(string finSong, string finPath)
     ui->songTitle->setText(QString(finSong.c_str()));
     timer.start(1000);
     openPlayer();
-    emit songChanged(finSong, finPath);
+    emit songChanged(finSong, finPath, PlayMode);
 }
 
 /*
@@ -112,9 +112,11 @@ void controls::start(string finSong, string finPath)
 void controls::controlTime(){
     if(PlayingState == 3 || PlayingState == 2 || PlayingState == -1){ /// file paused/stopped/idle.
         timer.stop();
+        emit remConState(3);
     }
     if(PlayingState == 1){  /// file playing
         timer.start(1000);
+         emit remConState(1);
     }
 }
 
@@ -206,14 +208,14 @@ void controls::openPlayer(){
 /*
   * Set Current qeue list when list changes
   */
-void controls::setCurList(fileObj &newList, int *newIDlist, int amount, bool range){
+void controls::setCurList(fileObj &newList, int *newIDlist, int amount, bool range, int mode){
     announced = fileObj();
     announced.initFile(100);
     announced = newList;
     announcedList = newIDlist;
     announcedAmount = amount;
     announcedRange = range;
-
+    PlayMode = mode;
 }
 
 ////  slot for seeking from detached track slider
@@ -235,17 +237,20 @@ void controls::setVol(int vol){
 //// pause media widget
 void controls::on_PAUSE_clicked()
 {
-    emit remConState(5);
+    PlayingState = 2;
+    controlTime();
 }
 //// play media widget
 void controls::on_PLAY_clicked()
 {
-    emit remConState(3);
+    PlayingState = 1;
+    controlTime();
 }
 //// stop media widget + timer
 void controls::on_STOP_clicked()
 {
-    emit remConState(5);
+    PlayingState = 3;
+    controlTime();
 }
 //// select next media file, start playback
 void controls::on_NEXT_clicked()
@@ -253,7 +258,8 @@ void controls::on_NEXT_clicked()
     if(CurrentSelect < curAmount-1){
          CurrentSelect++;
         startSelected();
-        emit remConState(3);
+        PlayingState = 1;
+        emit remConState(PlayingState);
     }
 }
 //// select previous media file, start playback
@@ -262,7 +268,8 @@ void controls::on_PREV_clicked()
      if(CurrentSelect > 0){
              CurrentSelect--;
              startSelected();
-             emit remConState(3);
+             PlayingState = 1;
+             emit remConState(PlayingState);
      }
 }
 

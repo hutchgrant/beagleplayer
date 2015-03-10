@@ -53,12 +53,12 @@ public:
 
 signals:
 
-    void curListChanged(fileObj &filelist, int *itemList, int amt, bool ignoreRange);
-    void trackChanged(string plName, string plPath, int plID, int plPar);
+    void curListChanged(fileObj &filelist, int *itemList, int amt, bool ignoreRange, int mode);
+    void trackChanged(string plName, string plPath, int plID, int plPar, int mode);
     void selectionChanged(int);                         //  a track was selected
     void FullSelection(int);                            // a track was double clicked
     void MenuSelection(int);                            // a Menu Item was selected
-    void startTempTrack(string, string);                // for use with immediate, non-cached, open files
+    void startTempTrack(string, string, int mode);                // for use with immediate, non-cached, open files
 
 public slots:
     void updateTitle(int);                               // update Right ViewList

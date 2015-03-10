@@ -1,6 +1,6 @@
 Format: http://dep.debian.net/deps/dep5
-Upstream-Name: beagletomb
-Source: https://github.com/hutchgrant/BeagleTomb
+Upstream-Name: beagleplayer
+Source: https://github.com/hutchgrant/beagleplayer
 
 Files: *
 Copyright: 2011-2015 Grant Hutchinson <h.g.utchinson@gmail.com>
@@ -23,7 +23,7 @@ Copyright: 2015 jQuery Foundation
 License: MIT and Creative Commons
 
 Files: res/html/* (jquery-ui)
-Copyright: 2015 Twitter, Inc
+Copyright: 2015 jQuery Foundation
 License: MIT and Creative Commons
 
 License: GPL-3.0+

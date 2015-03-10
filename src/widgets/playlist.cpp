@@ -35,6 +35,8 @@ playlist::playlist(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::playlist)
 {
+    plName = "";
+    PlayMode = 0;
     tempPar = 0;
     tempPath = "";
     tempTrack = "";
@@ -90,7 +92,7 @@ void playlist::fillPL(){
                 count++;
             }
         }
-        emit playlistChanged(pListItems, curPLlist, count, false);
+        emit playlistChanged(pListItems, curPLlist, count, false, PlayMode);
     }
     else if(PLMODE == 2){            // new playlist items
         curPLlist = new int[pNewItems.getSize()];
@@ -99,7 +101,7 @@ void playlist::fillPL(){
             curPLlist[count] = pNewItems.getID(i);
             count++;
         }
-        emit playlistChanged(pNewItems, curPLlist, count, false);
+        emit playlistChanged(pNewItems, curPLlist, count, false, PlayMode);
     }
     pl_model = new QStringListModel(this);
     pl_model->setStringList(curList);

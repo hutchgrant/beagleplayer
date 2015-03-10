@@ -74,14 +74,14 @@ void browse::Sync(int type){
         QDir usrDir;
          usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath(), tr("Video/Audio (*.avi *.mp4 *.mp3 *.flac *.wav)"));
          if(usrDir.dirName() != NULL || usrDir.dirName() != ""){
-            emit startTempTrack(usrDir.dirName().toStdString(), usrDir.path().toStdString());
+            emit startTempTrack(usrDir.dirName().toStdString(), usrDir.path().toStdString(), MenuMode);
          }
     }else if(type == -1){
         web = new QWebUrl();
         web->show();
         if(web->exec() == QDialog::Accepted){
             if(web->url_input != "http://" || web->url_input != ""){
-                emit startTempTrack("", web->url_input);
+                emit startTempTrack("", web->url_input, MenuMode);
             }
         }
     }
@@ -154,7 +154,7 @@ void browse::updateTitle(int selected){
                     songCount++;
                 }
             }
-           emit curListChanged(Song, curSongID, songCount, false);
+           emit curListChanged(Song, curSongID, songCount, false, MenuMode);
         }
         else if(MenuMode == 1 ){    ///  set Video + local
             selID = VidDir.getID(selected);
@@ -166,7 +166,7 @@ void browse::updateTitle(int selected){
                     vidCount++;
                 }
             }
-            emit curListChanged(Video, curVidID, vidCount, false);
+            emit curListChanged(Video, curVidID, vidCount, false, MenuMode);
         }
         else if(MenuMode == 2 ){    ///  set Radio
             selID = RadioCat.getID(selected);
@@ -178,7 +178,7 @@ void browse::updateTitle(int selected){
                     radCount++;
                 }
             }
-            emit curListChanged(Radio, curRadID, radCount, true);
+            emit curListChanged(Radio, curRadID, radCount, true, MenuMode);
         }
     t_Model->setStringList(curSong);
     ui->TrackList->setModel(t_Model);
@@ -204,21 +204,21 @@ void browse::on_TrackList_clicked(const QModelIndex &index)
     if(MenuMode == 0){             /// listing local songs
         for(int i=0; i<=Song.getSize(); i++){
             if(curSongID[selected] == Song.getID(i)){
-                emit trackChanged(Song.getName(i), Song.getPath(i), Song.getID(i), Song.getPar(i));
+                emit trackChanged(Song.getName(i), Song.getPath(i), Song.getID(i), Song.getPar(i), MenuMode);
             }
         }
     }
     else if(MenuMode == 1){         /// listing local videos
         for(int i =0; i<=vidCount; i++){
             if(curVidID[selected]== Video.getID(i)){
-                emit trackChanged(Video.getName(i), Video.getPath(i), Video.getID(i), Video.getPar(i));
+                emit trackChanged(Video.getName(i), Video.getPath(i), Video.getID(i), Video.getPar(i), MenuMode);
             }
         }
     }  
     else if(MenuMode == 2){         /// listing local videos
         for(int i =0; i<=radCount; i++){
             if(curRadID[selected]== Radio.getID(i)){
-                emit trackChanged(Radio.getName(i), Radio.getPath(i), Radio.getID(i), Radio.getPar(i));
+                emit trackChanged(Radio.getName(i), Radio.getPath(i), Radio.getID(i), Radio.getPar(i), MenuMode);
             }
         }
     }

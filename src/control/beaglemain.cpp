@@ -67,16 +67,16 @@ void beaglemain::changeMode(int mode){
 void beaglemain::connectSignals(){
       /// Browse  + control base signals
       connect(ui->Mode_Change, SIGNAL(currentIndexChanged(int)), brow, SLOT(updateMode(int)));   /// change from audio/video mode
-      connect(brow, SIGNAL(curListChanged(fileObj&,int*,int, bool)), cntrl, SLOT(setCurList(fileObj&,int*,int, bool)));  /// change control's playlist of tracks
+      connect(brow, SIGNAL(curListChanged(fileObj&,int*,int, bool, int)), cntrl, SLOT(setCurList(fileObj&,int*,int, bool, int)));  /// change control's playlist of tracks
       connect(brow,SIGNAL(FullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));  /// a full track selection was made (double0click)
       connect(brow,SIGNAL(selectionChanged(int)), cntrl, SLOT(setSelection(int)));  ///  a single track selection was made (single-click)
 
       /// current selection into playlist
-      connect(brow,SIGNAL(trackChanged(string, string, int, int)), playlst, SLOT(setTempTrack(string, string, int, int)));  ///  a single track selection was made (single-click)
-      connect(brow, SIGNAL(startTempTrack(string,string)), cntrl, SLOT(setTempTrackAndPlay(string, string)));
+      connect(brow,SIGNAL(trackChanged(string, string, int, int, int)), playlst, SLOT(setTempTrack(string, string, int, int, int)));  ///  a single track selection was made (single-click)
+      connect(brow, SIGNAL(startTempTrack(string,string, int)), cntrl, SLOT(setTempTrackAndPlay(string, string, int)));
 
       /// playlist
-      connect(playlst, SIGNAL(playlistChanged(fileObj&,int*,int, bool)), cntrl, SLOT(setCurList(fileObj&,int*,int, bool)));
+      connect(playlst, SIGNAL(playlistChanged(fileObj&,int*,int, bool, int)), cntrl, SLOT(setCurList(fileObj&,int*,int, bool, int)));
       connect(playlst, SIGNAL(playlistSelection(int)), cntrl, SLOT(setSelection(int)));
       connect(playlst, SIGNAL(playlistFullSelection(int)), cntrl, SLOT(setSelectionAndPlay(int)));
 

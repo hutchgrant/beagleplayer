@@ -43,7 +43,7 @@ public:
     int totalSecCount, totalMinCount, totalHourCount;
     int overallPos;
     int pl_selected;
-    int PlayingState;
+    int PlayingState, PlayMode;
 
     bool detachOpen;
 
@@ -68,7 +68,8 @@ public slots:
     void setSelection(int selection){
         CurrentSelect = selection;
     }
-    void setTempTrackAndPlay(string track, string path){
+    void setTempTrackAndPlay(string track, string path, int mode){
+        PlayMode = mode;
         start(track, path);
     }
     void setSelectionAndPlay(int selection){
@@ -76,7 +77,7 @@ public slots:
         initPlaylist();
         startSelected();
     }
-    void setCurList(fileObj &newlist, int * newIDlist,int amt, bool range);
+    void setCurList(fileObj &newlist, int * newIDlist,int amt, bool range, int mode);
 
     /*
      * Remote commands for signals from another widget!
@@ -161,7 +162,7 @@ private slots:
 
 signals:
     void detachControls();
-    void songChanged(string, string);
+    void songChanged(string, string, int);
     void setVolume(int);
     void remConSeek(int);
     void remConRange(int);
