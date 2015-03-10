@@ -130,6 +130,7 @@ void controls::rangeChange(int max){
 
     totalMinCount = totalMinCount - (totalHourCount *60);
     totalSecCount = max - (totalMinCount * 60);
+    ui->trackSlider->setRange(0, max);
 }
 
 /*

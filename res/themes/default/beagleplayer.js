@@ -95,6 +95,7 @@ jQuery( document ).ready(function($) {
        $( volSlider ).slider( "value", TrackVolume );
 
       if(parseInt(TrackState) === 1){
+          var moveSlider = false;
           if(!videoStarted){
                 loadAndStart();
           }else{
@@ -102,9 +103,16 @@ jQuery( document ).ready(function($) {
                   trackVideo.play();
                   pastPaused = false;
               }
+              console.log( TrackPos + " " +trackVideo.currentTime);
+
+              if(parseInt(TrackPos) - trackVideo.currentTime >= 2){
+                  moveSlider = true;
+              }else if(parseInt(TrackPos) - trackVideo.currentTime <= -2){
+                  moveSlider = true;
+              }
           }
-          calcRange(TrackPos, seekTime);
-          calcRange(TrackRange, seekRange);
+          calcRange(TrackPos, seekTime, moveSlider);
+          calcRange(TrackRange, seekRange, false);
       }else if(parseInt(TrackState) === 3){
           videoStarted = false;
           TrackName = "";
@@ -132,6 +140,7 @@ jQuery( document ).ready(function($) {
             trackVideo.setAttribute("type","audio/mp3");
         }else{
             trackVideo.setAttribute("type","video/mp4");
+            playerVisible = false;
             togglePlayer();
         }
         // TrackRange = trackVideo.duration;
@@ -224,11 +233,17 @@ jQuery( document ).ready(function($) {
      /*
       * Calculate a timer's range
       */
-    function calcRange(pos, range){
+    function calcRange(pos, range, moveSeek){
         /// we need to call every second, iterates every 0.5 for slider visuals
         if(timerInterval){
             timerInterval = false;
         }else{
+            if(moveSeek){
+                trackVideo.currentTime = pos;
+            }
+
+            trackVideo.volume = TrackVolume/100;
+
             totalMinutes = parseInt(pos) / 60;
             totalHours = (parseInt(totalMinutes) / 60);
 
