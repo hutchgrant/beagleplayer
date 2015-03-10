@@ -24,9 +24,11 @@
             <div class="track_seek">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-1" id="seek_time">00:00:00</div>
-                        <div class="col-md-1" style="float:left">/</div>
-                        <div class="col-md-1" id="seek_range">00:00:00</div>
+                        <div id="range">
+                            <div class="col-md-4" id="seek_time">00:00:00</div>
+                            <div class="col-sm-1" id="seek_divide">/</div>
+                            <div class="col-md-5" id="seek_range">00:00:00</div>
+                        </div>
                     </div>
                     <div class="row">
                       <input type="text" id="seek_amount" hidden>
@@ -59,3 +61,4 @@
 
     </body>
 </html>
+

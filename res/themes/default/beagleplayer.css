@@ -18,13 +18,15 @@ padding:2px;
 }
 
 .track_head {
-float:left;
-width:100%;
+margin-left:auto;
+margin-right:auto;
+width:1000px;
 }
 
 #track_title {
-width:350px;
+width:1000px;
 font-size:24px;
+margin-left: 30%;
 }
 
 .track_seek {
@@ -33,14 +35,16 @@ float:left;
 
 .track_buttons {
 margin-top:20px;
-float:left;
-width:100%;
+margin-left: auto;
+margin-right: auto;
+width: 650px;
 }
 
 .track_volume {
-margin-top:20px;
-float:left;
-width:100%;
+margin-top: 20px;
+width: 400px;
+margin-left: auto;
+margin-right: auto;
 }
 
 #seek_amount {
@@ -50,28 +54,41 @@ font-weight:bold;
 }
 
 #seek_slider {
-
+width:300px;
+margin-left: auto;
+margin-right: auto;
 }
 
 #seek_range {
-float:left;
 }
 #seek_time {
-float:left;
+}
+#seek_divide{
+}
+#range{
+    width:300px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #vol_amount {
 border:0;
 color:#f6931f;
 font-weight:bold;
+width:40px;
 }
 
 #vol_slider {
-
+width: 200px;
+margin-top: -30px;
+margin-left: auto;
 }
 
+
+
 .player{
-float:left;
+margin-left:auto;
+margin-right:auto;
 }
 
 :-webkit-full-screen {

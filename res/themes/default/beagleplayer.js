@@ -51,6 +51,7 @@ jQuery( document ).ready(function($) {
     var nextButton = document.getElementById('next');
     var fullScreen = document.getElementById('full');
     var openButton = document.getElementById('open');
+    var player = document.getElementById('player');
 
      /*
       * Create seek+volume sliders
@@ -103,7 +104,6 @@ jQuery( document ).ready(function($) {
                   trackVideo.play();
                   pastPaused = false;
               }
-              console.log( TrackPos + " " +trackVideo.currentTime);
 
               if(parseInt(TrackPos) - trackVideo.currentTime >= 2){
                   moveSlider = true;
@@ -211,11 +211,15 @@ jQuery( document ).ready(function($) {
         if(!fullScreened){
             trackVideo.setAttribute("width", 2000);
             trackVideo.setAttribute("height", 1000);
+            trackVideo.style.marginLeft = "-45%";
+            trackVideo.style.marginTop = "10px";
             fullScreened = true;
         }else{
             trackVideo.setAttribute("height", 700);
             trackVideo.setAttribute("width", 1024);
             fullScreened = false;
+            trackVideo.style.marginLeft = "auto";
+            trackVideo.style.marginTop = "10px";
         }
     }
     /*

@@ -90,21 +90,16 @@ public slots:
     void remoteCommand(int connect){
         if(connect == 3){
             timer.stop();
-            qDebug() << "remote stop";
         }else if(connect == 2){
-            qDebug() << "remote pause";
             timer.stop();
             emit remConState(2);
         }else if(connect == 1){
-            qDebug() << "remote play";
             timer.start(1000);
             emit remConState(1);
         }else if(connect == 4){
-            qDebug() << "remote next";
             CurrentSelect++;
             startSelected();
         }else if(connect == 5){
-            qDebug() << "remote prev";
             CurrentSelect--;
             startSelected();
         }
@@ -124,11 +119,13 @@ public slots:
         string sub = path.substr(path.length()-5, path.length());
         if(sub == "theme"){
             path.replace(path.end()-5, path.end(), "html");
+            themePath = path;
+            detach->close();
+            openPlayer();
         }else{
             path.replace(path.end()-3, path.end(), "html");
         }
         themePath = path;
-        qDebug() << "theme changed to " << themePath.c_str() << endl;
     }
 
 private slots:
