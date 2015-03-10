@@ -32,7 +32,6 @@ SOURCES += src/control/main.cpp\
     src/widgets/newplaylist.cpp \
     src/object/fileobj.cpp \
     src/widgets/controls.cpp \
-    src/widgets/skincntrl.cpp \
     src/widgets/volume.cpp \
     src/cache/localsync.cpp \
     src/widgets/radiostat.cpp \
@@ -48,7 +47,6 @@ HEADERS  += src/control/beaglemain.h \
     src/widgets/newplaylist.h \
     src/object/fileobj.h \
     src/widgets/controls.h \
-    src/widgets/skincntrl.h \
     src/widgets/volume.h \
     src/cache/localsync.h \
     src/widgets/radiostat.h \
@@ -63,7 +61,6 @@ FORMS    += src/control/beaglemain.ui \
     src/widgets/newplaylist.ui \
     src/widgets/volume.ui \
     src/widgets/controls.ui \
-    src/widgets/skincntrl.ui \
     src/widgets/radiostat.ui \
     src/widgets/about.ui \
     src/widgets/qweburl.ui \

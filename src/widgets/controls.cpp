@@ -61,6 +61,7 @@ controls::controls(QWidget *parent) :
     connect(detach, SIGNAL(remConSeek(int)), this, SLOT(remoteSeek(int)));
     connect(detach, SIGNAL(remConFile(int)), this, SLOT(remoteCommand(int)));
     connect(detach, SIGNAL(remConVol(int)), this, SLOT(remoteVolume(int)));
+    connect(detach, SIGNAL(detachClose()), this, SLOT(detachExited()));
 }
 
 /*
@@ -197,11 +198,11 @@ void controls::startSelected(){
  */
 void controls::openPlayer(){
     if(!detachOpen){
-    detachOpen = true;
-    detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
-    detach->setMinimumSize(QSize(1024, 720));
-    detach->showNormal();
-    detach->loadFile(themePath.c_str());
+        detachOpen = true;
+        detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
+        detach->setMinimumSize(QSize(1024, 720));
+        detach->showNormal();
+        detach->loadFile(themePath.c_str());
     }
 }
 

@@ -40,6 +40,10 @@ void detached::addToJavaScript() {
     webView()->page()->mainFrame()->addToJavaScriptWindowObject("detached", this);
 }
 
+void detached::closeEvent(QCloseEvent *event){
+    emit detachClose();
+}
+
 detached::~detached(){
 
 }

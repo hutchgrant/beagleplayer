@@ -6,7 +6,6 @@
 #include "src/cache/cache.h"
 #include "src/widgets/playlist.h"
 #include "src/widgets/controls.h"
-#include "src/widgets/skincntrl.h"
 #include "src/widgets/about.h"
 #include "src/widgets/appearance.h"
 
@@ -29,10 +28,6 @@ public:
     void connectSignals();
     void changeMode(int mode);
 private slots:
-
-    void detachControls(){
-        detached->show();
-    }
     /*
      * Main Tool Bar, File-> Import Audio
      */
@@ -70,7 +65,6 @@ private:
 
     playlist *playlst;
     controls *cntrl;
-    skincntrl *detached;
     about *aBout;
     appearance *theme;
 };

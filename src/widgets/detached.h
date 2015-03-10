@@ -104,6 +104,10 @@ signals:
     void remConSeek(int);
     void remConFile(int);
     void remConVol(int);
+
+    void detachClose();
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H

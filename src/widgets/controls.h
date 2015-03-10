@@ -23,9 +23,9 @@
 
 #include <QWidget>
 #include <QDebug>
+#include <QTimer>
 #include <sstream>
 #include "src/object/fileobj.h"
-#include "src/qmpwidget/qmpwidget.h"
 #include "src/widgets/volume.h"
 #include "src/widgets/detached.h"
 
@@ -158,6 +158,9 @@ private slots:
 
     void on_detach_clicked(){
         openPlayer();
+    }
+    void detachExited(){
+        detachOpen = false;
     }
 
 signals:
