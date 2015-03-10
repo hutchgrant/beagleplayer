@@ -121,8 +121,14 @@ public slots:
 
     /*  THEME  */
     void setTheme(string path){
-        path.replace(path.end()-3, path.end(), "html");
+        string sub = path.substr(path.length()-5, path.length());
+        if(sub == "theme"){
+            path.replace(path.end()-5, path.end(), "html");
+        }else{
+            path.replace(path.end()-3, path.end(), "html");
+        }
         themePath = path;
+        qDebug() << "theme changed to " << themePath.c_str() << endl;
     }
 
 private slots:

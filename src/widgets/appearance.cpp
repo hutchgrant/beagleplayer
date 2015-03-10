@@ -156,6 +156,7 @@ void appearance::apply(string file, string path){
     addTheme.set(0,0,0,file.c_str(), path.c_str());
     cah->updateDB(&addTheme, "theme");
     this->hide();
+    emit themeChanged(path.c_str());
 }
 
 /*

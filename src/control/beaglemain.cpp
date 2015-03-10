@@ -89,6 +89,9 @@ void beaglemain::connectSignals(){
       connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
       connect(ui->actionAppearance, SIGNAL(triggered()), this, SLOT(themeDialog()));
 
+      /// refresh and change theme
+      connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
+
 }
 
 
