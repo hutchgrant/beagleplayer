@@ -66,10 +66,12 @@ public slots:
 
     QString getTrack(){
         return QString(trackName.c_str());
-        this->songChange = false;
     }
     bool getPlaylistMove(){
         return this->songChange;
+        if(this->songChange){
+            this->songChange = false;
+        }
     }
 
     int getVolume(){

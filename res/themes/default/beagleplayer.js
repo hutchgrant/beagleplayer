@@ -30,6 +30,7 @@ jQuery( document ).ready(function($) {
     var hours = 0, minutes= 0, seconds = 0;
     var totalHours= 0, totalMinutes= 0, totalSeconds= 0;
     var videoStarted = false, fullScreened = false, playerVisible = false;
+    var pastPaused = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
@@ -74,7 +75,7 @@ jQuery( document ).ready(function($) {
       trackTitle.innerHTML = TrackName;
       TrackPath = detached.getPath();
       TrackChange = detached.getPlaylistMove();
-      if(TrackChange ){
+      if(TrackChange){
           defaultRange();
       }
 
@@ -86,7 +87,7 @@ jQuery( document ).ready(function($) {
 
       TrackVolume = detached.getVolume();
        $( volSlider ).slider( "value", TrackVolume );
-      if(parseInt(TrackState) === 3){
+      if(parseInt(TrackState) === 1){
           calcRange(TrackPos, seekTime);
           calcRange(TrackRange, seekRange);
           if(!videoStarted){
@@ -94,8 +95,16 @@ jQuery( document ).ready(function($) {
               trackVideo.setAttribute("type","video/mp4");
               trackVideo.load();
               videoStarted = true;
+              pastPaused = false;
+              togglePlayer();
+              trackVideo.play();
+          }else{
+              if(pastPaused){
+                  trackVideo.play();
+                  pastPaused = false;
+              }
           }
-      }else if(parseInt(TrackState) === 5){
+      }else if(parseInt(TrackState) === 3){
           videoStarted = false;
           TrackName = "";
           TrackPath = "";
@@ -104,6 +113,11 @@ jQuery( document ).ready(function($) {
           TrackVolume = 0;
           TrackState = 5;
           defaultRange();
+          trackVideo.pause();
+          pastPaused = true;
+      }else if(parseInt(TrackState) === 2){
+          trackVideo.pause();
+          pastPaused = true;
       }else{
           defaultRange();
       }
@@ -143,9 +157,13 @@ jQuery( document ).ready(function($) {
         openButton.addEventListener('click', function() {
             togglePlayer();
         }, false);
+
+        trackVideo.addEventListener("pause", function() {
+             sendRemoteCmd(2);
+        }, false);
     }
     function sendRemoteCmd(cmd){
-        detached.remoteCmd(cmd)
+        detached.remoteCmd(cmd);
     }
     function toggleFullScreen(){
         if(!fullScreened){

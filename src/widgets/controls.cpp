@@ -174,16 +174,16 @@ void controls::playlistControl(){
             CurrentSelect++;
             if(CurrentSelect < curAmount){
                 startSelected();
-                emit remConState(3);
+                emit remConState(1);
             }else{
-                emit remConState(5);
+                emit remConState(3);
             }
         }else{
-            emit remConState(3);
+            emit remConState(1);
         }
     }else{
         timer.stop();
-        emit remConState(5);
+        emit remConState(3);
     }
 }
 

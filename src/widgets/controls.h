@@ -94,10 +94,12 @@ public slots:
             qDebug() << "remote pause";
             timer.stop();
             widget.pause();
+            emit remConState(2);
         }else if(connect == 1){
             qDebug() << "remote play";
             timer.start(1000);
-            widget.pause();
+            widget.play();
+            emit remConState(1);
         }else if(connect == 4){
             qDebug() << "remote next";
             CurrentSelect++;
@@ -157,7 +159,7 @@ private slots:
     void on_detach_clicked(){
        // emit detachControls();
         detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
-        detach->setMinimumSize(QSize(640, 480));
+        detach->setMinimumSize(QSize(1024, 720));
         detach->showNormal();
         detach->loadFile(themePath.c_str());
     }
