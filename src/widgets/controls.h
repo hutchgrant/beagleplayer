@@ -43,9 +43,11 @@ public:
     int totalSecCount, totalMinCount, totalHourCount;
     int overallPos;
     int pl_selected;
+    int PlayingState;
+
+    bool detachOpen;
 
     QTimer timer;
-    QMPwidget widget;
 
     controls(QWidget *parent = 0);
     virtual ~controls();
@@ -56,11 +58,10 @@ public:
     void start(string finSong, string finPath);
     void startSelected();
 
+    void openPlayer();
+
     string getTimeDisplay(int hourCount, int minCount, int secondCount, int totalHourCount, int totalMinCount, int totalSecCount);
     void playlistControl();
-    void close(){
-        widget.close();
-    }
 
 public slots:
     void setVol(int vol);
@@ -87,18 +88,15 @@ public slots:
      */
     void remoteCommand(int connect){
         if(connect == 3){
-            widget.stop();
             timer.stop();
             qDebug() << "remote stop";
         }else if(connect == 2){
             qDebug() << "remote pause";
             timer.stop();
-            widget.pause();
             emit remConState(2);
         }else if(connect == 1){
             qDebug() << "remote play";
             timer.start(1000);
-            widget.play();
             emit remConState(1);
         }else if(connect == 4){
             qDebug() << "remote next";
@@ -153,15 +151,12 @@ private slots:
         playlistControl();
     }
 
-    void stopTime(int);
-    void rangeChange(int, int);
-    void sliderMoved(int);  // user seeked the f
+    void controlTime();
+    void rangeChange(int);
+    void sliderMoved(int);
+
     void on_detach_clicked(){
-       // emit detachControls();
-        detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
-        detach->setMinimumSize(QSize(1024, 720));
-        detach->showNormal();
-        detach->loadFile(themePath.c_str());
+        openPlayer();
     }
 
 signals:

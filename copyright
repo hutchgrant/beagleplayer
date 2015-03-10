@@ -1,18 +1,30 @@
 Format: http://dep.debian.net/deps/dep5
-Upstream-Name: beagleplayer
-Source: https://github.com/hutchgrant/beagleplayer
+Upstream-Name: beagletomb
+Source: https://github.com/hutchgrant/BeagleTomb
 
 Files: *
 Copyright: 2011-2015 Grant Hutchinson <h.g.utchinson@gmail.com>
 License: GPL-3.0+
 
-Files: debian/*
+Files: src/*
 Copyright: 2011-2015 Grant Hutchinson <h.g.utchinson@gmail.com>
 License: GPL-3.0+
 
-Files: src/qmpwidget/*
-Copyright: 2010-2015 Jonas Gehring
+Files: res/themes/default
+Copyright: 2011-2015 Grant Hutchinson <h.g.utchinson@gmail.com>
 License: GPL-3.0+
+
+Files: res/html/* (bootstrap)
+Copyright: 2015 Twitter, Inc
+License: MIT and Creative Commons
+
+Files: res/html/* (jquery)
+Copyright: 2015 jQuery Foundation
+License: MIT and Creative Commons
+
+Files: res/html/* (jquery-ui)
+Copyright: 2015 Twitter, Inc
+License: MIT and Creative Commons
 
 License: GPL-3.0+
  This program is free software: you can redistribute it and/or modify

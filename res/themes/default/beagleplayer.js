@@ -113,7 +113,7 @@ jQuery( document ).ready(function($) {
           TrackVolume = 0;
           TrackState = 5;
           defaultRange();
-          trackVideo.pause();
+          html5();
           pastPaused = true;
       }else if(parseInt(TrackState) === 2){
           trackVideo.pause();
@@ -159,7 +159,10 @@ jQuery( document ).ready(function($) {
         }, false);
 
         trackVideo.addEventListener("pause", function() {
-             sendRemoteCmd(2);
+           ///  sendRemoteCmd(2);
+        }, false);
+        trackVideo.addEventListener("durationchange", function() {
+             detached.remoteRange(trackVideo.duration);
         }, false);
     }
     function sendRemoteCmd(cmd){

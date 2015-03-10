@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql network opengl widgets
+QT       += core gui sql network widgets
 
 TARGET = beagleplayer
 TEMPLATE = app
@@ -34,7 +34,6 @@ SOURCES += src/control/main.cpp\
     src/widgets/controls.cpp \
     src/widgets/skincntrl.cpp \
     src/widgets/volume.cpp \
-    src/qmpwidget/qmpwidget.cpp \
     src/cache/localsync.cpp \
     src/widgets/radiostat.cpp \
     src/widgets/about.cpp \
@@ -51,8 +50,6 @@ HEADERS  += src/control/beaglemain.h \
     src/widgets/controls.h \
     src/widgets/skincntrl.h \
     src/widgets/volume.h \
-    src/qmpwidget/qmpwidget.h \
-    src/qmpwidget/qmpyuvreader.h \
     src/cache/localsync.h \
     src/widgets/radiostat.h \
     src/widgets/about.h \
@@ -71,9 +68,6 @@ FORMS    += src/control/beaglemain.ui \
     src/widgets/about.ui \
     src/widgets/qweburl.ui \
     src/widgets/appearance.ui
-
-OTHER_FILES += \
-    src/qmpwidget/qmpwidget.pri
 
 RESOURCES += \
     res/BPres.qrc

@@ -41,6 +41,9 @@ public slots:
         this->min = pos;
         emit remConSeek(pos);
     }
+    void remoteRange(int max){
+        emit remConRange(max);
+    }
 
     void setTrack(string track, string path){
         this->songChange = true;
@@ -88,6 +91,7 @@ public slots:
     }
 
 signals:
+    void remConRange(int);
     void remConSeek(int);
     void remConFile(int);
     void remConVol(int);

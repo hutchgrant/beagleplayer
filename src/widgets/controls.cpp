@@ -31,42 +31,43 @@ controls::controls(QWidget *parent) :
     ui->setupUi(this);
 
     themePath = "";
-    detach = new detached();
-
-    current.initFile(100);
     curAmount = 0;
     announcedAmount = 0;
     curRange = false;
     announcedRange = false;
+    detachOpen = false;
+
+    detach = new detached();
+    current.initFile(100);
 
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
-    widget.setSeekSlider(ui->trackSlider);
 
     connect(vol, SIGNAL(volChanged(int)), this, SLOT(setVol(int)));
     connect(this, SIGNAL(setVolume(int)), vol, SLOT(setPosition(int)));
+
     connect(&timer, SIGNAL(timeout()), this, SLOT(setTime()));
-    connect(ui->trackSlider, SIGNAL(rangeChanged(int, int)), this, SLOT(rangeChange(int, int)));
+
     connect(ui->trackSlider, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)));
-    connect(&widget, SIGNAL(stateChanged(int)), this, SLOT(stopTime(int)));
 
     connect(this, SIGNAL(songChanged(string, string)), detach, SLOT(setTrack(string, string)));
-    connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
-    connect(this, SIGNAL(remConRange(int)), detach, SLOT(setRange(int)));
-    connect(this, SIGNAL(remConVol(int)), detach, SLOT(setVolume(int)) );
     connect(this, SIGNAL(remConState(int)), detach, SLOT(setState(int)) );
 
+    connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
+    connect(this, SIGNAL(remConVol(int)), detach, SLOT(setVolume(int)) );
+
     /// connect detach player to controls
+    connect(detach, SIGNAL(remConRange(int)), this, SLOT(rangeChange(int)));
     connect(detach, SIGNAL(remConSeek(int)), this, SLOT(remoteSeek(int)));
     connect(detach, SIGNAL(remConFile(int)), this, SLOT(remoteCommand(int)));
     connect(detach, SIGNAL(remConVol(int)), this, SLOT(remoteVolume(int)));
-
 }
 
 /*
  * Init slider
  */
 void controls::initSlider(){
+    PlayingState =0;
     secondCount = 0;
     minCount = 0;
     hourCount = 0;
@@ -91,47 +92,28 @@ void controls::initPlaylist(){
     current = announced;
 }
 
-
-/*
-  *  Control for Start of local File
-  */
-void controls::startLocal(char *finSong, char *finPath)
-{
-    initSlider();
-    char *final;
-    final = new char[strlen(finPath) + 10];
-    sprintf(final, "%s", finPath);
-    cout << "Final File Playing: " << final << endl;
-    ui->songTitle->setText(QString(finSong));
-
-    widget.show();
-    widget.start(QStringList(final));
-
-    emit songChanged(finSong, final);
-}
-
 /*
   *  Control for Start of local File
   */
 void controls::start(string finSong, string finPath)
 {
     initSlider();
+    PlayingState = 1;
     cout << "Final File Playing: " << finSong << endl;
-    widget.show();
     ui->songTitle->setText(QString(finSong.c_str()));
-    widget.start(QStringList(finPath.c_str()));
-
+    timer.start(1000);
+    openPlayer();
     emit songChanged(finSong, finPath);
 }
 
 /*
  * Stop Timer if widget stops
  */
-void controls::stopTime(int state){
-    if(state == 5 || state == 0 || state == -1){ /// file paused/stopped/idle.
+void controls::controlTime(){
+    if(PlayingState == 3 || PlayingState == 2 || PlayingState == -1){ /// file paused/stopped/idle.
         timer.stop();
     }
-    if(state == 3){  /// file playing
+    if(PlayingState == 1){  /// file playing
         timer.start(1000);
     }
 }
@@ -139,13 +121,12 @@ void controls::stopTime(int state){
 /*
  * Set Timer Max Range based on the range of widget slider
  */
-void controls::rangeChange(int min, int max){
+void controls::rangeChange(int max){
     totalMinCount = max / 60;
     totalHourCount = totalMinCount / 60;
 
     totalMinCount = totalMinCount - (totalHourCount *60);
     totalSecCount = max - (totalMinCount * 60);
-    emit remConRange(max);
 }
 
 /*
@@ -166,25 +147,25 @@ void controls::sliderMoved(int pos){
 void controls::playlistControl(){
     string playtime;
     playtime = this->getTimeDisplay(hourCount, minCount, secondCount, totalHourCount, totalMinCount, totalSecCount);
-    if(widget.PlayingState == 3){
+    if(PlayingState == 1){
         ui->cntrl_time->setText(playtime.c_str());
-
         if(hourCount >= totalHourCount && minCount >= totalMinCount && secondCount >= totalSecCount && !curRange){
             timer.stop();
             CurrentSelect++;
             if(CurrentSelect < curAmount){
                 startSelected();
-                emit remConState(1);
+                PlayingState = 1;
             }else{
-                emit remConState(3);
+                PlayingState = 3;
             }
         }else{
-            emit remConState(1);
+            PlayingState = 1;
         }
     }else{
         timer.stop();
-        emit remConState(3);
+        PlayingState = 3;
     }
+    emit remConState(PlayingState);
 }
 
 /*
@@ -206,7 +187,20 @@ void controls::startSelected(){
     finPathSize = strlen(checkSongObjPathByID(selID, &current));
     finPath = new char[finPathSize + 1];
     finPath = checkSongObjPathByID(selID, &current);
-    startLocal(finSong, finPath);
+    start(finSong, finPath);
+}
+
+/*
+ *  Open html5 media player
+ */
+void controls::openPlayer(){
+    if(!detachOpen){
+    detachOpen = true;
+    detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
+    detach->setMinimumSize(QSize(1024, 720));
+    detach->showNormal();
+    detach->loadFile(themePath.c_str());
+    }
 }
 
 /*
@@ -235,27 +229,22 @@ void controls::remoteSeek(int pos){
 
 ////  slot for seeking too the detached volume slider
 void controls::setVol(int vol){
-    widget.setVolume(vol);
     emit setVolume(vol);
     emit remConVol(vol);
 }
 //// pause media widget
 void controls::on_PAUSE_clicked()
 {
-    widget.pause();
     emit remConState(5);
 }
 //// play media widget
 void controls::on_PLAY_clicked()
 {
-    widget.play();
     emit remConState(3);
 }
 //// stop media widget + timer
 void controls::on_STOP_clicked()
 {
-    widget.stop();
-    timer.stop();
     emit remConState(5);
 }
 //// select next media file, start playback
@@ -328,6 +317,5 @@ string controls::getTimeDisplay(int hourCount, int minCount, int secondCount, in
  */
 controls::~controls()
 {
-    widget.close();
     delete ui;
 }
