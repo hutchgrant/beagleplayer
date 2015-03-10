@@ -10,16 +10,17 @@ An audio, video, radio, playlist, client, for mplayer. Beagleplayer is ideal for
 - [Creators](#creators)
 - [License](#license)
 
+
 ##Dependencies
 
-```bash
-# Recommended with Qt5
+Recommend with Qt5
+```
 $ sudo apt-get install mplayer libqt5network5 libsqlite3-dev qtbase5-dev qt5-qmake libqt5opengl5-dev g++ qt5-default libqt5webkit5 libqt5webkit5-dev
 
-# optionally with Qt4
+with Qt4
 $  sudo apt-get install mplayer libqt4-dev libqt4-opengl libqt4-opengl-dev libqt4-network libqt4-sql libqt4-sql-sqlite gcc g++ make qt4-qmake libqt4-webkit
 ```
-This was built and tested in Ubuntu 14.04. Debian based distributions should be able to run without issue.  Minor modifications necessary, to cache path, for other Linux based systems.
+* This was built and tested in Ubuntu 14.04. Debian based distributions should be able to run without issue.  Minor modifications necessary, to cache path, for other Linux based systems.
 
 ##Included
 ```

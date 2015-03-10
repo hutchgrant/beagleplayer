@@ -50,7 +50,7 @@ controls::controls(QWidget *parent) :
     connect(ui->trackSlider, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoved(int)));
     connect(&widget, SIGNAL(stateChanged(int)), this, SLOT(stopTime(int)));
 
-    connect(this, SIGNAL(songChanged(string)), detach, SLOT(setTrack(string)));
+    connect(this, SIGNAL(songChanged(string, string)), detach, SLOT(setTrack(string, string)));
     connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
     connect(this, SIGNAL(remConRange(int)), detach, SLOT(setRange(int)));
     connect(this, SIGNAL(remConVol(int)), detach, SLOT(setVolume(int)) );
@@ -107,7 +107,7 @@ void controls::startLocal(char *finSong, char *finPath)
     widget.show();
     widget.start(QStringList(final));
 
-    emit songChanged(finSong);
+    emit songChanged(finSong, final);
 }
 
 /*
@@ -121,7 +121,7 @@ void controls::start(string finSong, string finPath)
     ui->songTitle->setText(QString(finSong.c_str()));
     widget.start(QStringList(finPath.c_str()));
 
-    emit songChanged(finSong);
+    emit songChanged(finSong, finPath);
 }
 
 /*

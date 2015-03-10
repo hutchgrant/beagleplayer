@@ -20,6 +20,7 @@
 jQuery( document ).ready(function($) {
 
     var TrackName = "";
+    var TrackPath = "";
     var TrackPos = 0;
     var TrackRange = 0;
     var TrackVolume = 0;
@@ -28,10 +29,14 @@ jQuery( document ).ready(function($) {
 
     var hours = 0, minutes= 0, seconds = 0;
     var totalHours= 0, totalMinutes= 0, totalSeconds= 0;
+    var videoStarted = false, fullScreened = false, playerVisible = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
-    var timerInterval =false;
+    var timerInterval = false;
+
+    var trackVideo = document.getElementById("video");
+    var trackSource = document.getElementById("source");
 
     var trackTitle = document.getElementById("track_title");
     var seekTime = document.getElementById("seek_time");
@@ -42,6 +47,8 @@ jQuery( document ).ready(function($) {
     var pauseButton = document.getElementById('pause');
     var playButton = document.getElementById('play');
     var nextButton = document.getElementById('next');
+    var fullScreen = document.getElementById('full');
+    var openButton = document.getElementById('open');
 
     function createSlider(init, min, max, sliderName, sliderVal){
       $( sliderName ).slider({
@@ -65,7 +72,7 @@ jQuery( document ).ready(function($) {
       TrackState = detached.getState();
       TrackName = detached.getTrack();
       trackTitle.innerHTML = TrackName;
-
+      TrackPath = detached.getPath();
       TrackChange = detached.getPlaylistMove();
       if(TrackChange ){
           defaultRange();
@@ -82,8 +89,16 @@ jQuery( document ).ready(function($) {
       if(parseInt(TrackState) === 3){
           calcRange(TrackPos, seekTime);
           calcRange(TrackRange, seekRange);
+          if(!videoStarted){
+              trackVideo.setAttribute("src",TrackPath);
+              trackVideo.setAttribute("type","video/mp4");
+              trackVideo.load();
+              videoStarted = true;
+          }
       }else if(parseInt(TrackState) === 5){
+          videoStarted = false;
           TrackName = "";
+          TrackPath = "";
           TrackPos = 0;
           TrackRange = 0;
           TrackVolume = 0;
@@ -93,7 +108,6 @@ jQuery( document ).ready(function($) {
           defaultRange();
       }
   }
-
     function defaultRange(){
         seekTime.innerHTML = "00" + ":" + "00" + ":" + "00";
         seekRange.innerHTML = "00" + ":" + "00" + ":" + "00";
@@ -101,6 +115,7 @@ jQuery( document ).ready(function($) {
 
     function addEvents(){
         prevButton.addEventListener('click', function() {
+            videoStarted = false;  // reload media src
             sendRemoteCmd(5);
         }, false);
 
@@ -117,11 +132,40 @@ jQuery( document ).ready(function($) {
         }, false);
 
         nextButton.addEventListener('click', function() {
+            videoStarted = false;  // reload media src
             sendRemoteCmd(4);
+        }, false);
+
+        fullScreen.addEventListener("loadedmetadata", goFullscreen, false);
+        fullScreen.addEventListener('click', function() {
+            toggleFullScreen();
+        }, false);
+        openButton.addEventListener('click', function() {
+            togglePlayer();
         }, false);
     }
     function sendRemoteCmd(cmd){
         detached.remoteCmd(cmd)
+    }
+    function toggleFullScreen(){
+        if(!fullScreened){
+            trackVideo.setAttribute("width", 2000);
+            trackVideo.setAttribute("height", 1000);
+            fullScreened = true;
+        }else{
+            trackVideo.setAttribute("height", 700);
+            trackVideo.setAttribute("width", 1024);
+            fullScreened = false;
+        }
+    }
+    function togglePlayer(){
+        if(!playerVisible){
+            trackVideo.style.display = "block";
+            playerVisible = true;
+        }else{
+            trackVideo.style.display = "none";
+            playerVisible = false;
+        }
     }
 
     function calcRange(pos, range){
@@ -154,8 +198,11 @@ jQuery( document ).ready(function($) {
             range.innerHTML = strHr + ":" + strMin + ":" + strSec;
         }
     }
-
+    function goFullscreen() {
+        trackVideo.webkitEnterFullscreen();
+    }
     /* INIT */
+    TrackPath = detached.getPath();
     TrackName = detached.getTrack();
     trackTitle.innerHTML = TrackName;
     TrackRange = detached.getRange();

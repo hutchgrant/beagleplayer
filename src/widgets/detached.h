@@ -13,7 +13,7 @@ class detached : public Html5ApplicationViewer
 
 public:
 
-    string trackName;
+    string trackName, trackPath;
     int volume, min, max, state;
     bool songChange;
 
@@ -42,9 +42,10 @@ public slots:
         emit remConSeek(pos);
     }
 
-    void setTrack(string track){
+    void setTrack(string track, string path){
         this->songChange = true;
         this->trackName = track;
+        this->trackPath = path;
     }
     void setSeekPos(int pos){
         this->min = pos;
@@ -57,6 +58,10 @@ public slots:
     }
     void setState(int mediaState){
         this->state = mediaState;
+    }
+
+    QString getPath(){
+        return QString(this->trackPath.c_str());
     }
 
     QString getTrack(){

@@ -157,14 +157,14 @@ private slots:
     void on_detach_clicked(){
        // emit detachControls();
         detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
-        detach->setMaximumSize(QSize(640, 480));
-        detach->showMaximized();
+        detach->setMinimumSize(QSize(640, 480));
+        detach->showNormal();
         detach->loadFile(themePath.c_str());
     }
 
 signals:
     void detachControls();
-    void songChanged(string);
+    void songChanged(string, string);
     void setVolume(int);
     void remConSeek(int);
     void remConRange(int);

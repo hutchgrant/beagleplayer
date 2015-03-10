@@ -23,6 +23,7 @@
 detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
 {
     trackName = "";
+    trackPath = "";
     volume = 0;
     min = 0;
     max = 0;
