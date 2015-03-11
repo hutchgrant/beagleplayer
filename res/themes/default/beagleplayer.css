@@ -20,24 +20,22 @@ padding:2px;
 .track_head {
 margin-left:auto;
 margin-right:auto;
-width:1000px;
 }
 
 #track_title {
-width:1000px;
 font-size:24px;
-margin-left: 30%;
+margin-left: auto;
+margin-right:auto;
 }
 
 .track_seek {
-float:left;
+margin-top: -50px;
 }
 
 .track_buttons {
-margin-top:20px;
+margin-top:5px;
 margin-left: auto;
 margin-right: auto;
-width: 650px;
 }
 
 .track_volume {
@@ -85,10 +83,10 @@ margin-left: auto;
 }
 
 
-
 .player{
 margin-left:auto;
 margin-right:auto;
+width:100%;
 }
 
 :-webkit-full-screen {
@@ -127,8 +125,9 @@ height: 100%;
 }
 video#video{
     display:none;
-    margin-top: -100px;
+    margin-left: -20px;
 }
+video::
 video::-webkit-media-controls-fullscreen-button {}
 video::-webkit-media-controls-play-button {}
 video::-webkit-media-controls-timeline {}

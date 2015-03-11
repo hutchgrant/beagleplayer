@@ -43,11 +43,12 @@ public:
     int totalSecCount, totalMinCount, totalHourCount;
     int overallPos;
     int pl_selected;
-    int PlayingState, PlayMode;
+    int PlayingState, PlayMode, screenMode;
 
     bool detachOpen;
 
     QTimer timer;
+    QSize screenSz;
 
     controls(QWidget *parent = 0);
     virtual ~controls();
@@ -109,6 +110,13 @@ public slots:
         setVol(vol);
     }
     void remoteSeek(int pos);
+
+    void remoteScreenToggle(bool fullscreen){
+        detach->close();
+        screenMode = fullscreen;
+        qDebug() << " remote player toggle fullscreen = " << fullscreen << endl;
+        openPlayer();
+    }
 
     QString getTrack(){
         return  QString(current.getName(CurrentSelect));

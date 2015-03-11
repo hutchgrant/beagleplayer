@@ -15,7 +15,7 @@ public:
 
     string trackName, trackPath;
     int volume, min, max, state, mode;
-    bool songChange;
+    bool songChange, screenMode; // true = full
 
     explicit detached(QWidget *parent = 0);
     virtual ~detached();
@@ -44,6 +44,14 @@ public slots:
     void remoteRange(int max){
         emit remConRange(max);
     }
+    void remotePage(string page);
+
+    void remoteScreen(bool type){
+        this->screenMode = type;
+        qDebug() << "remote type set to " << type <<endl;
+        emit remScreenToggle(type);
+    }
+
 
     /*
      * Object setters
@@ -65,6 +73,10 @@ public slots:
     }
     void setState(int mediaState){
         this->state = mediaState;
+    }
+    void setScreenMode(bool fullscreen){
+        qDebug() << "setting screenMode " << fullscreen << endl;
+        this->screenMode = fullscreen;
     }
 
     /*
@@ -98,13 +110,17 @@ public slots:
     int getState(){
         return this->state;
     }
+    bool getScreenMode(){
+        qDebug() << "getting screenMode " << screenMode << endl;
+        return this->screenMode;
+    }
 
 signals:
     void remConRange(int);
     void remConSeek(int);
     void remConFile(int);
     void remConVol(int);
-
+    void remScreenToggle(bool);
     void detachClose();
 protected:
     void closeEvent(QCloseEvent *event);

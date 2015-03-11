@@ -30,14 +30,17 @@ controls::controls(QWidget *parent) :
 {
     ui->setupUi(this);
     PlayMode = 0;
-    themePath = "";
     curAmount = 0;
     announcedAmount = 0;
     curRange = false;
     announcedRange = false;
-    detachOpen = false;
 
     detach = new detached();
+    detachOpen = false;
+    screenSz = QSize(1024,740);
+    screenMode = false;
+    themePath = "";
+
     current.initFile(100);
 
     vol = new volume(this);
@@ -61,6 +64,7 @@ controls::controls(QWidget *parent) :
     connect(detach, SIGNAL(remConSeek(int)), this, SLOT(remoteSeek(int)));
     connect(detach, SIGNAL(remConFile(int)), this, SLOT(remoteCommand(int)));
     connect(detach, SIGNAL(remConVol(int)), this, SLOT(remoteVolume(int)));
+    connect(detach, SIGNAL(remScreenToggle(bool)), this, SLOT(remoteScreenToggle(bool)));
     connect(detach, SIGNAL(detachClose()), this, SLOT(detachExited()));
 }
 
@@ -199,10 +203,22 @@ void controls::startSelected(){
  */
 void controls::openPlayer(){
     if(!detachOpen){
+        QIcon icon;
         detachOpen = true;
         detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
-        detach->setMinimumSize(QSize(1024, 720));
-        detach->showNormal();
+
+        if(screenMode){
+            screenSz = QSize(2000,1000);
+            detach->setScreenMode(true);
+            detach->showFullScreen();
+        }else{
+            screenSz = QSize(1024,840);
+            detach->setScreenMode(false);
+            detach->showNormal();
+        }
+        detach->setMinimumSize(screenSz);
+        icon.addFile("qrc:///res/beagleplayer_icon.png");
+        detach->setWindowIcon(icon);
         detach->loadFile(themePath.c_str());
     }
 }

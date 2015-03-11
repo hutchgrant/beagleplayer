@@ -29,12 +29,22 @@ detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
     max = 0;
     state = 0;
     songChange = false;
+    screenMode = false;
 
     QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 
     connect(webView()->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), SLOT(addToJavaScript()));
+
+    webView()->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+    webView()->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
 }
+
+void detached::remotePage(string page){
+     QUrl pageUrl(page.c_str());
+     webView()->page()->mainFrame()->setUrl(pageUrl);
+}
+
 
 void detached::addToJavaScript() {
     webView()->page()->mainFrame()->addToJavaScriptWindowObject("detached", this);

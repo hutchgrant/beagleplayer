@@ -31,7 +31,7 @@ jQuery( document ).ready(function($) {
     var hours = 0, minutes= 0, seconds = 0;
     var totalHours= 0, totalMinutes= 0, totalSeconds= 0;
     var videoStarted = false, fullScreened = false, playerVisible = false;
-    var pastPaused = false;
+    var pastPaused = false, originalColor = "", screenMode = false, toggleFull = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
@@ -43,6 +43,7 @@ jQuery( document ).ready(function($) {
     var trackTitle = document.getElementById("track_title");
     var seekTime = document.getElementById("seek_time");
     var seekRange = document.getElementById("seek_range");
+    var playBody = document.getElementsByTagName('body')[0];
 
     var prevButton = document.getElementById('prev');
     var stopButton = document.getElementById('stop');
@@ -52,7 +53,6 @@ jQuery( document ).ready(function($) {
     var fullScreen = document.getElementById('full');
     var openButton = document.getElementById('open');
     var player = document.getElementById('player');
-
      /*
       * Create seek+volume sliders
      */
@@ -184,7 +184,8 @@ jQuery( document ).ready(function($) {
 
         fullScreen.addEventListener("loadedmetadata", goFullscreen, false);
         fullScreen.addEventListener('click', function() {
-            toggleFullScreen();
+            screenMode = true;
+            toggleFullScreen(true);
         }, false);
         openButton.addEventListener('click', function() {
             togglePlayer();
@@ -207,19 +208,25 @@ jQuery( document ).ready(function($) {
     /*
      * Toggle <video> size
      */
-    function toggleFullScreen(){
-        if(!fullScreened){
+    function toggleFullScreen(sendRemote){
+        console.log(screenMode);
+        if(screenMode || toggleFull){
             trackVideo.setAttribute("width", 2000);
-            trackVideo.setAttribute("height", 1000);
-            trackVideo.style.marginLeft = "-45%";
-            trackVideo.style.marginTop = "10px";
-            fullScreened = true;
+            trackVideo.setAttribute("height", 900);
+            originalColor = playBody.style.backgroundColor;
+            playBody.style.backgroundColor = "black";
+            if(sendRemote){
+                detached.remoteScreen(screenMode);
+            }
         }else{
             trackVideo.setAttribute("height", 700);
             trackVideo.setAttribute("width", 1024);
-            fullScreened = false;
             trackVideo.style.marginLeft = "auto";
             trackVideo.style.marginTop = "10px";
+            playBody.style.backgroundColor = originalColor;
+            if(sendRemote){
+                detached.remoteScreen(screenMode);
+            }
         }
     }
     /*
@@ -281,6 +288,8 @@ jQuery( document ).ready(function($) {
     TrackName = detached.getTrack();
     trackTitle.innerHTML = TrackName;
     TrackVolume = detached.getVolume();
+    screenMode = detached.getScreenMode();
+    toggleFullScreen(false);
 
     addEvents();
     createSlider(0,0,TrackRange,seekSlider, seekVal);
