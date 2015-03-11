@@ -155,6 +155,7 @@ void controls::sliderMoved(int pos){
 void controls::playlistControl(){
     string playtime;
     playtime = this->getTimeDisplay(hourCount, minCount, secondCount, totalHourCount, totalMinCount, totalSecCount);
+    ui->trackSlider->setSliderPosition(overallPos);
     if(PlayingState == 1){
         ui->cntrl_time->setText(playtime.c_str());
         if(hourCount >= totalHourCount && minCount >= totalMinCount && secondCount >= totalSecCount && !curRange){

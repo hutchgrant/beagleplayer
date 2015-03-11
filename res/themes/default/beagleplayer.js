@@ -32,7 +32,7 @@ jQuery( document ).ready(function($) {
     var totalHours= 0, totalMinutes= 0, totalSeconds= 0;
     var videoStarted = false, fullScreened = false, playerVisible = false;
     var pastPaused = false, originalColor = "", screenMode = false, toggleFull = false;
-    var displayGUI = false;
+    var displayGUI = false, volumeShowing = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
@@ -55,11 +55,16 @@ jQuery( document ).ready(function($) {
       * Create seek+volume sliders
      */
     function createSlider(init, min, max, sliderName, sliderVal){
-      $( sliderName ).slider({
+        var orientation = "horizontal";
+      if(sliderName === "#vol_slider"){
+          orientation = "vertical";
+     }
+     $( sliderName ).slider({
         range: "min",
         value: init,
         min: min,
         max: max,
+        orientation: orientation,
         slide: function( event, ui ) {
             if(sliderName === "#vol_slider"){
                 detached.remoteVol(ui.value);
@@ -68,6 +73,7 @@ jQuery( document ).ready(function($) {
             }
           $( sliderVal ).val( ui.value );
         }
+
       });
       $( sliderVal ).val( $( sliderName ).slider( "value" ) );
     }
@@ -163,9 +169,6 @@ jQuery( document ).ready(function($) {
             videoStarted = false;  // reload media src
             sendRemoteCmd(5);
         });
-        $('#stop').click(function() {
-            sendRemoteCmd(3);
-        });
         $('#pause').click(function() {
              sendRemoteCmd(2);
         });
@@ -189,6 +192,9 @@ jQuery( document ).ready(function($) {
         });
         $('#open').click(function() {
             togglePlayer();
+        });
+        $('#vol_button').click(function() {
+            toggleVolume();
         });
 
         trackVideo.addEventListener("durationchange", function() {
@@ -225,7 +231,6 @@ jQuery( document ).ready(function($) {
      * Toggle <video> size
      */
     function toggleFullScreen(sendRemote){
-        console.log(screenMode);
         if(screenMode || toggleFull){
             trackVideo.setAttribute("width", 2000);
             trackVideo.setAttribute("height", 1200);
@@ -255,8 +260,20 @@ jQuery( document ).ready(function($) {
             trackVideo.style.display = "block";
             playerVisible = true;
         }else{
-            trackVideo.style.display = "none";
+            trackVideo.style.display = "block";
             playerVisible = false;
+        }
+    }
+    /*
+      * Toggle Volume display
+      */
+    function toggleVolume(){
+        if(!volumeShowing){
+            trackVolume.style.display = "block";
+            volumeShowing = true;
+        }else{
+            trackVolume.style.display = "none";
+             volumeShowing = false;
         }
     }
      /*
@@ -298,9 +315,6 @@ jQuery( document ).ready(function($) {
             range.innerHTML = strHr + ":" + strMin + ":" + strSec;
         }
     }
-     function goFullscreen() {
-         trackVideo.webkitEnterFullscreen();
-     }
     /* INIT */
     TrackPath = detached.getPath();
     TrackName = detached.getTrack();

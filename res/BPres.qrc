@@ -13,6 +13,7 @@
         <file>ADD_icon.png</file>
         <file>OPEN_icon.png</file>
         <file>REMOVE_icon.png</file>
+        <file>VOL_icon.png</file>
     </qresource>
     <qresource prefix="/js">
         <file>html/js/jquery-ui.min.js</file>
