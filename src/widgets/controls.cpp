@@ -212,7 +212,7 @@ void controls::openPlayer(){
             detach->setScreenMode(true);
             detach->showFullScreen();
         }else{
-            screenSz = QSize(1024,840);
+            screenSz = QSize(1024,570);
             detach->setScreenMode(false);
             detach->showNormal();
         }

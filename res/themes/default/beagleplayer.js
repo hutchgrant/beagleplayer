@@ -228,7 +228,9 @@ jQuery( document ).ready(function($) {
         console.log(screenMode);
         if(screenMode || toggleFull){
             trackVideo.setAttribute("width", 2000);
-            trackVideo.setAttribute("height", 1000);
+            trackVideo.setAttribute("height", 1200);
+            trackVideo.style.marginLeft = "-2%";
+            trackVideo.style.marginTop = "10px";
             originalColor = playBody.style.backgroundColor;
             playBody.style.backgroundColor = "black";
             if(sendRemote){

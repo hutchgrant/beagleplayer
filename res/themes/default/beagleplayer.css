@@ -1,7 +1,7 @@
 body {
 margin: 0;
 font-size: 2em;
-background-color: white;
+background-color: black;
 }
 
 .main {
@@ -21,18 +21,21 @@ margin-top: 20px;
 top: 5px;
 left: 200px;
 display:none;
+color:white;
 }
 
 #track_seek {
 display:none;
 position:absolute;
 bottom:4px;
-left:280px;
+left:10px;
+z-index:10;
+color:white;
 }
 
 #track_buttons {
 z-index: 10;
-bottom: 4px;
+bottom: 0px;
 left: 0;
 position: absolute;
 display:none;
@@ -40,18 +43,38 @@ display:none;
 
 .track_button {
 display:inline;
-padding:1px;
+padding:2px;
+ width:32px;
+ min-width:32px;
+ min-height:32px;
 }
 
 .buttons {
  display:inline;
  list-style-type: none;
+ color:red;
+ width:20px;
+}
+
+#pause {
+
+}
+#prev {
+
+}
+#play{
+
+}
+#stop{
+
+}
+#next{
 }
 
 #track_volume {
 width: 100px;
 z-index: 10;
-right: 45px;
+right: 200px;
 bottom: 4px;
 position: absolute;
 display:none;
@@ -88,7 +111,9 @@ font-weight:bold;
 width:40px;
 position: absolute;
 bottom: 0px;
-right: 100px;
+left:200px;
+height:22px;
+background-color:black;
 }
 
 #vol_slider {
@@ -140,7 +165,9 @@ height: 100%;
 }
 video#video{
     display:none;
-    margin-left: -2%;
+    position: absolute;
+    z-index: 1;
+    top: -123px;
 }
 video::
 video::-webkit-media-controls-fullscreen-button {}
