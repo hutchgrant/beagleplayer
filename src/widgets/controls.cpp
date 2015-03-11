@@ -208,7 +208,7 @@ void controls::openPlayer(){
         detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
 
         if(screenMode){
-            screenSz = QSize(2000,1000);
+            screenSz = QSize(1800,1000);
             detach->setScreenMode(true);
             detach->showFullScreen();
         }else{

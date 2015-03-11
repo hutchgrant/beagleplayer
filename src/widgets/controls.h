@@ -114,7 +114,6 @@ public slots:
     void remoteScreenToggle(bool fullscreen){
         detach->close();
         screenMode = fullscreen;
-        qDebug() << " remote player toggle fullscreen = " << fullscreen << endl;
         openPlayer();
     }
 

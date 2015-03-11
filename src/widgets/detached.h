@@ -48,7 +48,6 @@ public slots:
 
     void remoteScreen(bool type){
         this->screenMode = type;
-        qDebug() << "remote type set to " << type <<endl;
         emit remScreenToggle(type);
     }
 
@@ -75,7 +74,6 @@ public slots:
         this->state = mediaState;
     }
     void setScreenMode(bool fullscreen){
-        qDebug() << "setting screenMode " << fullscreen << endl;
         this->screenMode = fullscreen;
     }
 
@@ -111,7 +109,6 @@ public slots:
         return this->state;
     }
     bool getScreenMode(){
-        qDebug() << "getting screenMode " << screenMode << endl;
         return this->screenMode;
     }
 

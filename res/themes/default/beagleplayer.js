@@ -32,6 +32,7 @@ jQuery( document ).ready(function($) {
     var totalHours= 0, totalMinutes= 0, totalSeconds= 0;
     var videoStarted = false, fullScreened = false, playerVisible = false;
     var pastPaused = false, originalColor = "", screenMode = false, toggleFull = false;
+    var displayGUI = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
@@ -41,17 +42,14 @@ jQuery( document ).ready(function($) {
     var trackSource = document.getElementById("source");
 
     var trackTitle = document.getElementById("track_title");
+    var trackButtons = document.getElementById("track_buttons");
+    var trackVolume = document.getElementById("track_volume");
+    var trackSeek = document.getElementById("track_seek");
+
     var seekTime = document.getElementById("seek_time");
     var seekRange = document.getElementById("seek_range");
     var playBody = document.getElementsByTagName('body')[0];
 
-    var prevButton = document.getElementById('prev');
-    var stopButton = document.getElementById('stop');
-    var pauseButton = document.getElementById('pause');
-    var playButton = document.getElementById('play');
-    var nextButton = document.getElementById('next');
-    var fullScreen = document.getElementById('full');
-    var openButton = document.getElementById('open');
     var player = document.getElementById('player');
      /*
       * Create seek+volume sliders
@@ -138,6 +136,7 @@ jQuery( document ).ready(function($) {
         trackVideo.setAttribute("src",TrackPath);
         if(parseInt(TrackMode) === 0){
             trackVideo.setAttribute("type","audio/mp3");
+            showGUI();
         }else{
             trackVideo.setAttribute("type","video/mp4");
             playerVisible = false;
@@ -160,45 +159,62 @@ jQuery( document ).ready(function($) {
      * Add event listeners to our buttons and player
      */
     function addEvents(){
-        prevButton.addEventListener('click', function() {
+        $('#prev').click(function() {
             videoStarted = false;  // reload media src
             sendRemoteCmd(5);
-        }, false);
-
-        pauseButton.addEventListener('click', function() {
-            sendRemoteCmd(2);
-        }, false);
-
-        stopButton.addEventListener('click', function() {
+        });
+        $('#stop').click(function() {
             sendRemoteCmd(3);
-        }, false);
-
-        playButton.addEventListener('click', function() {
+        });
+        $('#pause').click(function() {
+             sendRemoteCmd(2);
+        });
+        $('#play').click(function() {
             sendRemoteCmd(1);
-        }, false);
-
-        nextButton.addEventListener('click', function() {
+        });
+        $('#next').click(function() {
             videoStarted = false;  // reload media src
             sendRemoteCmd(4);
-        }, false);
-
-        fullScreen.addEventListener("loadedmetadata", goFullscreen, false);
-        fullScreen.addEventListener('click', function() {
-            screenMode = true;
+        });
+        $('#full').click(function() {
+            if(!screenMode){
+                screenMode = true;
+            }else{
+                screenMode = false;
+            }
             toggleFullScreen(true);
-        }, false);
-        openButton.addEventListener('click', function() {
+        });
+        $('#video').click(function() {
+               showGUI();
+        });
+        $('#open').click(function() {
             togglePlayer();
-        }, false);
+        });
 
-        trackVideo.addEventListener("pause", function() {
-           ///  sendRemoteCmd(2);
-        }, false);
         trackVideo.addEventListener("durationchange", function() {
             TrackRange = trackVideo.duration;
              detached.remoteRange(trackVideo.duration);
         }, false);
     }
+    /*
+      *
+      */
+    function showGUI(){
+        if(!displayGUI){
+            trackTitle.style.display = "block";
+            trackButtons.style.display = "block";
+            trackVolume.style.display = "block";
+            trackSeek.style.display = "block";
+            displayGUI = true;
+        }else{
+            trackTitle.style.display = "none";
+            trackButtons.style.display = "none";
+            trackVolume.style.display = "none";
+            trackSeek.style.display = "none";
+            displayGUI = false;
+        }
+    }
+
     /*
      * Send Remote signals to qt widget
      */
@@ -212,14 +228,14 @@ jQuery( document ).ready(function($) {
         console.log(screenMode);
         if(screenMode || toggleFull){
             trackVideo.setAttribute("width", 2000);
-            trackVideo.setAttribute("height", 900);
+            trackVideo.setAttribute("height", 1000);
             originalColor = playBody.style.backgroundColor;
             playBody.style.backgroundColor = "black";
             if(sendRemote){
                 detached.remoteScreen(screenMode);
             }
         }else{
-            trackVideo.setAttribute("height", 700);
+            trackVideo.setAttribute("height", 800);
             trackVideo.setAttribute("width", 1024);
             trackVideo.style.marginLeft = "auto";
             trackVideo.style.marginTop = "10px";

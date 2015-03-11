@@ -21,7 +21,7 @@
             <div class="player">
                 <video id="video" width="1024" height="768" style="margin-left: 0px; display: block;"></video>
             </div>
-            <div class="track_seek">
+            <div id="track_seek">
                 <div class="container">
                     <div class="row">
                         <div id="range">
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="track_buttons">
+        <div id="track_buttons">
             <ul class="buttons">
                <li class="track_button"><button id="prev">Prev</button></li>
                <li class="track_button"><button id="stop">Stop</button></li>
@@ -49,10 +49,10 @@
              <li class="track_button"><button id="full" >FullScreen</button></li>
             </ul>
         </div>
-        <div class="track_foot"></div>
-               <div class="track_volume">
+        <div class="track_foot">
+               <div id="track_volume">
                  <p>
-                   <label for="vol_amount">Volume:</label>
+                   <label for="vol_amount"></label>
                    <input type="text" id="vol_amount" readonly>
                  </p>
                  <div id="vol_slider"></div>

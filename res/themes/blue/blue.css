@@ -4,16 +4,6 @@ font-size: 2em;
 background-color: blue;
 }
 
-.track_button {
-display:inline;
-padding:2px;
-}
-
-.buttons {
- display:inline;
- list-style-type: none;
-}
-
 .main {
 }
 
@@ -24,26 +14,48 @@ margin-right:auto;
 
 #track_title {
 font-size:24px;
-margin-left: auto;
-margin-right:auto;
-color:white
-}
-
-.track_seek {
-margin-top: -50px;
-}
-
-.track_buttons {
-margin-top:5px;
-margin-left: auto;
-margin-right: auto;
-}
-
-.track_volume {
+z-index: 20;
+padding: 0px;
+position: absolute;
 margin-top: 20px;
-width: 400px;
-margin-left: auto;
-margin-right: auto;
+top: 5px;
+left: 200px;
+display:none;
+color: white;
+}
+
+#track_seek {
+display:none;
+position:absolute;
+bottom:4px;
+left:280px;
+}
+
+#track_buttons {
+z-index: 10;
+bottom: 4px;
+left: 0;
+position: absolute;
+display:none;
+}
+
+.track_button {
+display:inline;
+padding:1px;
+}
+
+.buttons {
+ display:inline;
+ list-style-type: none;
+}
+
+#track_volume {
+width: 100px;
+z-index: 10;
+right: 45px;
+bottom: 4px;
+position: absolute;
+display:none;
 }
 
 #seek_amount {
@@ -65,7 +77,6 @@ margin-right: auto;
 #seek_divide{
 }
 #range{
-	color:white;
     width:300px;
     margin-left: auto;
     margin-right: auto;
@@ -76,6 +87,9 @@ border:0;
 color:#f6931f;
 font-weight:bold;
 width:40px;
+position: absolute;
+bottom: 0px;
+right: 100px;
 }
 
 #vol_slider {
@@ -127,7 +141,7 @@ height: 100%;
 }
 video#video{
     display:none;
-    margin-left: -20px;
+    margin-left: -2%;
 }
 video::
 video::-webkit-media-controls-fullscreen-button {}
