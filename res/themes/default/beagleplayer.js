@@ -32,7 +32,7 @@ jQuery( document ).ready(function($) {
     var totalHours= 0, totalMinutes= 0, totalSeconds= 0;
     var videoStarted = false, fullScreened = false, playerVisible = false;
     var pastPaused = false, originalColor = "", screenMode = false, toggleFull = false;
-    var displayGUI = false, volumeShowing = false;
+    var displayGUI = false, volumeShowing = false, ignoreRange = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
@@ -109,9 +109,9 @@ jQuery( document ).ready(function($) {
                   pastPaused = false;
               }
 
-              if(parseInt(TrackPos) - trackVideo.currentTime > 0){
+              if(parseInt(TrackPos) - trackVideo.currentTime > 2 && trackVideo.currentTime > 0){
                   moveSlider = true;
-              }else if(parseInt(TrackPos) - trackVideo.currentTime < -2){
+              }else if(parseInt(TrackPos) - trackVideo.currentTime < -2  && trackVideo.currentTime > 0){
                   moveSlider = true;
               }
           }
@@ -139,10 +139,14 @@ jQuery( document ).ready(function($) {
      * Load the media file into the <video> tag, initialize player
      */
     function loadAndStart(){
+        ignoreRange = false;
         trackVideo.setAttribute("src",TrackPath);
-        if(parseInt(TrackMode) === 0){
+        if(parseInt(TrackMode) === 0 || parseInt(TrackMode) === 2){
             trackVideo.setAttribute("type","audio/mp3");
             showGUI();
+            if(TrackMode === 2){
+                ignoreRange = true;
+            }
         }else{
             trackVideo.setAttribute("type","video/mp4");
             playerVisible = false;
@@ -320,7 +324,8 @@ jQuery( document ).ready(function($) {
     * Control the playlist, prev/next
     */
     function controlPlaylist(){
-        if(trackVideo.currentTime >= TrackRange && TrackRange > 1){
+        if(trackVideo.currentTime >= TrackRange && TrackRange > 1 && !ignoreRange){
+            // seek to the next song, if their is a range, if range isn't being ignored
             videoStarted = false;  // reload media src
             sendRemoteCmd(4);
         }
