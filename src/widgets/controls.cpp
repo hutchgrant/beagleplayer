@@ -133,7 +133,7 @@ void controls::rangeChange(int max){
     totalHourCount = totalMinCount / 60;
 
     totalMinCount = totalMinCount - (totalHourCount *60);
-    totalSecCount = max - (totalMinCount * 60);
+    totalSecCount = (max - (totalMinCount * 60) -((totalHourCount *60)*60)) ;
     ui->trackSlider->setRange(0, max);
 }
 
@@ -145,7 +145,7 @@ void controls::sliderMoved(int pos){
     hourCount = minCount / 60;
 
     minCount = minCount - (hourCount *60);
-    secondCount = pos - (minCount * 60);
+    secondCount = (pos - (minCount * 60) -((hourCount *60)*60));
     overallPos = pos;
 }
 
@@ -227,12 +227,7 @@ void controls::setCurList(fileObj &newList, int *newIDlist, int amount, bool ran
 
 ////  slot for seeking from detached track slider
 void controls::remoteSeek(int pos){
-    minCount = pos / 60;
-    hourCount = minCount / 60;
-
-    minCount = minCount - (hourCount *60);
-    secondCount = pos - (minCount * 60);
-    overallPos = pos;
+    sliderMoved(pos);
     ui->trackSlider->setSliderPosition(overallPos);
 }
 

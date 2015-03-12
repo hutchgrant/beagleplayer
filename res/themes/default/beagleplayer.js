@@ -298,7 +298,7 @@ jQuery( document ).ready(function($) {
             totalHours = (parseInt(totalMinutes) / 60);
 
             totalMinutes = parseInt(totalMinutes - (parseInt(totalHours) * 60));
-            totalSeconds = parseInt(pos - (parseInt(totalMinutes) * 60));
+            totalSeconds = (parseInt(pos - (parseInt(totalMinutes) * 60)) - ((parseInt(totalHours) *60)*60));
 
             var strSec = "", strMin = "", strHr = "";
             if(parseInt(totalSeconds) < 10){
