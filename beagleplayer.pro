@@ -11,11 +11,6 @@ TEMPLATE = app
 
 greaterThan(QT_MAJOR_VERSION, 4):QT += widgets webkitwidgets
 
-# Add more folders to ship with the application, here
-# folder_01.source = src/html
-# folder_01.target = .
-# DEPLOYMENTFOLDERS = folder_01
-
 # Define TOUCH_OPTIMIZED_NAVIGATION for touch optimization and flicking
 #DEFINES += TOUCH_OPTIMIZED_NAVIGATION
 
@@ -68,3 +63,19 @@ FORMS    += src/control/beaglemain.ui \
 
 RESOURCES += \
     res/BPres.qrc
+
+documentation.files = docs/*
+documentation.path = /opt/extras.ubuntu.com/beagleplayer/docs
+sources.files = src/*
+sources.path = /opt/extras.ubuntu.com/beagleplayer/src
+target.path = /opt/extras.ubuntu.com/beagleplayer
+other.files = ./*
+other.path = /opt/extras.ubuntu.com/beagleplayer/release
+res.files = res/*
+res.path = /opt/extras.ubuntu.com/beagleplayer/res
+
+INSTALLS += target \
+            sources \
+            documentation \
+            other \
+            res
