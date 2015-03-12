@@ -1,4 +1,4 @@
-# Beagleplayer 0.1.4
+# Beagleplayer 0.1.5
 An audio, video, radio, playlist, client, for mplayer. Beagleplayer is ideal for: quick, easy, browsing of your media library.
 
 ## Table of contents
@@ -14,10 +14,10 @@ An audio, video, radio, playlist, client, for mplayer. Beagleplayer is ideal for
 
 ```bash
 # Recommended with Qt5
-$ sudo apt-get install mplayer libqt5network5 libsqlite3-dev qtbase5-dev qt5-qmake libqt5opengl5-dev g++ qt5-default libqt5webkit5 libqt5webkit5-dev
+$ sudo apt-get install qt5-default libqt5webkit5 libqt5webkit5-dev
 
 # optionally with Qt4
-$  sudo apt-get install mplayer libqt4-dev libqt4-opengl libqt4-opengl-dev libqt4-network libqt4-sql libqt4-sql-sqlite gcc g++ make qt4-qmake libqt4-webkit
+$  sudo apt-get install libqt4-dev libqt4-network libqt4-sql libqt4-sql-sqlite gcc g++ make qt4-qmake libqt4-webkit
 ```
 This was built and tested in Ubuntu 14.04. Debian based distributions should be able to run without issue.  Minor modifications necessary, to cache path, for other Linux based systems.
 
@@ -36,7 +36,6 @@ beagleplayer/
 │   ├── control
 │   ├── html5applicationviewer
 │   ├── object
-│   ├── qmpwidget
 │   └── widgets
 ├── debian/
 └── docs/
@@ -46,30 +45,26 @@ beagleplayer/
 ```
 
 ##Compile and Run
-1. download and extract beagleplayer.v.0.1.4.tar.gz 
+- download and extract beagleplayer.v.0.1.4.tar.gz 
 ```bash
 $ wget https://github.com/hutchgrant/beagleplayer/archive/master.zip
 $ cd ~/Downloads
 $  tar -zxvf beagleplayer*.tar.gz 
 ```
-2. Or install git and clone
+- Or install git and clone
 ```bash
 $ sudo apt-get install git
 $ git clone https://github.com/hutchgrant/beagleplayer.git
 ```
-3. Compile
+- Compile
 ```bash
  $ cd ./beagleplayer
  $ qmake 
  $ make
 ```
-4. Run the compiled binary with
+- Run the compiled binary with
 ```bash
  $ ./beagleplayer
-```
-5. Recommended you link it in your /usr/bin folder.
-```
-$ sudo ln -s ./beagleplayer /usr/bin/beagleplayer
 ```
 
 ##Themes
@@ -83,8 +78,8 @@ A theme consist of:
 * yourtheme.css
 * yourtheme.png
 
-For an example of a .theme file see the default theme
-For an example of a .html and .css theme check the [default](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/default/default.theme) or [blue](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/blue/blue.html) themes.
+- For an example of a .theme file see the default theme
+- For an example of a .html and .css theme check the [default](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/default/default.theme) or [blue](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/blue/blue.html) themes.
 
 ##Contributing
 

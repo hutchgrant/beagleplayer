@@ -26,7 +26,7 @@ cache::cache()
 {
     cache_dir = "/.cache/beagleplayer2/";
     cache_dir = getenv("HOME") + cache_dir;
-    db_file = cache_dir + "test.db";
+    db_file = cache_dir + "beagle.db";
     locate_file = cache_dir + "cache_locate.txt";
 }
 /*
