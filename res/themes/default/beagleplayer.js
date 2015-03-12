@@ -109,9 +109,9 @@ jQuery( document ).ready(function($) {
                   pastPaused = false;
               }
 
-              if(parseInt(TrackPos) - trackVideo.currentTime >= 2){
+              if(parseInt(TrackPos) - trackVideo.currentTime > 0){
                   moveSlider = true;
-              }else if(parseInt(TrackPos) - trackVideo.currentTime <= -2){
+              }else if(parseInt(TrackPos) - trackVideo.currentTime < -2){
                   moveSlider = true;
               }
           }
@@ -313,8 +313,19 @@ jQuery( document ).ready(function($) {
                 strHr = parseInt(totalHours);
             }
             range.innerHTML = strHr + ":" + strMin + ":" + strSec;
+            controlPlaylist();
         }
     }
+    /*
+    * Control the playlist, prev/next
+    */
+    function controlPlaylist(){
+        if(trackVideo.currentTime >= TrackRange && TrackRange > 1){
+            videoStarted = false;  // reload media src
+            sendRemoteCmd(4);
+        }
+    }
+
     /* INIT */
     TrackPath = detached.getPath();
     TrackName = detached.getTrack();

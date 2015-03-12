@@ -155,21 +155,9 @@ void controls::sliderMoved(int pos){
 void controls::playlistControl(){
     string playtime;
     playtime = this->getTimeDisplay(hourCount, minCount, secondCount, totalHourCount, totalMinCount, totalSecCount);
-    ui->trackSlider->setSliderPosition(overallPos);
     if(PlayingState == 1){
         ui->cntrl_time->setText(playtime.c_str());
-        if(hourCount >= totalHourCount && minCount >= totalMinCount && secondCount >= totalSecCount && !curRange){
-            timer.stop();
-            CurrentSelect++;
-            if(CurrentSelect < curAmount){
-                startSelected();
-                PlayingState = 1;
-            }else{
-                PlayingState = 3;
-            }
-        }else{
-            PlayingState = 1;
-        }
+        ui->trackSlider->setSliderPosition(overallPos);
     }else{
         timer.stop();
         PlayingState = 3;
@@ -278,6 +266,8 @@ void controls::on_NEXT_clicked()
          CurrentSelect++;
         startSelected();
         PlayingState = 1;
+        timer.stop();
+        timer.start(1000);
         emit remConState(PlayingState);
     }
 }
@@ -288,6 +278,8 @@ void controls::on_PREV_clicked()
              CurrentSelect--;
              startSelected();
              PlayingState = 1;
+             timer.stop();
+             timer.start(1000);
              emit remConState(PlayingState);
      }
 }
