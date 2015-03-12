@@ -14,7 +14,7 @@ An audio, video, radio, playlist, client, for mplayer. Beagleplayer is ideal for
 
 ```bash
 # Recommended with Qt5
-$ sudo apt-get install qt5-default libqt5webkit5 libqt5webkit5-dev
+$ sudo apt-get install qt5-default libqt5webkit5-dev
 
 # optionally with Qt4
 $  sudo apt-get install libqt4-dev libqt4-network libqt4-sql libqt4-sql-sqlite gcc g++ make qt4-qmake libqt4-webkit
