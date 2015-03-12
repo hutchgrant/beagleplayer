@@ -96,11 +96,6 @@ void browse::Sync(int type){
  * Sync all Objects from cache
  */
 void browse::syncCache(){
-    Artist = fileObj();
-    Song = fileObj();
-    VidDir = fileObj();
-    Video =  fileObj();
-    Radio =  fileObj();
     Artist.initFile(100); Song.initFile(100); VidDir.initFile(100); Video.initFile(100), Radio.initFile(10), RadioCat.initFile(10);
     dbCon->readAll(Artist, Song, VidDir, Video);/// read from local database and sync to local objects
     dbCon->readDB(Radio, "radios");

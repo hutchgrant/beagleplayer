@@ -33,14 +33,14 @@ cache::cache()
  * Destructor
  */
 cache::~cache(){
-
+    closeDB();
 }
 
 /*
  * Open SQLite DB
  */
 void cache::openDB(){
-   this->db = QSqlDatabase::addDatabase("QSQLITE", "beagle_cache");
+    this->db = QSqlDatabase::addDatabase("QSQLITE", "beagle_cache");
    this->db.setDatabaseName(db_file.c_str());
 }
 
@@ -56,13 +56,19 @@ void cache::closeDB(){
 /*
  * Initialize DB cache from text file, ensure tables are written
  */
-void cache::init(){
+bool cache::init(){
     if(!initDB()){
         createCache();
-        setInitDB();
-        if(initDB()){
-            addTables();
+        if(setInitDB()){
+            if(initDB()){
+              addTables();
+              addTheme();
+              return true;
+            }
         }
+        return false;
+    }else{
+        return true;
     }
 }
 
@@ -125,15 +131,16 @@ int cache::lastInsertID(){
  *  Read from table to object
  */
 void cache::readDB(fileObj &file, string type){
-    stringstream os;
-    int fileCount = 0;
-    string fileName = "", filePath = "";
-    openDB();
-    if(this->db.open()){
-        os << "SELECT * FROM "<< type << endl;
-        QSqlQuery myQry(db);
-        myQry.prepare(os.str().c_str());
-        myQry.exec();
+   stringstream os;
+   int fileCount = 0;
+   string fileName = "", filePath = "";
+   openDB();
+   if(this->db.open()){
+       os << "SELECT * FROM "<< type << endl;
+       QSqlQuery myQry(db);
+       myQry.prepare(os.str().c_str());
+
+       if(myQry.exec() != 0 ){
         while (myQry.next()){
             fileName = unsanitizeName(myQry.value(2).toString());
             filePath = unsanitizeName(myQry.value(3).toString());
@@ -141,9 +148,10 @@ void cache::readDB(fileObj &file, string type){
             file.set(fileCount, myQry.value(0).toInt(), myQry.value(1).toInt(), fileName.c_str(), filePath.c_str());
             fileCount++;
         }
-        this->db.close();
-        closeDB();
-    }
+       }
+       this->db.close();
+      closeDB();
+   }
 }
 
 /*
@@ -179,10 +187,8 @@ void cache::removeFrom(int key, string table, bool parent){
 /*
  *  Add Initial Tables
  */
-void cache::addTables(){
-    openDB();
-    this->db.open();
-    string finalQry[8];
+bool cache::addTables(){
+    string finalQry[9];
     finalQry[0] = "create table songdirs (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
     finalQry[1] = "create table songs (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
     finalQry[2] = "create table viddirs (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
@@ -193,11 +199,29 @@ void cache::addTables(){
     finalQry[7] = "create table radios (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
     finalQry[8] = "create table theme (key INTEGER PRIMARY KEY,dir_par integer,dir_name TEXT,dir_path TEXT)";
 
-    for(int i=0; i<9; i++){
-        writeMe(finalQry[i]);
-     }
-    this->db.close();
-    closeDB();
+
+    openDB();
+    if(this->db.open()){
+        QSqlQuery myQry(db);
+        for(int i=0; i<9; i++){
+            myQry.prepare(finalQry[i].c_str());
+            myQry.exec();
+         }
+        this->db.close();
+        closeDB();
+    }
+    return true;
+
+}
+
+bool cache::addTheme(){
+    fileObj addTheme;
+    addTheme.initFile(100);
+    addTheme.set(0,0,0,"default", QDir::current().absolutePath().append("/res/themes/default/default.theme").toStdString().c_str());
+    if(writeDB(&addTheme, "theme") >=0){
+        return true;
+    }
+    return false;
 }
 
 /*
@@ -226,30 +250,25 @@ int cache::updateDB(fileObj *file, string type){
  *  Locate cache and read text file in order to locate cache db, if it moved.
  */
 bool cache::initDB(){
-   bool found = false;
-   char PrefIn[100];
-   FILE* fp;
-   string Cache = locate_file;
-   fp = fopen(Cache.c_str(), "r");   /// open cached db location
-   if(fp != NULL){
-       cout << "cache found " << endl;
-       rewind(fp);
-       while(!feof(fp)){
-           fscanf(fp, "%s", &PrefIn);
-           found = true;
-       }
-   }
-   else{
+    QFile file(locate_file.c_str());
+    string dbFile = "";
+    bool exit = false, found = false;
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        while(!in.atEnd()){
+            db_file = in.readLine().toStdString();
+            found = true;
+        }
+        file.close();
+    }else{
        return false;
    }
 
    if(found){   // if the db (listed in this text cache) exists
-       db_file = PrefIn;  /// set SQL location
-       fclose(fp);
        return true;
    }
    else{
-       fclose(fp);
        return false;
    }
 }
@@ -257,13 +276,13 @@ bool cache::initDB(){
 /*
  *   Initialize text file to hold caches location if it moves.  This file must stay in a static location
  */
-void cache::setInitDB(){
+bool cache::setInitDB(){
    ofstream myfile;
    string cache = locate_file;
-   qDebug() << "writing db : " << db_file.c_str() << " to file " << locate_file.c_str();
    myfile.open (cache.c_str());
    myfile << db_file.c_str();
    myfile.close();
+   return true;
 }
 
 /*

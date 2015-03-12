@@ -41,6 +41,8 @@ playlist::playlist(QWidget *parent) :
     tempPath = "";
     tempTrack = "";
     PLMODE = 0;
+    pListSelect = 0;
+    pItemSelect = 0;
 
     ui->setupUi(this);
 }

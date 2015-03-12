@@ -10,6 +10,10 @@ beaglemain::beaglemain(QWidget *parent) :
 {
     ui->setupUi(this);
     addWidgets();
+
+    /// Appearance (theme)
+    connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
+
     initCache();
     connectSignals();
     ui->menuBar->show();
@@ -21,6 +25,10 @@ beaglemain::beaglemain(QWidget *parent) :
 beaglemain::~beaglemain()
 {
     delete ui;
+    delete brow;
+    delete playlst;
+    delete aBout;
+    delete theme;
 }
 
 /*
@@ -43,15 +51,13 @@ void beaglemain::addWidgets(){
  */
 void beaglemain::initCache(){
 
-    /// Appearance (theme)
-    connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
+    if(dbCache.init()){
+        brow->initCache(&dbCache);
+        playlst->initCache(&dbCache);
+        theme->init(&dbCache);
 
-    dbCache.init();  /// determine db location, if exists, if not create it
-    brow->initCache(&dbCache);
-    playlst->initCache(&dbCache);
-    theme->init(&dbCache);
-
-    brow->Sync(1);  /// initialize and fill DB cache objects
+        brow->Sync(1);  /// initialize and fill DB cache objects
+    }
 }
 
 /*
@@ -90,7 +96,7 @@ void beaglemain::connectSignals(){
       connect(ui->actionAppearance, SIGNAL(triggered()), this, SLOT(themeDialog()));
 
       /// refresh and change theme
-      connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
+     connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
 
 }
 

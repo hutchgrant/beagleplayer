@@ -43,9 +43,9 @@ public:
     fileObj pList, pListItems;
     fileObj pNewList, pNewItems;
 
-    int PLMODE = 0, pListSelect = 0, pItemSelect = 0;
+    int PLMODE, pListSelect, pItemSelect;
     int *curPLlist;
-    string tempTrack = "", tempPath = "";
+    string tempTrack, tempPath;
     int tempPar, tempID;
 
     explicit playlist(QWidget *parent = 0);

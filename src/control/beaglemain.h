@@ -33,11 +33,11 @@ private slots:
      */
     void importAudio(){
         changeMode(0);
-        brow->Sync(2);  /// import video dialog
+        brow->Sync(2);  /// import audio dialog
     }
     void importVideo(){
         changeMode(1);
-        brow->Sync(3); /// import audio dialog
+        brow->Sync(3); /// import video dialog
     }
     void openFile(){
         brow->Sync(0);
@@ -60,8 +60,6 @@ private slots:
 private:
     Ui::beaglemain *ui;
     browse *brow;
-    browse *brow2;
-    browse *brow3;
 
     playlist *playlst;
     controls *cntrl;

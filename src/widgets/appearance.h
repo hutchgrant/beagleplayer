@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QFileDialog>
 #include <QAbstractButton>
+#include <QGraphicsScene>
 #include "src/cache/cache.h"
 
 namespace Ui {
@@ -16,6 +17,7 @@ class appearance : public QDialog
 
 public:
     int selectTheme, defaultTheme;
+    cache *cah;
 
     explicit appearance(QWidget *parent = 0);
     ~appearance();
@@ -34,8 +36,6 @@ public slots:
     void init(cache *dbcon){
         cah = dbcon;
         setCurrent();
-        getThemes();
-        fillThemes();
     }
 
 private slots:
@@ -47,10 +47,8 @@ signals:
 
 private:
     Ui::appearance *ui;
-    cache *cah;
     fileObj themes;
     QStringListModel *t_Model;
-
 };
 
 #endif // APPEARANCE_H

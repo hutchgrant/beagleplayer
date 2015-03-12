@@ -22,11 +22,12 @@ public:
     void openDB();
     void closeDB();
 
-    void init();
+    bool init();
 
-    void addTables();
+    bool addTables();
+    bool addTheme();
     bool initDB();
-    void setInitDB();
+    bool setInitDB();
     void createCache();
 
     int writeMe(string qry);

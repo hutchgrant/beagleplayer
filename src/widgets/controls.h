@@ -127,8 +127,6 @@ public slots:
         if(sub == "theme"){
             path.replace(path.end()-5, path.end(), "html");
             themePath = path;
-            detach->close();
-            openPlayer();
         }else{
             path.replace(path.end()-3, path.end(), "html");
         }

@@ -28,7 +28,6 @@ appearance::appearance(QWidget *parent) :
     ui(new Ui::appearance)
 {
     ui->setupUi(this);
-    themes = fileObj();
     themes.initFile(100);
     selectTheme = 0;
     defaultTheme = 0;
@@ -38,6 +37,8 @@ appearance::appearance(QWidget *parent) :
  *  Get all themes from ./themes folder
  */
 void appearance::getThemes(){
+    themes = fileObj();
+    themes.initFile(100);
     int themeCount = 0;
     int count = 0;
     fileObj themeDir;
@@ -66,13 +67,12 @@ void appearance::getThemes(){
  *  Set the selected theme's image to the appearance display
  */
 void appearance::setThemeImg(string imgPath){
-    QGraphicsScene *scn = new QGraphicsScene(ui->graphicsView);
+  /*  scn = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene( scn );
-
-    QPixmap someImage(imgPath.c_str());
+    someImage = QPixmap(imgPath.c_str());
     scn->setSceneRect(0,0,0,0);
     scn->addPixmap(someImage);
-    ui->graphicsView->show();
+    ui->graphicsView->show(); */
 }
 
 /*
@@ -95,13 +95,14 @@ void appearance::parseTheme(string filename){
             count++;
         }
         file.close();
+        ui->theme_selected->setText(strings.at(0));
+        ui->theme_author->setText(strings.at(2));
+        ui->theme_version->setText(strings.at(3));
+        ui->theme_title->setText(strings.at(1));
+        ui->theme_date->setText(strings.at(4));
+        ui->theme_desc->setText(strings.at(5));
     }
-    ui->theme_selected->setText(strings.at(0));
-    ui->theme_author->setText(strings.at(2));
-    ui->theme_version->setText(strings.at(3));
-    ui->theme_title->setText(strings.at(1));
-    ui->theme_date->setText(strings.at(4));
-    ui->theme_desc->setText(strings.at(5));
+
 }
 
 /*
@@ -164,17 +165,16 @@ void appearance::apply(string file, string path){
  */
 void appearance::setCurrent(){
     string path = "";
+    qDebug() << "reading themes " << endl;
     cah->readDB(themes, "theme");
     if(themes.getSize() == 0){
         if(createDefaultTheme()){
             cah->readDB(themes, "theme");
         }
+    }else{
+        path = themes.getPath(defaultTheme);
+        emit themeChanged(path);
     }
-    path = themes.getPath(defaultTheme);
-    parseTheme(path);
-    path = path.replace(path.end()-5, path.end(),"png");
-    setThemeImg(path);
-    emit themeChanged(path);
 }
 
 /*
