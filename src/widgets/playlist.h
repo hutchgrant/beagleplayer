@@ -76,7 +76,7 @@ public slots:
 
 
 signals:
-    void playlistChanged(fileObj &plItem, int * plItemList, int amt, bool ignoreRange, int mode);
+    void playlistChanged(int, fileObj &plItem, int * plItemList, int amt, bool ignoreRange, int mode);
     void playlistSelection(int selected);
     void playlistFullSelection(int selected);
 

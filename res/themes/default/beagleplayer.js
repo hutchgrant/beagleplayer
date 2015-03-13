@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 jQuery( document ).ready(function($) {
-
     var TrackName = "";
     var TrackPath = "";
     var TrackPos = 0;
@@ -33,6 +32,7 @@ jQuery( document ).ready(function($) {
     var videoStarted = false, fullScreened = false, playerVisible = false;
     var pastPaused = false, originalColor = "", screenMode = false, toggleFull = false;
     var displayGUI = false, volumeShowing = false, ignoreRange = false;
+    var playlistShowing = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
@@ -51,6 +51,10 @@ jQuery( document ).ready(function($) {
     var playBody = document.getElementsByTagName('body')[0];
 
     var player = document.getElementById('player');
+    var playlist = document.getElementsByClassName('playlist')[0];
+    var playlistList = document.getElementById('playlist_table');
+    var playlistItem = document.getElementsByClassName('playlist_item');
+
      /*
       * Create seek+volume sliders
      */
@@ -200,6 +204,9 @@ jQuery( document ).ready(function($) {
         $('#vol_button').click(function() {
             toggleVolume();
         });
+        $('#playlist').click(function() {
+            togglePlaylist();
+        });
 
         trackVideo.addEventListener("durationchange", function() {
             TrackRange = trackVideo.duration;
@@ -269,6 +276,19 @@ jQuery( document ).ready(function($) {
         }
     }
     /*
+     * Toggle Playlist display
+     */
+    function togglePlaylist(){
+        if(!playlistShowing){
+            playlist.style.display = "inline";
+            playlistShowing = true;
+        }else{
+            playlist.style.display = "none";
+            playlistShowing = false;
+        }
+    }
+
+    /*
       * Toggle Volume display
       */
     function toggleVolume(){
@@ -330,6 +350,38 @@ jQuery( document ).ready(function($) {
             sendRemoteCmd(4);
         }
     }
+    /*
+    * Display Playlist
+    */
+    function displayPlaylist(){
+        var row = [], cell1 = [];
+        var counter = 0;
+        for(var x=0; x<fileobj.getSize(); x++){
+            if(parseInt(fileobj.getPar(x)) === parseInt(detached.getSelectedDirID())){
+                track = "<p id='track_" +x + "'>" +fileobj.getQStrName(x) + "</p>";
+                console.log("track = " + track);
+                row[x] = playlistList.insertRow(0);
+                cell1[x] = row[x].insertCell(0);
+                cell1[x].innerHTML = track;
+                cell1[x].setAttribute("class", fileobj.getID(x));
+                cell1[x].setAttribute("id", counter);
+                cell1[x].onclick=function(){playlistSelection(this)};
+                counter++;
+            }
+        }
+    }
+    /*
+     * Determine which playlist item was selected, send signal to player
+     */
+    function playlistSelection(x){
+        var trackID = x.getAttribute("class");
+        var trackNum = x.getAttribute("id");
+        var trackName = x.textContent;
+
+        x.style.color = "blue";
+
+        detached.remoteTrack(trackNum);
+    }
 
     /* INIT */
     TrackPath = detached.getPath();
@@ -342,6 +394,7 @@ jQuery( document ).ready(function($) {
     addEvents();
     createSlider(0,0,TrackRange,seekSlider, seekVal);
     createSlider(TrackVolume,0,100,volSlider, volVal);
+    displayPlaylist();
 
     var timer=setInterval(function () {checkWidget()}, 500);
 });

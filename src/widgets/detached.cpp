@@ -19,7 +19,11 @@
  */
 #include "detached.h"
 #include <QtNetwork>
+#include <QWebHistory>
 
+/*
+ *  Constructor
+ */
 detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
 {
     trackName = "";
@@ -30,6 +34,12 @@ detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
     state = 0;
     songChange = false;
     screenMode = false;
+    wTheme = "";
+    wPath = "";
+    curRange = false;
+    curAmount = 0;
+    current = new fileObj();
+    current->initFile(100);
 
     QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
@@ -40,20 +50,46 @@ detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
     webView()->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
 }
 
-void detached::remotePage(string page){
-     QUrl pageUrl(page.c_str());
-     webView()->page()->mainFrame()->setUrl(pageUrl);
+/*
+ *  Set the webview to a different URL
+ */
+void detached::remotePage(QString page){
+     QUrl pageUrl(QString("file:///") + wPath.c_str() + page);
+      webView()->load(pageUrl);
 }
 
+/*
+ *  For debugging purpose, when we need to double check navigation
+ */
+void detached::displayHistory(){
+    QWebHistory *web = webView()->history();
+    QList<QWebHistoryItem> items = web->items();
+    int size = items.length();
+     for(int i =0; i< size; i++){
+        qDebug() <<   items.at(i).lastVisited();
+        qDebug() <<   items.at(i).url();
+     }
+}
 
+/*
+ *  Add our detached slots to the javascript window, class named 'detched'
+ */
 void detached::addToJavaScript() {
     webView()->page()->mainFrame()->addToJavaScriptWindowObject("detached", this);
+    webView()->page()->mainFrame()->addToJavaScriptWindowObject("fileobj", current);
+
 }
 
+/*
+ *  Emit that our detached window closed, so we know to open it again
+ */
 void detached::closeEvent(QCloseEvent *event){
     emit detachClose();
 }
 
+/*
+ * Destructor
+ */
 detached::~detached(){
 
 }

@@ -79,7 +79,7 @@ bool playlist::readPL(){
  */
 void playlist::fillPL(){
     QStringList curList;
-    int count = 0;
+    int count = 0, selID = 0;
     if(PLMODE == 0){  // browsing playlists
         for(int i= 0; i< pList.getSize(); i++){
             curList << pList.getName(i);
@@ -87,14 +87,15 @@ void playlist::fillPL(){
     }
     else if(PLMODE == 1){            // browsing playlist items
         curPLlist = new int[pListItems.getSize()];
+        selID = pList.getID(pListSelect);
         for(int i = 0; i< pListItems.getSize(); i++){
-            if(pListItems.getPar(i) == pList.getID(pListSelect)){
+            if(pListItems.getPar(i) == selID){
                 curList << pListItems.getName(i);
                 curPLlist[count] = pListItems.getID(i);
                 count++;
             }
         }
-        emit playlistChanged(pListItems, curPLlist, count, false, PlayMode);
+        emit playlistChanged(selID, pListItems, curPLlist, count, false, PlayMode);
     }
     else if(PLMODE == 2){            // new playlist items
         curPLlist = new int[pNewItems.getSize()];
@@ -103,7 +104,7 @@ void playlist::fillPL(){
             curPLlist[count] = pNewItems.getID(i);
             count++;
         }
-        emit playlistChanged(pNewItems, curPLlist, count, false, PlayMode);
+        emit playlistChanged(0, pNewItems, curPLlist, count, false, PlayMode);
     }
     pl_model = new QStringListModel(this);
     pl_model->setStringList(curList);

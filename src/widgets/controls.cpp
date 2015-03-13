@@ -34,6 +34,7 @@ controls::controls(QWidget *parent) :
     announcedAmount = 0;
     curRange = false;
     announcedRange = false;
+    announcedSelect = 0;
 
     detach = new detached();
     detachOpen = false;
@@ -55,9 +56,10 @@ controls::controls(QWidget *parent) :
 
     connect(this, SIGNAL(songChanged(string, string, int)), detach, SLOT(setTrack(string, string, int)));
     connect(this, SIGNAL(remConState(int)), detach, SLOT(setState(int)) );
-
     connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
     connect(this, SIGNAL(remConVol(int)), detach, SLOT(setVolume(int)) );
+    connect(this, SIGNAL(remListChange(int, fileObj *, int*, int, bool,int)), detach, SLOT(setCurList(int, fileObj *, int*, int, bool,int)));
+    connect(this, SIGNAL(remSelectChange(int)), detach, SLOT(setSelection(int)));
 
     /// connect detach player to controls
     connect(detach, SIGNAL(remConRange(int)), this, SLOT(rangeChange(int)));
@@ -65,6 +67,7 @@ controls::controls(QWidget *parent) :
     connect(detach, SIGNAL(remConFile(int)), this, SLOT(remoteCommand(int)));
     connect(detach, SIGNAL(remConVol(int)), this, SLOT(remoteVolume(int)));
     connect(detach, SIGNAL(remScreenToggle(bool)), this, SLOT(remoteScreenToggle(bool)));
+    connect(detach, SIGNAL(remTrackChange(int)), this, SLOT(remoteSelection(int)));
     connect(detach, SIGNAL(detachClose()), this, SLOT(detachExited()));
 }
 
@@ -224,7 +227,7 @@ void controls::openPlayer(){
 /*
   * Set Current qeue list when list changes
   */
-void controls::setCurList(fileObj &newList, int *newIDlist, int amount, bool range, int mode){
+void controls::setCurList(int selID, fileObj &newList, int *newIDlist, int amount, bool range, int mode){
     announced = fileObj();
     announced.initFile(100);
     announced = newList;
@@ -232,6 +235,8 @@ void controls::setCurList(fileObj &newList, int *newIDlist, int amount, bool ran
     announcedAmount = amount;
     announcedRange = range;
     PlayMode = mode;
+    announcedSelect = selID;
+    emit remListChange(announcedSelect, &announced, announcedList, announcedAmount, announcedRange, PlayMode);
 }
 
 ////  slot for seeking from detached track slider

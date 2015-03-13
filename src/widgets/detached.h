@@ -5,6 +5,7 @@
 #include <QGraphicsWebView>
 #include <QWebFrame>
 #include "html5applicationviewer.h"
+#include "src/object/fileobj.h"
 
 using namespace std;
 class detached : public Html5ApplicationViewer
@@ -12,14 +13,9 @@ class detached : public Html5ApplicationViewer
     Q_OBJECT
 
 public:
-
-    string trackName, trackPath;
-    int volume, min, max, state, mode;
-    bool songChange, screenMode; // true = full
-
     explicit detached(QWidget *parent = 0);
     virtual ~detached();
-
+    void displayHistory();
 private slots:
     void addToJavaScript();
 public slots:
@@ -44,11 +40,14 @@ public slots:
     void remoteRange(int max){
         emit remConRange(max);
     }
-    void remotePage(string page);
+    void remotePage(QString page);
 
     void remoteScreen(bool type){
         this->screenMode = type;
         emit remScreenToggle(type);
+    }
+    void remoteTrack(int track){
+        emit remTrackChange(track);
     }
 
 
@@ -76,6 +75,25 @@ public slots:
     void setScreenMode(bool fullscreen){
         this->screenMode = fullscreen;
     }
+    void setTheme(string theme){
+        this->wTheme = theme;
+        this->wPath = theme.substr(0, theme.find_last_of("/")+1);
+    }
+    void setCurList(int selID, fileObj *newlist, int * newIDlist,int amt, bool range, int mode){
+        this->current = newlist;
+        this->curList = newIDlist;
+        this->curAmount = amt;
+        this->curRange = range;
+        this->mode = mode;
+        this->directoryID = selID;
+    }
+    void setSelection(int select){
+        this->selectedID = select;
+    }
+    void setDirSelection(int select){
+        this->directoryID = select;
+    }
+
 
     /*
      * Object getters
@@ -111,6 +129,13 @@ public slots:
     bool getScreenMode(){
         return this->screenMode;
     }
+    int getSelectedID(){
+       return this->selectedID;
+    }
+    int getSelectedDirID(){
+       return this->directoryID;
+    }
+
 
 signals:
     void remConRange(int);
@@ -118,9 +143,20 @@ signals:
     void remConFile(int);
     void remConVol(int);
     void remScreenToggle(bool);
+    void remTrackChange(int);
     void detachClose();
 protected:
     void closeEvent(QCloseEvent *event);
+private:
+    int *curList;       /// current cue list ID's
+    int curAmount; /// init for playlist size
+    bool curRange;
+
+    string trackName, trackPath, wTheme, wPath;
+    int volume, min, max, state, mode, directoryID, selectedID;
+    bool songChange, screenMode; // true = full
+
+    fileObj *current;
 };
 
 #endif // MAINWINDOW_H

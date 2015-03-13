@@ -26,9 +26,12 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstring>
+#include <QObject>
+
 using namespace std;
-class fileObj
+class fileObj : public QObject
 {
+    Q_OBJECT
 public:
 
     string *fileName;    // Item name
@@ -39,15 +42,15 @@ public:
     int InitSize;       // Number size before reallocate
 
 
-    fileObj();
+    explicit fileObj();
     fileObj(const fileObj& src);
     fileObj& operator=(const fileObj& src);
 
     void initFile(int initSZ);
     void REinitFile(int oldsize, int newsize);
-    void display();
-    virtual ~fileObj();
 
+    virtual ~fileObj();
+public slots:
     void setName(int item, const char *name){
         if(item >= 0 && item <= objSize){
             fileName[item] = name;
@@ -138,8 +141,11 @@ public:
     int getInit(){
         return InitSize;
     }
+    QString getQStrName(int pos){
+        return QString(fileName[pos].c_str());
+    }
 
-
+    void display();
 
 };
 

@@ -69,6 +69,7 @@ public slots:
     void setVol(int vol);
     void setSelection(int selection){
         CurrentSelect = selection;
+        emit remSelectChange(selection);
     }
     void setTempTrackAndPlay(string track, string path, int mode){
         PlayMode = mode;
@@ -79,7 +80,7 @@ public slots:
         initPlaylist();
         startSelected();
     }
-    void setCurList(fileObj &newlist, int * newIDlist,int amt, bool range, int mode);
+    void setCurList(int selID, fileObj &newlist, int * newIDlist,int amt, bool range, int mode);
 
     /*
      * Remote commands for signals from another widget!
@@ -132,6 +133,7 @@ public slots:
             path.replace(path.end()-3, path.end(), "html");
         }
         themePath = path;
+        detach->setTheme(themePath);
     }
 
 private slots:
@@ -172,6 +174,15 @@ private slots:
         detachOpen = false;
     }
 
+    void remoteSelection(int select){
+        CurrentSelect = select;
+        startSelected();
+        PlayingState = 1;
+        timer.stop();
+        timer.start(1000);
+        emit remConState(PlayingState);
+    }
+
 signals:
     void detachControls();
     void songChanged(string, string, int);
@@ -181,11 +192,15 @@ signals:
     void remConFile(int);
     void remConVol(int);
     void remConState(int);
+    void remListChange(int, fileObj *, int *,int, bool, int);
+    void remSelectChange(int);
+
 private:
         void adjustVol(int vol);
         int CurrentSelect;  /// current selection number
         int *curList, *announcedList;       /// current cue list ID's
         int curAmount, announcedAmount; /// init for playlist size
+        int announcedSelect;   /// ID of parent directory we're browsing
         bool curRange, announcedRange; /// init for ignoring range
         string themePath;
 
