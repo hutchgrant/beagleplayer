@@ -91,6 +91,7 @@ jQuery( document ).ready(function($) {
       if(TrackChange == true){
           defaultRange();
           videoStarted = false;
+          $('#playlist_table > tbody').html("");
       }
 
       TrackName = detached.getTrack();
@@ -107,6 +108,7 @@ jQuery( document ).ready(function($) {
           var moveSlider = false;
           if(!videoStarted){
                 loadAndStart();
+              displayPlaylist();
           }else{
               if(pastPaused){
                   trackVideo.play();
@@ -360,12 +362,12 @@ jQuery( document ).ready(function($) {
             if(parseInt(fileobj.getPar(x)) === parseInt(detached.getSelectedDirID())){
                 track = "<p id='track_" +x + "'>" +fileobj.getQStrName(x) + "</p>";
                 console.log("track = " + track);
-                row[x] = playlistList.insertRow(0);
-                cell1[x] = row[x].insertCell(0);
-                cell1[x].innerHTML = track;
-                cell1[x].setAttribute("class", fileobj.getID(x));
-                cell1[x].setAttribute("id", counter);
-                cell1[x].onclick=function(){playlistSelection(this)};
+                row[counter] = playlistList.insertRow(0);
+                cell1[counter] = row[counter].insertCell(0);
+                cell1[counter].innerHTML = track;
+                cell1[counter].setAttribute("class", fileobj.getID(x));
+                cell1[counter].setAttribute("id", counter);
+                cell1[counter].onclick=function(){playlistSelection(this)};
                 counter++;
             }
         }
@@ -378,9 +380,8 @@ jQuery( document ).ready(function($) {
         var trackNum = x.getAttribute("id");
         var trackName = x.textContent;
 
-        x.style.color = "blue";
-
         detached.remoteTrack(trackNum);
+        togglePlaylist();
     }
 
     /* INIT */
@@ -394,7 +395,6 @@ jQuery( document ).ready(function($) {
     addEvents();
     createSlider(0,0,TrackRange,seekSlider, seekVal);
     createSlider(TrackVolume,0,100,volSlider, volVal);
-    displayPlaylist();
 
     var timer=setInterval(function () {checkWidget()}, 500);
 });
