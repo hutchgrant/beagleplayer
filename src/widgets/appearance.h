@@ -36,6 +36,8 @@ public slots:
     void init(cache *dbcon){
         cah = dbcon;
         setCurrent();
+        getThemes();
+        fillThemes();
     }
 
 private slots:

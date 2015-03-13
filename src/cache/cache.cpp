@@ -28,6 +28,9 @@ cache::cache()
     cache_dir = getenv("HOME") + cache_dir;
     db_file = cache_dir + "beagle.db";
     locate_file = cache_dir + "cache_locate.txt";
+
+    theme_dir = cache_dir + "themes/";
+    default_theme = theme_dir + "default/default.theme";
 }
 /*
  * Destructor
@@ -216,8 +219,9 @@ bool cache::addTables(){
 
 bool cache::addTheme(){
     fileObj addTheme;
+    QString theme = QApplication::applicationDirPath() + "/res/themes/default/default.theme";
     addTheme.initFile(100);
-    addTheme.set(0,0,0,"default", QDir::current().absolutePath().append("/res/themes/default/default.theme").toStdString().c_str());
+    addTheme.set(0,0,0,"default", theme.toStdString().c_str());
     if(writeDB(&addTheme, "theme") >=0){
         return true;
     }
@@ -291,6 +295,9 @@ bool cache::setInitDB(){
 void cache::createCache(){
    QString q_main = cache_dir.c_str();
    QDir(q_main).mkdir(q_main);
+
+   QString q_theme = theme_dir.c_str();
+   QDir(q_theme).mkdir(q_theme);
 }
 
 /*

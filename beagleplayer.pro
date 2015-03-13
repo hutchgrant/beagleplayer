@@ -11,6 +11,11 @@ TEMPLATE = app
 
 greaterThan(QT_MAJOR_VERSION, 4):QT += widgets webkitwidgets
 
+# Add more folders to ship with the application, here
+ folder_01.source = res/themes
+ folder_01.target = ./res
+ DEPLOYMENTFOLDERS = folder_01
+
 # Define TOUCH_OPTIMIZED_NAVIGATION for touch optimization and flicking
 #DEFINES += TOUCH_OPTIMIZED_NAVIGATION
 

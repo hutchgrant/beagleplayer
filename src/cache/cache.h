@@ -3,6 +3,7 @@
 
 #include <QtSql>
 #include <QString>
+#include <QApplication>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -13,7 +14,7 @@ using namespace std;
 class cache
 {
 public:
-    string db_file, locate_file, cache_dir;
+    string db_file, locate_file, cache_dir, theme_dir, default_theme;
     QSqlDatabase db;
 
     cache();

@@ -43,7 +43,7 @@ void appearance::getThemes(){
     int count = 0;
     fileObj themeDir;
     themeDir.initFile(100);
-    QDirIterator directories(QDir::currentPath().append("/res/themes/"), QDir::Dirs | QDir::NoDotAndDotDot);
+    QDirIterator directories(cah->theme_dir.c_str(), QDir::Dirs | QDir::NoDotAndDotDot);
     while(directories.hasNext()){
         directories.next();
         themeDir.set(count, count, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
@@ -165,13 +165,8 @@ void appearance::apply(string file, string path){
  */
 void appearance::setCurrent(){
     string path = "";
-    qDebug() << "reading themes " << endl;
     cah->readDB(themes, "theme");
-    if(themes.getSize() == 0){
-        if(createDefaultTheme()){
-            cah->readDB(themes, "theme");
-        }
-    }else{
+    if(themes.getSize() != 0){
         path = themes.getPath(defaultTheme);
         emit themeChanged(path);
     }

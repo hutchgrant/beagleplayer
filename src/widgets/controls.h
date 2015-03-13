@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QDebug>
 #include <QTimer>
+#include <QDir>
 #include <sstream>
 #include "src/object/fileobj.h"
 #include "src/widgets/volume.h"

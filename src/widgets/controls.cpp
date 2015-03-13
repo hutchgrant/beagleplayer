@@ -191,6 +191,12 @@ void controls::startSelected(){
  *  Open html5 media player
  */
 void controls::openPlayer(){
+    /* Default player theme */
+    string cache_dir = "/.cache/beagleplayer2/";
+    cache_dir = getenv("HOME") + cache_dir;
+    string theme_dir = cache_dir + "themes/";
+    string default_theme = theme_dir + "default/default.html";
+
     if(!detachOpen){
         QIcon icon;
         detachOpen = true;
@@ -208,6 +214,9 @@ void controls::openPlayer(){
         detach->setMinimumSize(screenSz);
         icon.addFile("qrc:///res/beagleplayer_icon.png");
         detach->setWindowIcon(icon);
+        if(themePath == ""){
+            themePath = default_theme;
+        }
         detach->loadFile(themePath.c_str());
     }
 }

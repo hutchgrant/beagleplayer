@@ -11,9 +11,6 @@ beaglemain::beaglemain(QWidget *parent) :
     ui->setupUi(this);
     addWidgets();
 
-    /// Appearance (theme)
-    connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
-
     initCache();
     connectSignals();
     ui->menuBar->show();
@@ -54,6 +51,7 @@ void beaglemain::initCache(){
     if(dbCache.init()){
         brow->initCache(&dbCache);
         playlst->initCache(&dbCache);
+        connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
         theme->init(&dbCache);
 
         brow->Sync(1);  /// initialize and fill DB cache objects
