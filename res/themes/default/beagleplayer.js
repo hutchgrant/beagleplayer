@@ -32,7 +32,7 @@ jQuery( document ).ready(function($) {
     var videoStarted = false, fullScreened = false, playerVisible = false;
     var pastPaused = false, originalColor = "", screenMode = false, toggleFull = false;
     var displayGUI = false, volumeShowing = false, ignoreRange = false;
-    var playlistShowing = false, directoriesShowing = false;
+    var playlistShowing = false, directoriesShowing = false, modeShowing = false;
     var playbackRetry = false, DEBUG = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
@@ -46,6 +46,7 @@ jQuery( document ).ready(function($) {
     var trackButtons = document.getElementById("track_buttons");
     var trackVolume = document.getElementById("track_volume");
     var trackSeek = document.getElementById("track_seek");
+    var trackMode = document.getElementById('mode');
 
     var seekTime = document.getElementById("seek_time");
     var seekRange = document.getElementById("seek_range");
@@ -56,8 +57,6 @@ jQuery( document ).ready(function($) {
     var playlistList = document.getElementById('playlist_table');
     var directory = document.getElementsByClassName('directory')[0];
     var directoryList = document.getElementById('directory_table');
-
-
 
      /*
       * Create seek+volume sliders
@@ -89,14 +88,23 @@ jQuery( document ).ready(function($) {
    * Repeatedly check widgets, to see if any of our var have changed
   */
   function checkWidget(){
-      TrackMode = detached.getMode();
+
+      if(detached.getPlayListChanged()){
+          $('#playlist_table > tbody').html("");
+          displayPlaylist();
+      }
+      if(detached.getDirChanged()){
+          $('#directory_table > tbody').html("");
+          displayDirectories();
+      }
+
       TrackState = detached.getState();
       TrackChange = detached.getPlaylistMove();
       if(TrackChange == true){
           defaultRange();
           videoStarted = false;
           $('#playlist_table > tbody').html("");
-           $('#directory_table > tbody').html("");
+       //    $('#directory_table > tbody').html("");
       }
 
       TrackName = detached.getTrack();
@@ -114,7 +122,7 @@ jQuery( document ).ready(function($) {
           if(!videoStarted){
                 loadAndStart();
                 displayPlaylist();
-                displayDirectories();
+              displayDirectories();
           }else{
               if(pastPaused){
                   trackVideo.play();
@@ -207,9 +215,9 @@ jQuery( document ).ready(function($) {
                showGUI();
         });
         $('#open').click(function() {
-            toggleDirectories();
+            toggleMode();
         });
-        $('#vol_button').click(function() {
+        $('#vol').click(function() {
             toggleVolume();
         });
         $('#playlist').click(function() {
@@ -217,6 +225,10 @@ jQuery( document ).ready(function($) {
         });
         $('#open_directory').click(function() {
             toggleDirectories();
+        });
+        $('#mode li').click(function(){
+           detached.remoteMode(parseInt($(this).attr('id')));
+           toggleMode();
         });
 
         trackVideo.addEventListener("durationchange", function() {
@@ -235,14 +247,16 @@ jQuery( document ).ready(function($) {
         if(!displayGUI){
             trackTitle.style.display = "block";
             trackButtons.style.display = "block";
-            trackVolume.style.display = "block";
             trackSeek.style.display = "block";
+            $(volVal).show();
             displayGUI = true;
         }else{
             trackTitle.style.display = "none";
             trackButtons.style.display = "none";
-            trackVolume.style.display = "none";
             trackSeek.style.display = "none";
+            $(volVal).hide();
+            $(volSlider).hide();
+            volumeShowing = false;
             displayGUI = false;
         }
     }
@@ -286,7 +300,7 @@ jQuery( document ).ready(function($) {
             trackVideo.style.display = "block";
             playerVisible = true;
         }else{
-            trackVideo.style.display = "block";
+            trackVideo.style.display = "none";
             playerVisible = false;
         }
     }
@@ -300,6 +314,7 @@ jQuery( document ).ready(function($) {
         }else{
             playlist.style.display = "none";
             playlistShowing = false;
+            toggleDirectories();
         }
     }
     /*
@@ -316,14 +331,26 @@ jQuery( document ).ready(function($) {
         }
     }
     /*
+      * Toggle Mode display
+      */
+    function toggleMode(){
+        if(!modeShowing){
+            trackMode.style.display = "inline";
+            modeShowing = true;
+        }else{
+            trackMode.style.display = "none";
+             modeShowing = false;
+        }
+    }
+    /*
       * Toggle Volume display
       */
     function toggleVolume(){
         if(!volumeShowing){
-            trackVolume.style.display = "block";
+            $(volSlider).show();
             volumeShowing = true;
         }else{
-            trackVolume.style.display = "none";
+            $(volSlider).hide();
              volumeShowing = false;
         }
     }
@@ -427,7 +454,6 @@ jQuery( document ).ready(function($) {
         var trackName = x.textContent;
         detached.remoteTrack(trackNum);
         togglePlaylist();
-        toggleDirectories();
     }
     /*
      * Determine which directory item was selected, send signal to player
@@ -500,6 +526,6 @@ jQuery( document ).ready(function($) {
     addEvents();
     createSlider(0,0,TrackRange,seekSlider, seekVal);
     createSlider(TrackVolume,0,100,volSlider, volVal);
-
+    $( "#mode" ).menu();
     var timer=setInterval(function () {checkWidget()}, 500);
 });

@@ -40,28 +40,28 @@
         <div id="track_buttons">
             <ul class="buttons">
                <li class="track_button" id="prev">
-               <img src="qrc:///res/RRWD_icon.png" width="22" height="22"/>
+               <img src="qrc:///res/RRWD_icon.png" id="button"/>
                </li>
                <li class="track_button" id="pause">
-               <img src="qrc:///res/PAUSE_icon.png" width="22" height="22"/>
+               <img src="qrc:///res/PAUSE_icon.png" id="button"/>
                 </li>
                <li class="track_button" id="play">
-               <img src="qrc:///res/FWD_icon.png" width="22" height="22"/>
+               <img src="qrc:///res/FWD_icon.png" id="button"/>
                </li>
                 <li class="track_button" id="next">
-               <img src="qrc:///res/FFWD_icon.png" width="22" height="22"/>
+               <img src="qrc:///res/FFWD_icon.png" id="button"/>
                 </li>
                <li class="track_button" id="open">
-               <img src="qrc:///res/OPEN_icon.png" width="22" height="22"/>
+               <img src="qrc:///res/OPEN_icon.png" id="button"/>
                </li>
                <li class="track_button" id="playlist">
-               <img src="qrc:///res/PLAYLIST_icon.png" width="22" height="22"/>
+               <img src="qrc:///res/PLAYLIST_icon.png" id="button"/>
                </li>
                <li class="track_button" id="full">
-               <img src="qrc:///res/UP_icon.png" width="22" height="22"/>
+               <img src="qrc:///res/UP_icon.png" id="button"/>
                </li>
-               <li class="track_button" id="vol_button">
-               <img src="qrc:///res/VOL_icon.png" width="22" height="22"/>
+               <li class="track_button" id="vol">
+               <img src="qrc:///res/VOL_icon.png" id="button"/>
                </li>
             </ul>
         </div>
@@ -74,12 +74,17 @@
                  <div id="vol_slider"></div>
                </div>
         </div>
-
-<div class="playlist">
-<table id="playlist_table"></table>
-</div>
-<div class="directory">
-<table id="directory_table"></table>
-</div>
+        <div class="playlist">
+            <img src="qrc:///res/OPEN_icon.png" id="open_directory"/>
+            <table id="playlist_table"></table>
+        </div>
+        <div class="directory">
+            <table id="directory_table"></table>
+        </div>
+        <ul id="mode">
+        <li id="0">Audio</li>
+        <li id="1">Video</li>
+        <li id="2">Radio</li>
+        </ul>
     </body>
 </html>

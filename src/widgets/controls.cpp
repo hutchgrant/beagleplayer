@@ -59,7 +59,8 @@ controls::controls(QWidget *parent) :
     connect(this, SIGNAL(remConState(int)), detach, SLOT(setState(int)) );
     connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
     connect(this, SIGNAL(remConVol(int)), detach, SLOT(setVolume(int)) );
-    connect(this, SIGNAL(remListChange(int, fileObj *,fileObj *, int*, int, bool,int)), detach, SLOT(setCurList(int, fileObj *,fileObj *, int*, int, bool,int)));
+    connect(this, SIGNAL(remListChange(int, fileObj *, int*, int, bool,int)), detach, SLOT(setCurList(int, fileObj *, int*, int, bool,int)));
+    connect(this, SIGNAL(remDirChange(fileObj*)), detach, SLOT(setCurDir(fileObj*)));
     connect(this, SIGNAL(remSelectChange(int)), detach, SLOT(setSelection(int)));
 
     /// connect detach player to controls
@@ -73,6 +74,7 @@ controls::controls(QWidget *parent) :
     connect(detach, SIGNAL(remModeChange(int)), this, SLOT(remoteMode(int)));
     connect(detach, SIGNAL(detachClose()), this, SLOT(detachExited()));
 
+    setVol(50); /// set default volume
 }
 
 /*
@@ -213,7 +215,6 @@ void controls::openPlayer(){
         QIcon icon;
         detachOpen = true;
         detach->setOrientation(Html5ApplicationViewer::ScreenOrientationLockLandscape);
-
         if(screenMode){
             screenSz = QSize(1800,1000);
             detach->setScreenMode(true);
@@ -236,12 +237,9 @@ void controls::openPlayer(){
 /*
   * Set Current qeue list when list changes
   */
-void controls::setCurList(int selID, fileObj* newDirList, fileObj *newList, int *newIDlist, int amount, bool range, int mode){
+void controls::setCurList(int selID, fileObj *newList, int *newIDlist, int amount, bool range, int mode){
     announced.initFile(100);
-    announcedDir.initFile(100);
-
     announced = *newList;
-    announcedDir = *newDirList;
     delete [] announcedList;
     announcedList = new int[amount+1];
     announcedList = newIDlist;
@@ -249,7 +247,7 @@ void controls::setCurList(int selID, fileObj* newDirList, fileObj *newList, int 
     announcedRange = range;
     PlayMode = mode;
     announcedSelect = selID;
-    emit remListChange(announcedSelect, &announcedDir, &announced, announcedList, announcedAmount, announcedRange, PlayMode);
+    emit remListChange(announcedSelect, &announced, announcedList, announcedAmount, announcedRange, PlayMode);
 }
 
 ////  slot for seeking from detached track slider

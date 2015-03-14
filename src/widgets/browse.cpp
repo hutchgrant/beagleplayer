@@ -118,17 +118,20 @@ void browse::updateMenu(){
     {
         for(int i=0; i < Artist.getSize(); i++){
             curMenu << Artist.getName(i);
+             emit curDirChanged(&Artist);
         }
     }
     else if(MenuMode == 1 ) // vid Dirs + local
     {
         for(int i=0; i < VidDir.getSize(); i++){
             curMenu << VidDir.getName(i);
+             emit curDirChanged(&VidDir);
         }
     }
     else if(MenuMode == 2){ // radio stations + reminder: use categories later
         for(int i=0; i < RadioCat.getSize(); i++){
             curMenu << RadioCat.getName(i);
+            emit curDirChanged(&RadioCat);
         }
     }
     m_Model->setStringList(curMenu);
@@ -155,7 +158,7 @@ void browse::updateTitle(int selected){
                     songCount++;
                 }
             }
-           emit curListChanged(selID, &Artist, &Song, curSongID, songCount, false, MenuMode);
+           emit curListChanged(selID, &Song, curSongID, songCount, false, MenuMode);
         }
         else if(MenuMode == 1 ){    ///  set Video + local
             selID = VidDir.getID(selected);
@@ -167,7 +170,7 @@ void browse::updateTitle(int selected){
                     vidCount++;
                 }
             }
-            emit curListChanged(selID, &VidDir, &Video, curVidID, vidCount, false, MenuMode);
+            emit curListChanged(selID, &Video, curVidID, vidCount, false, MenuMode);
         }
         else if(MenuMode == 2 ){    ///  set Radio
             selID = RadioCat.getID(selected);
@@ -179,7 +182,7 @@ void browse::updateTitle(int selected){
                     radCount++;
                 }
             }
-            emit curListChanged(selID, &RadioCat, &Radio, curRadID, radCount, true, MenuMode);
+            emit curListChanged(selID, &Radio, curRadID, radCount, true, MenuMode);
         }
     t_Model->setStringList(curSong);
     ui->TrackList->setModel(t_Model);

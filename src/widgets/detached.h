@@ -53,9 +53,9 @@ public slots:
         setDirSelection(id);
         emit remDirChange(id);
     }
-    void remoteMode(int mode){
-        setPlayMode(mode);
-        emit remModeChange(mode);
+    void remoteMode(int type){
+        this->mode = type;
+        emit remModeChange(type);
     }
 
 
@@ -83,26 +83,31 @@ public slots:
     void setScreenMode(bool fullscreen){
         this->screenMode = fullscreen;
     }
-    void setPlayMode(int mode){
-        this->mode = mode;
+    void setPlayMode(int type){
+        this->mode = type;
     }
 
     void setTheme(string theme){
         this->wTheme = theme;
         this->wPath = theme.substr(0, theme.find_last_of("/")+1);
     }
-    void setCurList(int selID, fileObj *dirlist, fileObj *newlist, int * newIDlist,int amt, bool range, int mode){
+    void setCurList(int selID, fileObj *newlist, int * newIDlist,int amt, bool range, int mode){
         this->current.initFile(100);
         this->current = *newlist;
-        this->currentDir.initFile(100);
-        this->currentDir = *dirlist;
         this->curList = new int[amt+1];
         this->curList = newIDlist;
         this->curAmount = amt;
         this->curRange = range;
         this->mode = mode;
         this->directoryID = selID;
+        this->listChanged = true;
     }
+    void setCurDir(fileObj *dirlist){
+        this->currentDir.initFile(100);
+        this->currentDir = *dirlist;
+        this->dirChanged = true;
+    }
+
     void setSelection(int select){
         this->selectedID = select;
     }
@@ -151,6 +156,22 @@ public slots:
     int getSelectedDirID(){
        return this->directoryID;
     }
+    bool getPlayListChanged(){
+        if(this->listChanged){
+            this->listChanged = false;
+            return true;
+        }else{
+           return false;
+        }
+    }
+    bool getDirChanged(){
+        if(this->dirChanged){
+            this->dirChanged = false;
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 
 signals:
@@ -172,7 +193,7 @@ private:
 
     string trackName, trackPath, wTheme, wPath;
     int volume, min, max, state, mode, directoryID, selectedID;
-    bool songChange, screenMode; // true = full
+    bool songChange, screenMode, listChanged, dirChanged; // true = full
 
     fileObj current, currentDir;
 };

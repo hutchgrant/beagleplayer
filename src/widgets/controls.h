@@ -80,7 +80,12 @@ public slots:
         initPlaylist();
         startSelected();
     }
-    void setCurList(int selID, fileObj *dirlist, fileObj *newlist, int * newIDlist,int amt, bool range, int mode);
+    void setCurList(int selID, fileObj *newlist, int * newIDlist,int amt, bool range, int mode);
+    void setCurDir(fileObj *newDirList){
+        announcedDir.initFile(100);
+        announcedDir = *newDirList;
+        emit remDirChange(&announcedDir);
+    }
 
     /*
      * Remote commands for signals from another widget!
@@ -190,6 +195,7 @@ private slots:
     }
 
 signals:
+    ///  Control detached
     void detachControls();
     void songChanged(string, string, int);
     void setVolume(int);
@@ -198,7 +204,9 @@ signals:
     void remConFile(int);
     void remConVol(int);
     void remConState(int);
-    void remListChange(int, fileObj *, fileObj *, int *,int, bool, int);
+    void remListChange(int, fileObj *, int *,int, bool, int);
+    void remDirChange(fileObj*);
+    ///  Control browse
     void conDirChange(int id);
     void conModeChange(int mode);
     void remSelectChange(int);
