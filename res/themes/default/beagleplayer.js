@@ -32,7 +32,8 @@ jQuery( document ).ready(function($) {
     var videoStarted = false, fullScreened = false, playerVisible = false;
     var pastPaused = false, originalColor = "", screenMode = false, toggleFull = false;
     var displayGUI = false, volumeShowing = false, ignoreRange = false;
-    var playlistShowing = false, playbackRetry = false, DEBUG = false;
+    var playlistShowing = false, directoriesShowing = false;
+    var playbackRetry = false, DEBUG = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
@@ -53,7 +54,10 @@ jQuery( document ).ready(function($) {
     var player = document.getElementById('player');
     var playlist = document.getElementsByClassName('playlist')[0];
     var playlistList = document.getElementById('playlist_table');
-    var playlistItem = document.getElementsByClassName('playlist_item');
+    var directory = document.getElementsByClassName('directory')[0];
+    var directoryList = document.getElementById('directory_table');
+
+
 
      /*
       * Create seek+volume sliders
@@ -92,6 +96,7 @@ jQuery( document ).ready(function($) {
           defaultRange();
           videoStarted = false;
           $('#playlist_table > tbody').html("");
+           $('#directory_table > tbody').html("");
       }
 
       TrackName = detached.getTrack();
@@ -109,7 +114,7 @@ jQuery( document ).ready(function($) {
           if(!videoStarted){
                 loadAndStart();
                 displayPlaylist();
-             // displayDirectories();
+                displayDirectories();
           }else{
               if(pastPaused){
                   trackVideo.play();
@@ -202,7 +207,7 @@ jQuery( document ).ready(function($) {
                showGUI();
         });
         $('#open').click(function() {
-            togglePlayer();
+            toggleDirectories();
         });
         $('#vol_button').click(function() {
             toggleVolume();
@@ -294,7 +299,19 @@ jQuery( document ).ready(function($) {
             playlistShowing = false;
         }
     }
+    /*
+     * Toggle Directory display
+     */
+    function toggleDirectories(){
+        if(!directoriesShowing){
+             directory.style.display = "inline";
+            directoriesShowing = true;
 
+        }else{
+             directory.style.display = "none";
+            directoriesShowing = false;
+        }
+    }
     /*
       * Toggle Volume display
       */
@@ -358,10 +375,11 @@ jQuery( document ).ready(function($) {
         }
     }
     /*
-    * Display Playlist
+    * Fill in Playlist
     */
     function displayPlaylist(){
         var row = [], cell1 = [];
+        var track = "";
         var counter = 0;
         for(var x=0; x<fileobj.getSize(); x++){
             if(parseInt(fileobj.getPar(x)) === parseInt(detached.getSelectedDirID())){
@@ -380,14 +398,15 @@ jQuery( document ).ready(function($) {
         }
     }
     /*
-    * Display Playlist
+    * Fill in Directories
     */
     function displayDirectories(){
         var row = [], cell1 = [];
+        var track = "";
         var counter = 0;
         for(var x=0; x<dirobj.getSize(); x++){
                 track = "<p id='dir_" +counter + "'>" +dirobj.getQStrName(x) + "</p>";
-                row[counter] = playlistList.insertRow(0);
+                 row[counter] =   directoryList.insertRow(0)
                 cell1[counter] = row[counter].insertCell(0);
                 cell1[counter].innerHTML = track;
                 cell1[counter].setAttribute("class", dirobj.getID(x));
@@ -417,7 +436,8 @@ jQuery( document ).ready(function($) {
         var trackName = x.textContent;
 
         detached.remoteDirectory(trackNum);
-        displayPlaylist();
+        $('#playlist_table > tbody').html("");
+           displayPlaylist();
       ///  togglePlaylist();
     }
     /*

@@ -27,6 +27,8 @@
  */
 fileObj::fileObj()
 {
+    objSize = 0;
+    InitSize = INITSIZE;
     initFile(INITSIZE);
 }
 
@@ -36,8 +38,6 @@ fileObj::fileObj()
 fileObj::fileObj(const fileObj &src){
 
     if(src.objSize > 0){
-        objSize = 0;
-        InitSize = 0;
         initFile(src.objSize);
         for(int i=0; i< src.objSize; i++){
             set(i,src.fileID[i], src.filePar[i], src.fileName[i].c_str(), src.filePath[i].c_str());
@@ -51,14 +51,15 @@ fileObj::fileObj(const fileObj &src){
  *  Initialize Object
  */
 void fileObj::initFile(int initSZ){
-    objSize = 0;
-    InitSize = 0;
     if(objSize > 0){
         delete [] fileName;
         delete [] filePath;
         delete [] fileID;
         delete [] filePar;
     }
+
+    objSize = 0;
+    InitSize = 0;
     fileName = new string[initSZ];
     fileID = new int[initSZ];
     filePar = new int[initSZ];
@@ -102,6 +103,10 @@ void fileObj::REinitFile(int oldsize, int newsize){
     for(int i=0; i< tempObjSize; i++){
         set(i,idCopy[i], parCopy[i], nameCopy[i].c_str(), pathCopy[i].c_str());
     }
+    delete [] idCopy;
+    delete [] parCopy;
+    delete [] nameCopy;
+    delete [] pathCopy;
 }
 
 /*
@@ -135,8 +140,6 @@ fileObj& fileObj::operator=(const fileObj& src){
 
     if(this != &src){
         if(src.objSize > 0){
-            objSize = 0;
-            InitSize = 0;
             initFile(src.objSize);
 
             for(int i=0; i< src.objSize; i++){

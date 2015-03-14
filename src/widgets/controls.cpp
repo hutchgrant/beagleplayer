@@ -236,8 +236,9 @@ void controls::openPlayer(){
   * Set Current qeue list when list changes
   */
 void controls::setCurList(int selID, fileObj* newDirList, fileObj *newList, int *newIDlist, int amount, bool range, int mode){
-    announced = fileObj();
     announced.initFile(100);
+    announcedDir.initFile(100);
+
     announced = *newList;
     announcedDir = *newDirList;
     delete [] announcedList;
@@ -356,4 +357,5 @@ string controls::getTimeDisplay(int hourCount, int minCount, int secondCount, in
 controls::~controls()
 {
     delete ui;
+    delete detach;
 }

@@ -45,6 +45,7 @@ public:
     explicit fileObj();
     fileObj(const fileObj& src);
     fileObj& operator=(const fileObj& src);
+    fileObj* operator=(const fileObj* src);
 
     void initFile(int initSZ);
     void REinitFile(int oldsize, int newsize);
