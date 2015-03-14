@@ -6,6 +6,9 @@ An audio, video, radio, playlist, client, for mplayer. Beagleplayer is ideal for
 - [Dependencies](#dependencies)
 - [Included](#included)
 - [Compile and Run](#compile-and-run)
+- [PPA Installation](#ppa-install)
+- [Themes](#themes)
+- [Theme Examples](#theme-examples)
 - [Contributing](#contributing)
 - [Creators](#creators)
 - [License](#license)
@@ -15,9 +18,6 @@ An audio, video, radio, playlist, client, for mplayer. Beagleplayer is ideal for
 ```bash
 # Recommended with Qt5
 $ sudo apt-get install qt5-default libqt5webkit5-dev
-
-# optionally with Qt4
-$  sudo apt-get install libqt4-dev libqt4-network libqt4-sql libqt4-sql-sqlite gcc g++ make qt4-qmake libqt4-webkit
 ```
 This was built and tested in Ubuntu 14.04. Debian based distributions should be able to run without issue.  Minor modifications necessary, to cache path, for other Linux based systems.
 
@@ -45,7 +45,7 @@ beagleplayer/
 ```
 
 ##Compile and Run
-- download and extract beagleplayer.v.0.1.4.tar.gz 
+- download and extract beagleplayer.v.0.1.5.tar.gz 
 ```bash
 $ wget https://github.com/hutchgrant/beagleplayer/archive/master.zip
 $ cd ~/Downloads
@@ -67,9 +67,16 @@ $ git clone https://github.com/hutchgrant/beagleplayer.git
  $ ./beagleplayer
 ```
 
+##PPA Install
+
+If you're using Ubuntu 14.04(Trusty) or Ubuntu 14.10(Utopic) you can install the launchpad ppa with:
+```bash
+sudo add-apt-repository ppa:hutchgrant/beagleplayer && sudo apt-get update && sudo apt-get install beagleplayer
+```
+
 ##Themes
 
-Themes can be built by creating a new folder in the ./res/themes/ directory call it yourtheme.
+Themes can be built by creating a new folder in your ~/.cache/res/themes/ directory call it yourtheme.
 
 A theme consist of: 
 
@@ -78,7 +85,10 @@ A theme consist of:
 * yourtheme.css
 * yourtheme.png
 
-- For an example of a .theme file see the default theme
+###Theme Examples
+
+- For an example of a .theme file see the default themes [./res/themes/default](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/default/default.theme)
+
 - For an example of a .html and .css theme check the [default](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/default/default.theme) or [blue](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/blue/blue.html) themes.
 
 ##Contributing
