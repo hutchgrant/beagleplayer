@@ -32,7 +32,7 @@ jQuery( document ).ready(function($) {
     var videoStarted = false, fullScreened = false, playerVisible = false;
     var pastPaused = false, originalColor = "", screenMode = false, toggleFull = false;
     var displayGUI = false, volumeShowing = false, ignoreRange = false;
-    var playlistShowing = false;
+    var playlistShowing = false, playbackRetry = false, DEBUG = false;
 
     var seekSlider = "#seek_slider", seekVal = "#seek_amount";
     var volSlider = "#vol_slider", volVal = "#vol_amount";
@@ -214,9 +214,13 @@ jQuery( document ).ready(function($) {
             TrackRange = trackVideo.duration;
              detached.remoteRange(trackVideo.duration);
         }, false);
+
+        if(DEBUG){
+            debugging();
+        }
     }
     /*
-      *
+      *  Show Controls Button GUI
       */
     function showGUI(){
         if(!displayGUI){
@@ -360,8 +364,7 @@ jQuery( document ).ready(function($) {
         var counter = 0;
         for(var x=0; x<fileobj.getSize(); x++){
             if(parseInt(fileobj.getPar(x)) === parseInt(detached.getSelectedDirID())){
-                track = "<p id='track_" +x + "'>" +fileobj.getQStrName(x) + "</p>";
-                console.log("track = " + track);
+                track = "<p id='track_" +counter + "'>" +fileobj.getQStrName(x) + "</p>";
                 row[counter] = playlistList.insertRow(0);
                 cell1[counter] = row[counter].insertCell(0);
                 cell1[counter].innerHTML = track;
@@ -369,6 +372,9 @@ jQuery( document ).ready(function($) {
                 cell1[counter].setAttribute("id", counter);
                 cell1[counter].onclick=function(){playlistSelection(this)};
                 counter++;
+                if(DEBUG){
+                    console.log(fileobj.getQStrName(x) + "  index = " + counter);
+                }
             }
         }
     }
@@ -384,6 +390,54 @@ jQuery( document ).ready(function($) {
         togglePlaylist();
     }
 
+    /*
+      * Briefly pause playback then try reload if playback interrupted or src not found
+      */
+    function retryPlayback(){
+        if(!playbackRetry){
+             sendRemoteCmd(2);  // pause playback
+            var delay=5000;//1 seconds
+             setTimeout(function(){
+                 sendRemoteCmd(1);  // play playback
+             },delay);
+            playbackRetry = true;
+        }else{
+             sendRemoteCmd(2);  // pause playback
+            playbackRetry = false;
+        }
+    }
+    /*
+      * Debugging Playback
+      */
+    function debugging(){
+            trackVideo.addEventListener("stalled", function() {
+                console.log("TRACK STALLED!");
+            }, false);
+            trackVideo.addEventListener("abort", function() {
+                console.log("TRACK aborted!");
+            }, false);
+            trackVideo.addEventListener("error", function() {
+                console.log("TRACK Error!");
+            }, false);
+            trackVideo.addEventListener("suspend", function() {
+                console.log("TRACK paused!");
+            }, false);
+            trackVideo.addEventListener("ended", function() {
+                console.log("TRACK ended!");
+            }, false);
+            trackVideo.addEventListener("waiting", function() {
+                console.log("TRACK waiting!");
+            }, false);
+            trackVideo.addEventListener("canplaythrough", function() {
+                console.log("TRACK doesn't need buffering!");
+            }, false);
+            trackVideo.addEventListener("progress", function() {
+                console.log("TRACK progress!");
+            }, false);
+    }
+
+    /* Debugging - Enable for verbose events */
+    DEBUG = false;
     /* INIT */
     TrackPath = detached.getPath();
     TrackName = detached.getTrack();
