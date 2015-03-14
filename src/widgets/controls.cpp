@@ -34,6 +34,7 @@ controls::controls(QWidget *parent) :
     curRange = false, announcedRange = false;
     announcedSelect = 0, CurrentSelect = 0, CurrentDirSelect = 0;
     announcedList = new int[1];
+    curList = new int[1];
 
     current.initFile(100);
     currentDir.initFile(100);

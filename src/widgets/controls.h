@@ -136,6 +136,21 @@ public slots:
         detach->setTheme(themePath);
     }
 
+    void remoteSelection(int select){
+        CurrentSelect = select;
+        initPlaylist();
+        timer.stop();
+        startSelected();
+    }
+    void remoteDir(int id){
+        CurrentDirSelect = id;
+        emit conDirChange(id);
+    }
+    void remoteMode(int mode){
+        PlayMode = mode;
+        emit conModeChange(mode);
+    }
+
 private slots:
 
     void on_PAUSE_clicked();
@@ -172,23 +187,6 @@ private slots:
     }
     void detachExited(){
         detachOpen = false;
-    }
-
-    void remoteSelection(int select){
-        CurrentSelect = select;
-        startSelected();
-        PlayingState = 1;
-        timer.stop();
-        timer.start(1000);
-        emit remConState(PlayingState);
-    }
-    void remoteDir(int id){
-        CurrentDirSelect = id;
-        emit conDirChange(id);
-    }
-    void remoteMode(int mode){
-        PlayMode = mode;
-        emit conModeChange(mode);
     }
 
 signals:

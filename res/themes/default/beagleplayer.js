@@ -215,6 +215,9 @@ jQuery( document ).ready(function($) {
         $('#playlist').click(function() {
             togglePlaylist();
         });
+        $('#open_directory').click(function() {
+            toggleDirectories();
+        });
 
         trackVideo.addEventListener("durationchange", function() {
             TrackRange = trackVideo.duration;
@@ -413,7 +416,6 @@ jQuery( document ).ready(function($) {
                 cell1[counter].setAttribute("id", counter);
                 cell1[counter].onclick=function(){directorySelection(this)};
                 counter++;
-                console.log(dirobj.getQStrName(x) + "  index = " + counter);
         }
     }
     /*
@@ -423,9 +425,9 @@ jQuery( document ).ready(function($) {
         var trackID = x.getAttribute("class");
         var trackNum = x.getAttribute("id");
         var trackName = x.textContent;
-
         detached.remoteTrack(trackNum);
         togglePlaylist();
+        toggleDirectories();
     }
     /*
      * Determine which directory item was selected, send signal to player
@@ -437,8 +439,7 @@ jQuery( document ).ready(function($) {
 
         detached.remoteDirectory(trackNum);
         $('#playlist_table > tbody').html("");
-           displayPlaylist();
-      ///  togglePlaylist();
+        displayPlaylist();
     }
     /*
       * Briefly pause playback then try reload if playback interrupted or src not found
