@@ -30,19 +30,18 @@ controls::controls(QWidget *parent) :
 {
     ui->setupUi(this);
     PlayMode = 0;
-    curAmount = 0;
-    announcedAmount = 0;
-    curRange = false;
-    announcedRange = false;
-    announcedSelect = 0;
+    curAmount = 0, announcedAmount = 0;
+    curRange = false, announcedRange = false;
+    announcedSelect = 0, CurrentSelect = 0, CurrentDirSelect = 0;
+
+    current.initFile(100);
+    currentDir.initFile(100);
 
     detach = new detached();
     detachOpen = false;
     screenSz = QSize(1024,740);
     screenMode = false;
     themePath = "";
-
-    current.initFile(100);
 
     vol = new volume(this);
     ui->volLayout->addWidget(vol, 0,0,0,0,0);
@@ -58,7 +57,7 @@ controls::controls(QWidget *parent) :
     connect(this, SIGNAL(remConState(int)), detach, SLOT(setState(int)) );
     connect(this, SIGNAL(remConSeek(int)), detach, SLOT(setSeekPos(int)) );
     connect(this, SIGNAL(remConVol(int)), detach, SLOT(setVolume(int)) );
-    connect(this, SIGNAL(remListChange(int, fileObj *, int*, int, bool,int)), detach, SLOT(setCurList(int, fileObj *, int*, int, bool,int)));
+    connect(this, SIGNAL(remListChange(int, fileObj *,fileObj *, int*, int, bool,int)), detach, SLOT(setCurList(int, fileObj *,fileObj *, int*, int, bool,int)));
     connect(this, SIGNAL(remSelectChange(int)), detach, SLOT(setSelection(int)));
 
     /// connect detach player to controls
@@ -68,7 +67,10 @@ controls::controls(QWidget *parent) :
     connect(detach, SIGNAL(remConVol(int)), this, SLOT(remoteVolume(int)));
     connect(detach, SIGNAL(remScreenToggle(bool)), this, SLOT(remoteScreenToggle(bool)));
     connect(detach, SIGNAL(remTrackChange(int)), this, SLOT(remoteSelection(int)));
+    connect(detach, SIGNAL(remDirChange(int)), this, SLOT(remoteDir(int)));
+    connect(detach, SIGNAL(remModeChange(int)), this, SLOT(remoteMode(int)));
     connect(detach, SIGNAL(detachClose()), this, SLOT(detachExited()));
+
 }
 
 /*
@@ -98,6 +100,10 @@ void controls::initPlaylist(){
     current = fileObj();
     current.initFile(100);
     current = announced;
+
+    currentDir = fileObj();
+    currentDir.initFile(100);
+    currentDir = announcedDir;
 }
 
 /*
@@ -112,6 +118,7 @@ void controls::start(string finSong, string finPath)
     timer.start(1000);
     openPlayer();
     emit songChanged(finSong, finPath, PlayMode);
+
 }
 
 /*
@@ -227,16 +234,17 @@ void controls::openPlayer(){
 /*
   * Set Current qeue list when list changes
   */
-void controls::setCurList(int selID, fileObj &newList, int *newIDlist, int amount, bool range, int mode){
+void controls::setCurList(int selID, fileObj* newDirList, fileObj *newList, int *newIDlist, int amount, bool range, int mode){
     announced = fileObj();
     announced.initFile(100);
-    announced = newList;
+    announced = *newList;
+    announcedDir = *newDirList;
     announcedList = newIDlist;
     announcedAmount = amount;
     announcedRange = range;
     PlayMode = mode;
     announcedSelect = selID;
-    emit remListChange(announcedSelect, &announced, announcedList, announcedAmount, announcedRange, PlayMode);
+    emit remListChange(announcedSelect, &announcedDir, &announced, announcedList, announcedAmount, announcedRange, PlayMode);
 }
 
 ////  slot for seeking from detached track slider

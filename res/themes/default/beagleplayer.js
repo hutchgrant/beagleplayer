@@ -108,7 +108,8 @@ jQuery( document ).ready(function($) {
           var moveSlider = false;
           if(!videoStarted){
                 loadAndStart();
-              displayPlaylist();
+                displayPlaylist();
+             // displayDirectories();
           }else{
               if(pastPaused){
                   trackVideo.play();
@@ -379,6 +380,24 @@ jQuery( document ).ready(function($) {
         }
     }
     /*
+    * Display Playlist
+    */
+    function displayDirectories(){
+        var row = [], cell1 = [];
+        var counter = 0;
+        for(var x=0; x<dirobj.getSize(); x++){
+                track = "<p id='dir_" +counter + "'>" +dirobj.getQStrName(x) + "</p>";
+                row[counter] = playlistList.insertRow(0);
+                cell1[counter] = row[counter].insertCell(0);
+                cell1[counter].innerHTML = track;
+                cell1[counter].setAttribute("class", dirobj.getID(x));
+                cell1[counter].setAttribute("id", counter);
+                cell1[counter].onclick=function(){directorySelection(this)};
+                counter++;
+                console.log(dirobj.getQStrName(x) + "  index = " + counter);
+        }
+    }
+    /*
      * Determine which playlist item was selected, send signal to player
      */
     function playlistSelection(x){
@@ -389,7 +408,18 @@ jQuery( document ).ready(function($) {
         detached.remoteTrack(trackNum);
         togglePlaylist();
     }
+    /*
+     * Determine which directory item was selected, send signal to player
+     */
+    function directorySelection(x){
+        var trackID = x.getAttribute("class");
+        var trackNum = x.getAttribute("id");
+        var trackName = x.textContent;
 
+        detached.remoteDirectory(trackNum);
+        displayPlaylist();
+      ///  togglePlaylist();
+    }
     /*
       * Briefly pause playback then try reload if playback interrupted or src not found
       */

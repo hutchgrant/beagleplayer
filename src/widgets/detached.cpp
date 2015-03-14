@@ -38,8 +38,8 @@ detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
     wPath = "";
     curRange = false;
     curAmount = 0;
-    current = new fileObj();
-    current->initFile(100);
+    current = fileObj();
+    current.initFile(100);
 
     QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
@@ -76,8 +76,8 @@ void detached::displayHistory(){
  */
 void detached::addToJavaScript() {
     webView()->page()->mainFrame()->addToJavaScriptWindowObject("detached", this);
-    webView()->page()->mainFrame()->addToJavaScriptWindowObject("fileobj", current);
-
+    webView()->page()->mainFrame()->addToJavaScriptWindowObject("fileobj", &this->current);
+    webView()->page()->mainFrame()->addToJavaScriptWindowObject("dirobj", &this->currentDir);
 }
 
 /*

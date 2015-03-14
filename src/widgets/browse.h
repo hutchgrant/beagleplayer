@@ -53,7 +53,7 @@ public:
 
 signals:
 
-    void curListChanged(int selID, fileObj &filelist, int *itemList, int amt, bool ignoreRange, int mode);
+    void curListChanged(int selID, fileObj *dirlist, fileObj *filelist, int *itemList, int amt, bool ignoreRange, int mode);
     void trackChanged(string plName, string plPath, int plID, int plPar, int mode);
     void selectionChanged(int);                         //  a track was selected
     void FullSelection(int);                            // a track was double clicked
@@ -68,6 +68,10 @@ public slots:
         syncCache();
         updateMenu();
     }
+    void changeDirectory(int id){
+        updateTitle(id);
+    }
+
 private slots:
 
     void on_MenuList_clicked(const QModelIndex &index);

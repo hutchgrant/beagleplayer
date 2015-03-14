@@ -46,7 +46,7 @@ public:
     int pl_selected;
     int PlayingState, PlayMode, screenMode;
 
-    bool detachOpen;
+    bool detachOpen, detachRemove;
 
     QTimer timer;
     QSize screenSz;
@@ -80,7 +80,7 @@ public slots:
         initPlaylist();
         startSelected();
     }
-    void setCurList(int selID, fileObj &newlist, int * newIDlist,int amt, bool range, int mode);
+    void setCurList(int selID, fileObj *dirlist, fileObj *newlist, int * newIDlist,int amt, bool range, int mode);
 
     /*
      * Remote commands for signals from another widget!
@@ -182,6 +182,14 @@ private slots:
         timer.start(1000);
         emit remConState(PlayingState);
     }
+    void remoteDir(int id){
+        CurrentDirSelect = id;
+        emit conDirChange(id);
+    }
+    void remoteMode(int mode){
+        PlayMode = mode;
+        emit conModeChange(mode);
+    }
 
 signals:
     void detachControls();
@@ -192,19 +200,21 @@ signals:
     void remConFile(int);
     void remConVol(int);
     void remConState(int);
-    void remListChange(int, fileObj *, int *,int, bool, int);
+    void remListChange(int, fileObj *, fileObj *, int *,int, bool, int);
+    void conDirChange(int id);
+    void conModeChange(int mode);
     void remSelectChange(int);
 
 private:
         void adjustVol(int vol);
-        int CurrentSelect;  /// current selection number
+        int CurrentSelect, CurrentDirSelect;  /// current selection id for file and directory
         int *curList, *announcedList;       /// current cue list ID's
         int curAmount, announcedAmount; /// init for playlist size
         int announcedSelect;   /// ID of parent directory we're browsing
         bool curRange, announcedRange; /// init for ignoring range
         string themePath;
 
-        fileObj current, announced;    /// current fileObj List
+        fileObj current, currentDir, announced, announcedDir;    /// current fileObj List
         detached *detach;
         Ui::controls *ui;
         string name, path;

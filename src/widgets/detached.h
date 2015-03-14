@@ -49,6 +49,14 @@ public slots:
     void remoteTrack(int track){
         emit remTrackChange(track);
     }
+    void remoteDirectory(int id){
+        setDirSelection(id);
+        emit remDirChange(id);
+    }
+    void remoteMode(int mode){
+        setPlayMode(mode);
+        emit remModeChange(mode);
+    }
 
 
     /*
@@ -75,12 +83,19 @@ public slots:
     void setScreenMode(bool fullscreen){
         this->screenMode = fullscreen;
     }
+    void setPlayMode(int mode){
+        this->mode = mode;
+    }
+
     void setTheme(string theme){
         this->wTheme = theme;
         this->wPath = theme.substr(0, theme.find_last_of("/")+1);
     }
-    void setCurList(int selID, fileObj *newlist, int * newIDlist,int amt, bool range, int mode){
-        this->current = newlist;
+    void setCurList(int selID, fileObj *dirlist, fileObj *newlist, int * newIDlist,int amt, bool range, int mode){
+        this->current.initFile(100);
+        this->current = *newlist;
+        this->currentDir.initFile(100);
+        this->currentDir = *dirlist;
         this->curList = newIDlist;
         this->curAmount = amt;
         this->curRange = range;
@@ -144,6 +159,8 @@ signals:
     void remConVol(int);
     void remScreenToggle(bool);
     void remTrackChange(int);
+    void remDirChange(int);
+    void remModeChange(int);
     void detachClose();
 protected:
     void closeEvent(QCloseEvent *event);
@@ -156,7 +173,7 @@ private:
     int volume, min, max, state, mode, directoryID, selectedID;
     bool songChange, screenMode; // true = full
 
-    fileObj *current;
+    fileObj current, currentDir;
 };
 
 #endif // MAINWINDOW_H

@@ -95,7 +95,7 @@ void playlist::fillPL(){
                 count++;
             }
         }
-        emit playlistChanged(selID, pListItems, curPLlist, count, false, PlayMode);
+        emit playlistChanged(selID, &pList, &pListItems, curPLlist, count, false, PlayMode);
     }
     else if(PLMODE == 2){            // new playlist items
         curPLlist = new int[pNewItems.getSize()];
@@ -104,7 +104,7 @@ void playlist::fillPL(){
             curPLlist[count] = pNewItems.getID(i);
             count++;
         }
-        emit playlistChanged(0, pNewItems, curPLlist, count, false, PlayMode);
+        emit playlistChanged(0, new fileObj, &pNewItems, curPLlist, count, false, PlayMode);
     }
     pl_model = new QStringListModel(this);
     pl_model->setStringList(curList);
