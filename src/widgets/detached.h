@@ -96,7 +96,6 @@ public slots:
         this->current = *newlist;
         this->currentDir.initFile(100);
         this->currentDir = *dirlist;
-        delete [] curList;
         this->curList = new int[amt+1];
         this->curList = newIDlist;
         this->curAmount = amt;

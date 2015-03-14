@@ -39,6 +39,7 @@ detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
     curRange = false;
     curAmount = 0;
     curList = new int[1];
+    curList[0] = 0;
     current = fileObj();
     current.initFile(100);
     currentDir.initFile(100);
@@ -93,5 +94,5 @@ void detached::closeEvent(QCloseEvent *event){
  * Destructor
  */
 detached::~detached(){
-
+    delete [] curList;
 }

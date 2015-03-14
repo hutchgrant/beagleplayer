@@ -38,10 +38,6 @@ fileObj::fileObj(const fileObj &src){
     if(src.objSize > 0){
         objSize = 0;
         InitSize = 0;
-        delete [] fileName;
-        delete [] fileID;
-        delete [] filePar;
-        delete [] filePath;
         initFile(src.objSize);
         for(int i=0; i< src.objSize; i++){
             set(i,src.fileID[i], src.filePar[i], src.fileName[i].c_str(), src.filePath[i].c_str());
@@ -99,10 +95,6 @@ void fileObj::REinitFile(int oldsize, int newsize){
         idCopy[i] = fileID[i];
         pathCopy[i] = filePath[i];
     }
-    delete [] fileName;
-    delete [] fileID;
-    delete [] filePar;
-    delete [] filePath;
     tempObjSize = objSize;
     initFile(InitSize);
     /// refill array fileName fileID filePar array
@@ -145,10 +137,6 @@ fileObj& fileObj::operator=(const fileObj& src){
         if(src.objSize > 0){
             objSize = 0;
             InitSize = 0;
-            delete [] fileName;
-            delete [] fileID;
-            delete [] filePar;
-            delete [] filePath;
             initFile(src.objSize);
 
             for(int i=0; i< src.objSize; i++){
