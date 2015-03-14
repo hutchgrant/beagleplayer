@@ -33,6 +33,7 @@ controls::controls(QWidget *parent) :
     curAmount = 0, announcedAmount = 0;
     curRange = false, announcedRange = false;
     announcedSelect = 0, CurrentSelect = 0, CurrentDirSelect = 0;
+    announcedList = new int[1];
 
     current.initFile(100);
     currentDir.initFile(100);
@@ -239,6 +240,8 @@ void controls::setCurList(int selID, fileObj* newDirList, fileObj *newList, int 
     announced.initFile(100);
     announced = *newList;
     announcedDir = *newDirList;
+    delete [] announcedList;
+    announcedList = new int[amount+1];
     announcedList = newIDlist;
     announcedAmount = amount;
     announcedRange = range;

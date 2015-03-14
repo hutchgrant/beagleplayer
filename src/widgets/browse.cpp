@@ -68,8 +68,14 @@ void browse::Sync(int type){
         radStat = new radiostat();
         radStat->init(dbCon);
         radStat->show();
-        MenuMode = 2;  /// set Mode to radio
-        updateTitle(0);
+        if(radStat->exec() == QDialog::Accepted){
+            dbCon->readDB(Radio, "radios");
+            dbCon->readDB(RadioCat, "categories");
+
+            MenuMode = 2;  /// set Mode to radio
+            updateMenu();
+            updateTitle(0);
+        }
     }else if(type == 0){
         QDir usrDir;
          usrDir = QFileDialog::getOpenFileName(this, tr("Open a Audio/Video file"), QDir::currentPath(), tr("Video/Audio (*.avi *.mp4 *.mp3 *.flac *.wav)"));

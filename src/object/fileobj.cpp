@@ -57,6 +57,12 @@ fileObj::fileObj(const fileObj &src){
 void fileObj::initFile(int initSZ){
     objSize = 0;
     InitSize = 0;
+    if(objSize > 0){
+        delete [] fileName;
+        delete [] filePath;
+        delete [] fileID;
+        delete [] filePar;
+    }
     fileName = new string[initSZ];
     fileID = new int[initSZ];
     filePar = new int[initSZ];

@@ -38,8 +38,10 @@ detached::detached(QWidget *parent) : Html5ApplicationViewer(parent)
     wPath = "";
     curRange = false;
     curAmount = 0;
+    curList = new int[1];
     current = fileObj();
     current.initFile(100);
+    currentDir.initFile(100);
 
     QWebSettings::globalSettings()->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
     QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
