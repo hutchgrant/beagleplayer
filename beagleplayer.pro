@@ -57,14 +57,14 @@ HEADERS  += src/control/beaglemain.h \
 
 FORMS    += src/control/beaglemain.ui \
     src/widgets/browse.ui \
-    src/widgets/playlist.ui \
     src/widgets/newplaylist.ui \
     src/widgets/volume.ui \
     src/widgets/controls.ui \
     src/widgets/radiostat.ui \
     src/widgets/about.ui \
     src/widgets/qweburl.ui \
-    src/widgets/appearance.ui
+    src/widgets/appearance.ui \
+    src/widgets/playlist.ui
 
 RESOURCES += \
     res/BPres.qrc

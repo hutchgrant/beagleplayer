@@ -30,6 +30,7 @@
 #include "src/widgets/volume.h"
 #include "src/widgets/detached.h"
 
+
 namespace Ui {
 class controls;
 }

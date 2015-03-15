@@ -272,20 +272,12 @@ jQuery( document ).ready(function($) {
      */
     function toggleFullScreen(sendRemote){
         if(screenMode || toggleFull){
-            trackVideo.setAttribute("width", 2000);
-            trackVideo.setAttribute("height", 1200);
-            trackVideo.style.marginLeft = "-2%";
-            trackVideo.style.marginTop = "10px";
             originalColor = playBody.style.backgroundColor;
             playBody.style.backgroundColor = "black";
             if(sendRemote){
                 detached.remoteScreen(screenMode);
             }
         }else{
-            trackVideo.setAttribute("height", 800);
-            trackVideo.setAttribute("width", 1024);
-            trackVideo.style.marginLeft = "auto";
-            trackVideo.style.marginTop = "10px";
             playBody.style.backgroundColor = originalColor;
             if(sendRemote){
                 detached.remoteScreen(screenMode);

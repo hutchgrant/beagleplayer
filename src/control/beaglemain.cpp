@@ -53,7 +53,7 @@ void beaglemain::initCache(){
         playlst->initCache(&dbCache);
         connect(theme, SIGNAL(themeChanged(string)), cntrl, SLOT(setTheme(string)));
         theme->init(&dbCache);
-
+        connect(brow, SIGNAL(curDirChanged(fileObj*)), cntrl, SLOT(setCurDir(fileObj *)));
         brow->Sync(1);  /// initialize and fill DB cache objects
     }
 }
