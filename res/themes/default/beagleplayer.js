@@ -113,6 +113,7 @@ jQuery( document ).ready(function($) {
       TrackPos = detached.getSeekPos();
       TrackVolume = detached.getVolume();
 
+
       $( seekSlider ).slider( "value", TrackPos );
       $( seekSlider ).slider( "option", "max", TrackRange );
        $( volSlider ).slider( "value", TrackVolume );
@@ -159,12 +160,13 @@ jQuery( document ).ready(function($) {
      * Load the media file into the <video> tag, initialize player
      */
     function loadAndStart(){
+        TrackMode = detached.getMode();
         ignoreRange = false;
         trackVideo.setAttribute("src",TrackPath);
         if(parseInt(TrackMode) === 0 || parseInt(TrackMode) === 2){
             trackVideo.setAttribute("type","audio/mp3");
             showGUI();
-            if(TrackMode === 2){
+            if(parseInt(TrackMode) === 2){
                 ignoreRange = true;
             }
         }else{
@@ -258,6 +260,9 @@ jQuery( document ).ready(function($) {
             $(volSlider).hide();
             volumeShowing = false;
             displayGUI = false;
+            playlistShowing = true;
+            directoriesShowing = true;
+            togglePlaylist();
         }
     }
 
@@ -306,6 +311,7 @@ jQuery( document ).ready(function($) {
         }else{
             playlist.style.display = "none";
             playlistShowing = false;
+            directoriesShowing = true;
             toggleDirectories();
         }
     }
