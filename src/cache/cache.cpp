@@ -29,7 +29,7 @@ cache::cache()
     db_file = cache_dir + "beagle.db";
     locate_file = cache_dir + "cache_locate.txt";
 
-    theme_dir = cache_dir + "themes/";
+    theme_dir = "/opt/extras.ubuntu.com/beagleplayer/res/themes/";
     default_theme = theme_dir + "default/default.theme";
 }
 /*
@@ -296,8 +296,8 @@ void cache::createCache(){
    QString q_main = cache_dir.c_str();
    QDir(q_main).mkdir(q_main);
 
-   QString q_theme = theme_dir.c_str();
-   QDir(q_theme).mkdir(q_theme);
+  // QString q_theme = theme_dir.c_str();
+   // QDir(q_theme).mkdir(q_theme);
 }
 
 /*

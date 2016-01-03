@@ -51,6 +51,8 @@ private:
     Ui::appearance *ui;
     fileObj themes;
     QStringListModel *t_Model;
+    QGraphicsScene *scn;
+    QPixmap themeImg;
 };
 
 #endif // APPEARANCE_H

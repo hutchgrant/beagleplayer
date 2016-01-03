@@ -1,6 +1,6 @@
 THEME=blue
 TITLE=blue beagleplayer theme
 AUTHOR=Grant Hutchinson
-VERSION=0.0.1
-DATE=MAR 09, 2015
-DESCRIPTION=some test description
+VERSION=0.0.2
+DATE=Mar 09, 2015
+DESCRIPTION=default blue theme

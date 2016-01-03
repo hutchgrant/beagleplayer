@@ -43,7 +43,8 @@ void appearance::getThemes(){
     int count = 0;
     fileObj themeDir;
     themeDir.initFile(100);
-    QDirIterator directories(cah->theme_dir.c_str(), QDir::Dirs | QDir::NoDotAndDotDot);
+    QString theme = QApplication::applicationDirPath() + "/res/themes/";
+    QDirIterator directories(theme.toStdString().c_str(), QDir::Dirs | QDir::NoDotAndDotDot);
     while(directories.hasNext()){
         directories.next();
         themeDir.set(count, count, 0, directories.fileName().toStdString().c_str(), directories.filePath().toStdString().c_str());
@@ -67,12 +68,17 @@ void appearance::getThemes(){
  *  Set the selected theme's image to the appearance display
  */
 void appearance::setThemeImg(string imgPath){
-  /*  scn = new QGraphicsScene(ui->graphicsView);
+
+    int lastDot = QString(imgPath.c_str()).lastIndexOf(".");
+    QString subImgPath = QString(imgPath.c_str()).mid(0, lastDot);
+    subImgPath = subImgPath.append(".png");
+
+    scn = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene( scn );
-    someImage = QPixmap(imgPath.c_str());
+    themeImg = QPixmap(subImgPath);
     scn->setSceneRect(0,0,0,0);
-    scn->addPixmap(someImage);
-    ui->graphicsView->show(); */
+    scn->addPixmap(themeImg);
+    ui->graphicsView->show();
 }
 
 /*
@@ -125,6 +131,7 @@ void appearance::on_theme_list_clicked(const QModelIndex &index)
 {
     selectTheme = ui->theme_list->currentIndex().row();
     parseTheme(themes.getPath(selectTheme));
+    setThemeImg(themes.getPath(selectTheme));
 }
 
 /*
@@ -138,6 +145,7 @@ void appearance::on_buttonBox_clicked(QAbstractButton *button)
         reset();
     }else if(buttonText == "Apply"){
         apply(themes.getName(selectTheme), themes.getPath(selectTheme));
+        ui->theme_current->setText(themes.getName(selectTheme));
     }
 }
 
@@ -178,7 +186,8 @@ void appearance::setCurrent(){
 bool appearance::createDefaultTheme(){
     fileObj addTheme;
     addTheme.initFile(100);
-    addTheme.set(0,0,0,"default", QDir::current().absolutePath().append("/res/themes/default/default.theme").toStdString().c_str());
+    QString theme = QApplication::applicationDirPath() + "/res/themes/default/default.theme";
+    addTheme.set(0,0,0,"default", theme.toStdString().c_str());
     if(cah->writeDB(&addTheme, "theme") >=0){
         return true;
     }

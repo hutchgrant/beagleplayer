@@ -1,5 +1,5 @@
 # Beagleplayer 0.1.5
-An audio, video, radio, playlist, client, for mplayer. Beagleplayer is ideal for: quick, easy, browsing of your media library.
+An audio, video, radio, playlist, client. Beagleplayer is ideal for: quick, easy, browsing of your media library.
 
 ## Table of contents
 
@@ -46,31 +46,32 @@ beagleplayer/
 
 ##Compile and Run
 - download and extract beagleplayer.v.0.1.5.tar.gz 
-```bash
-$ wget https://github.com/hutchgrant/beagleplayer/archive/master.zip
-$ cd ~/Downloads
-$  tar -zxvf beagleplayer*.tar.gz 
+```
+wget https://github.com/hutchgrant/beagleplayer/archive/master.zip
+cd ~/Downloads
+tar -zxvf beagleplayer*.tar.gz 
 ```
 - Or install git and clone
-```bash
-$ sudo apt-get install git
-$ git clone https://github.com/hutchgrant/beagleplayer.git
+```
+sudo apt-get install git
+git clone https://github.com/hutchgrant/beagleplayer.git
 ```
 - Compile
-```bash
- $ cd ./beagleplayer
- $ qmake 
- $ make
+```
+cd ./beagleplayer
+qmake 
+make
+sudo make install
 ```
 - Run the compiled binary with
-```bash
- $ ./beagleplayer
+```
+beagleplayer
 ```
 
 ##PPA Install
 
 If you're using Ubuntu 14.04(Trusty) or Ubuntu 14.10(Utopic) you can install the launchpad ppa with:
-```bash
+```
 sudo add-apt-repository ppa:hutchgrant/beagleplayer && sudo apt-get update && sudo apt-get install beagleplayer
 ```
 
@@ -89,57 +90,14 @@ A theme consist of:
 
 - For an example of a .theme file see the default themes [./res/themes/default](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/default/default.theme)
 
-- For an example of a .html and .css theme check the [default](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/default/default.theme) or [blue](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/blue/blue.html) themes.
+- For an example of a .html and .css theme check the [default](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/default/default.theme), [blue](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/blue/blue.html), [grey](https://github.com/hutchgrant/beagleplayer/blob/master/res/themes/blue/grey.html)themes.
 
 ##Contributing
 
-Contributions are encouraged, while it must be noted, this project has a planned path and you should seek to contact the authors, before undergoing any large development.  All contributions will be placed under the same GPLv3 license, contributers must agree to that license.
-
-The following is expected from any pull requests.
-
-1. [Fork](http://help.github.com/fork-a-repo/) the project, clone your fork,
-   and configure the remotes:
-
-   ```bash
-   # clone your fork
-   git clone https://github.com/<your-username>/beagleplayer.git
-   # change directory to the repository folder
-   cd beagleplayer
-   # set the official beagleplayer repo to a remote branch called "upstream"
-   git remote add upstream https://github.com/hutchgrant/beagleplayer.git
-   ```
-
-2. If you cloned a while ago, make sure to update with the latest changes from upstream branch:
-
-   ```bash
-   git checkout master
-   git pull upstream master
-   ```
-
-3. Create a new branch for your changes/fixes
-
-   ```bash
-   git checkout -b <topic-branch-name>
-   ```
-
-4. Locally merge (or rebase) the upstream development branch into your topic branch:
-
-   ```bash
-   git pull [--rebase] upstream master
-   ```
-
-6. Push your topic branch up to your fork:
-
-   ```bash
-   git push origin <topic-branch-name>
-   ```
-
-7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
-    with a clear title and description against the `master` branch.
+see [Contributing](https://github.com/hutchgrant/beagleplayer/blob/master/CONTRIBUTING.md)
 
 ## Creators
 **Grant Hutchinson**
-
 
 ## License
 All code and documentation from 2011- 2015 is available under the terms of the [GNU Public License v3](http://www.gnu.org/copyleft/gpl.html)

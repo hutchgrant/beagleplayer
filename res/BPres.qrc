@@ -54,5 +54,8 @@
         <file>themes/default/beagleplayer.js</file>
         <file>themes/default/default.html</file>
         <file>themes/default/default.theme</file>
+        <file>themes/blue/blue.css</file>
+        <file>themes/blue/blue.html</file>
+        <file>themes/blue/blue.theme</file>
     </qresource>
 </RCC>

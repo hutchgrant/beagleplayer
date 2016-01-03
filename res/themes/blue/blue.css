@@ -1,7 +1,7 @@
 body {
 margin: 0;
 font-size: 2em;
-background-color: blue;
+background-color: black;
 }
 
 .main {
@@ -27,15 +27,18 @@ color:white;
 #track_seek {
 display:none;
 position:absolute;
-bottom:4px;
+bottom:0px;
+padding: 1px;
 left:10px;
+right:10px;
 z-index:10;
 color:white;
+background-color: blue;
 }
 
 #track_buttons {
 z-index: 10;
-bottom: 0px;
+bottom: 3px;
 left: 0;
 position: absolute;
 display:none;
@@ -79,10 +82,9 @@ height:22px;
 #track_volume {
 width: 100px;
 z-index: 10;
-left: 290px;
+left: 310px;
 bottom: 4px;
 position: absolute;
-display:none;
 }
 
 #seek_amount {
@@ -116,20 +118,21 @@ font-weight:bold;
 width:40px;
 position: absolute;
 bottom: 0px;
-height:22px;
+height:25px;
 background-color:black;
+display:none;
 }
 
 #vol_slider {
+display:none;
 margin-top: -30px;
 bottom: 30px;
 }
 
 
 .player{
-margin-left:auto;
-margin-right:auto;
 width:100%;
+height:100%;
 }
 .playlist {
 position:absolute;
@@ -138,8 +141,8 @@ left:25%;
 z-index:30;
 min-width:60%;
 min-height:70%;
-background-color:blue;
-color:black;
+background-color:black;
+color:white;
 display:none;
 overflow: auto;
 height:70%;
@@ -148,7 +151,7 @@ width:60%;
 border-radius: 7px 7px 7px 7px;
 -moz-border-radius: 7px 7px 7px 7px;
 -webkit-border-radius: 7px 7px 7px 7px;
-border: 4px solid #dedede;
+border: 4px solid rgb(0, 10, 255);
 }
 
 .directory {
@@ -158,8 +161,8 @@ left:5%;
 z-index:30;
 min-width:20%;
 min-height:70%;
-background-color:blue;
-color:black;
+background-color:black;
+color:white;
 display:none;
 overflow: auto;
 height:70%;
@@ -168,7 +171,7 @@ width:20%;
 border-radius: 7px 7px 7px 7px;
 -moz-border-radius: 7px 7px 7px 7px;
 -webkit-border-radius: 7px 7px 7px 7px;
-border: 4px solid #dedede;
+border: 4px solid rgb(0, 10, 255);
 }
 
 #mode {
@@ -188,9 +191,9 @@ border-radius: 7px 7px 7px 7px;
 -webkit-border-radius: 7px 7px 7px 7px;
 border: 4px solid #dedede;
 }
-/* Slider */
-.ui-slider .ui-slider-handle {00:00:23/00:02:01
 
+/* Slider */
+.ui-slider .ui-slider-handle {
     width: .4em;
     height: 0.8em;
 }
@@ -248,16 +251,7 @@ video#video{
     display:none;
     position: absolute;
     z-index: 1;
-    top: -123px;
+    width:100%;
+    height:100%;
 }
-video::
-video::-webkit-media-controls-fullscreen-button {}
-video::-webkit-media-controls-play-button {}
-video::-webkit-media-controls-timeline {}
-video::-webkit-media-controls-current-time-display{}
-video::-webkit-media-controls-time-remaining-display {}
-video::-webkit-media-controls-time-remaining-display {}
-video::-webkit-media-controls-mute-button {}
-video::-webkit-media-controls-toggle-closed-captions-button {}
-video::-webkit-media-controls-volume-slider {}
 
