@@ -19,7 +19,7 @@ An audio, video, radio, playlist, client. Beagleplayer is ideal for: quick, easy
 # Recommended with Qt5
 $ sudo apt-get install qt5-default libqt5webkit5-dev
 ```
-This was built and tested in Ubuntu 14.04 and a beta version available for [Windows 10](https://github.com/hutchgrant/beagleplayer/blob/master/README-windows.md). Debian based distributions should be able to run without issue.  Minor modifications necessary, to cache path, for other Linux based systems.
+This was built/tested in Ubuntu 14.04 aswell as a beta version available for [Windows 10](https://github.com/hutchgrant/beagleplayer/blob/master/README-windows.md). Debian based distributions should be able to run without issue.  Minor modifications necessary, to cache path, for other Linux based systems.
 
 ##Included
 ```

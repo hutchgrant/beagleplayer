@@ -30,6 +30,7 @@ beagleplayer/
 │   └── widgets
 ├── debian/
 └── docs/
+```
 
 ##Compile and Run
 
@@ -40,10 +41,12 @@ beagleplayer/
 3. Install Git
 
 4. Open Git cmdline type: 
+
 ```
 cd Documents 
 git clone https://github.com/hutchgrant/beagleplayer.git
 ```
+
 5. Open QtCreator -> Open Project -> browse C:\User\youruser\Documents\beagleplayer, open the beagleplayer.pro file
 
 6. Compile and run.
@@ -51,11 +54,13 @@ git clone https://github.com/hutchgrant/beagleplayer.git
 7. Database will be created at C:\User\youruser\beagleplayer\beagle.db
 
 8. You need to manually copy the entire 'res' folder 
+
 ```
 Copy
 from: C:\User\youruser\Documents\beagleplayer\res
 to: C:\User\youruser\beagleplayer\res
 ```
+
 This is so beagleplayer can use the custom themes.
 
 9. Enjoy.
