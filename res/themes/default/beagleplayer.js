@@ -43,6 +43,7 @@ jQuery( document ).ready(function($) {
     var trackSource = document.getElementById("source");
 
     var trackTitle = document.getElementById("track_title");
+    var trackFoot = document.getElementsByClassName("track_foot")[0];
     var trackButtons = document.getElementById("track_buttons");
     var trackVolume = document.getElementById("track_volume");
     var trackSeek = document.getElementById("track_seek");
@@ -213,7 +214,7 @@ jQuery( document ).ready(function($) {
             }
             toggleFullScreen(true);
         });
-        $('#video').click(function() {
+        $('#video').click(function(){
                showGUI();
         });
         $('#open').click(function() {
@@ -248,12 +249,14 @@ jQuery( document ).ready(function($) {
     function showGUI(){
         if(!displayGUI){
             trackTitle.style.display = "block";
+            trackFoot.style.display = "block";
             trackButtons.style.display = "block";
             trackSeek.style.display = "block";
             $(volVal).show();
             displayGUI = true;
         }else{
             trackTitle.style.display = "none";
+            trackFoot.style.display = "none";
             trackButtons.style.display = "none";
             trackSeek.style.display = "none";
             $(volVal).hide();
@@ -262,7 +265,9 @@ jQuery( document ).ready(function($) {
             displayGUI = false;
             playlistShowing = true;
             directoriesShowing = true;
+            ccShowing = true;
             togglePlaylist();
+            toggleCC();
         }
     }
 
@@ -350,6 +355,18 @@ jQuery( document ).ready(function($) {
         }else{
             $(volSlider).hide();
              volumeShowing = false;
+        }
+    }
+    /*
+      * Toggle Subtitles/captioning
+      */
+    function toggleCC(){
+        if(!ccShowing){
+            $('#ccView').show();
+            ccShowing = true;
+        }else{
+            $('#ccView').hide();
+            ccShowing = false;
         }
     }
      /*

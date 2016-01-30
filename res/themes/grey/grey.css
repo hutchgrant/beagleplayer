@@ -8,13 +8,26 @@ background-color: black;
 }
 
 .track_head {
-margin-left:auto;
-margin-right:auto;
+height: 50px;
+z-index: 2;
+position: absolute;
+left: 0px;
+top: 0;
+width: 100%
 }
-
+.track_foot {
+width: 100%;
+bottom: 0;
+left: 0;
+z-index: 2;
+position: absolute;
+height: 30px;
+background-color: grey;
+display:none;
+}
 #track_title {
 font-size:24px;
-z-index: 20;
+z-index: 3;
 padding: 0px;
 position: absolute;
 margin-top: 20px;
@@ -26,18 +39,18 @@ color:white;
 
 #track_seek {
 display:none;
-position:absolute;
-bottom:0px;
+position: absolute;
+bottom: 0px;
 padding: 1px;
-left:10px;
-right:10px;
-z-index:10;
-color:white;
-background-color: grey;
+left: 360px;
+right: 10px;
+z-index: 3;
+color: white;
+width: 59%;
 }
 
 #track_buttons {
-z-index: 10;
+z-index: 3;
 bottom: 3px;
 left: 0;
 position: absolute;
@@ -59,29 +72,32 @@ padding:2px;
  width:20px;
 }
 
+#track_buttons_rt {
+z-index: 3;
+bottom: 2px;
+right: 0;
+position: absolute;
+display: none;
+}
+
+.track_button_rt {
+display: inline;
+padding: 2px;
+width: 32px;
+}
+#buttons_rt {
+ display:inline;
+ list-style-type: none;
+}
+
 #button #open_directory{
 width: 22px;
 height:22px;
 }
 
-#pause {
-
-}
-#prev {
-
-}
-#play{
-
-}
-#stop{
-
-}
-#next{
-}
-
 #track_volume {
-width: 100px;
-z-index: 10;
+width: 30px;
+z-index: 3;
 left: 310px;
 bottom: 4px;
 position: absolute;
@@ -94,30 +110,23 @@ font-weight:bold;
 }
 
 #seek_slider {
-width:300px;
-margin-left: auto;
-margin-right: auto;
+margin-bottom: 5px;
 }
 
-#seek_range {
-}
-#seek_time {
-}
-#seek_divide{
-}
 #range{
-    width:300px;
-    margin-left: auto;
-    margin-right: auto;
+width: 300px;
+margin-left: 35%;
+font-size: 14px;
+font-weight: 600;
 }
 
 #vol_amount {
 border:0;
 color:#f6931f;
 font-weight:bold;
-width:40px;
+width:30px;
 position: absolute;
-bottom: 0px;
+bottom: -1px;
 height:25px;
 background-color:black;
 display:none;
@@ -129,16 +138,15 @@ margin-top: -30px;
 bottom: 30px;
 }
 
-
 .player{
-width:100%;
-height:100%;
+z-index: 1;
 }
+
 .playlist {
 position:absolute;
 top:15%;
 left:25%;
-z-index:30;
+z-index:10;
 min-width:60%;
 min-height:70%;
 background-color:black;
@@ -151,14 +159,14 @@ width:60%;
 border-radius: 7px 7px 7px 7px;
 -moz-border-radius: 7px 7px 7px 7px;
 -webkit-border-radius: 7px 7px 7px 7px;
-border: 4px solid grey;
+border: 4px solid #dedede;
 }
 
 .directory {
 position:absolute;
 top:15%;
 left:5%;
-z-index:30;
+z-index:10;
 min-width:20%;
 min-height:70%;
 background-color:black;
@@ -171,20 +179,34 @@ width:20%;
 border-radius: 7px 7px 7px 7px;
 -moz-border-radius: 7px 7px 7px 7px;
 -webkit-border-radius: 7px 7px 7px 7px;
-border: 4px solid grey;
+border: 4px solid #dedede;
 }
 
 #mode {
 position:absolute;
 bottom: 20px;
 left:15%;
-z-index:30;
+z-index:10;
 background-color:black;
 color:white;
 display:none;
 overflow: auto;
-height: 15%;
-width:15%;
+
+border-radius: 7px 7px 7px 7px;
+-moz-border-radius: 7px 7px 7px 7px;
+-webkit-border-radius: 7px 7px 7px 7px;
+border: 4px solid #dedede;
+}
+
+#ccView {
+position:absolute;
+bottom: 30px;
+right:2%;
+z-index:10;
+background-color:black;
+color:white;
+display:none;
+overflow: auto;
 
 border-radius: 7px 7px 7px 7px;
 -moz-border-radius: 7px 7px 7px 7px;
@@ -213,40 +235,17 @@ border: 4px solid #dedede;
         margin-left: 0;
         width:10px;
 }
+
 :-webkit-full-screen {
 width: 100%;
 height: 100%;
 }
 
-:-moz-full-screen {
-  /* properties */
-}
-
-:-ms-fullscreen {
-  /* properties */
-}
-
-:full-screen { /*pre-spec */
-  /* properties */
-}
-
-:fullscreen { /* spec */
-  /* properties */
-}
-
-/* deeper elements */
 :-webkit-full-screen video {
   width: 100%;
   height: 100%;
 }
 
-/* styling the backdrop*/
-::backdrop {
-  /* properties */
-}
-::-ms-backdrop {
-  /* properties */
-}
 video#video{
     display:none;
     position: absolute;
@@ -254,4 +253,3 @@ video#video{
     width:100%;
     height:100%;
 }
-

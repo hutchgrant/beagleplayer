@@ -24,13 +24,22 @@
  */
 cache::cache()
 {
-    cache_dir = "/.cache/beagleplayer2/";
+#ifdef Q_OS_LINUX
+    cache_dir = "/.cache/beagleplayer/";
     cache_dir = getenv("HOME") + cache_dir;
-    db_file = cache_dir + "beagle.db";
-    locate_file = cache_dir + "cache_locate.txt";
-
     theme_dir = "/opt/extras.ubuntu.com/beagleplayer/res/themes/";
     default_theme = theme_dir + "default/default.theme";
+#endif
+#ifdef Q_OS_WIN
+    string basedir = "C:";
+    cache_dir = "\\beagleplayer\\";
+    cache_dir = basedir + getenv("homepath") + cache_dir;
+    theme_dir =  "\\beagleplayer\res\themes\\";
+    theme_dir = basedir + getenv("homepath") + theme_dir;
+    default_theme = theme_dir + "default\default.theme";
+#endif
+    db_file = cache_dir + "beagle.db";
+    locate_file = cache_dir + "cache_locate.txt";
 }
 /*
  * Destructor
@@ -219,7 +228,13 @@ bool cache::addTables(){
 
 bool cache::addTheme(){
     fileObj addTheme;
+#ifdef Q_OS_LINUX
     QString theme = QApplication::applicationDirPath() + "/res/themes/default/default.theme";
+#endif
+#ifdef Q_OS_WIN
+    QString homedir = "C:";
+    QString theme =  homedir + getenv("homepath") +"\\beagleplayer\res\themes\default\default.theme";
+#endif
     addTheme.initFile(100);
     addTheme.set(0,0,0,"default", theme.toStdString().c_str());
     if(writeDB(&addTheme, "theme") >=0){

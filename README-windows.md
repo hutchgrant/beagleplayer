@@ -6,20 +6,11 @@ An audio, video, radio, playlist, client. Beagleplayer is ideal for: quick, easy
 - [Dependencies](#dependencies)
 - [Included](#included)
 - [Compile and Run](#compile-and-run)
-- [PPA Installation](#ppa-install)
 - [Themes](#themes)
 - [Theme Examples](#theme-examples)
 - [Contributing](#contributing)
 - [Creators](#creators)
 - [License](#license)
-
-##Dependencies
-
-```bash
-# Recommended with Qt5
-$ sudo apt-get install qt5-default libqt5webkit5-dev
-```
-This was built and tested in Ubuntu 14.04 and a beta version available for [Windows 10](https://github.com/hutchgrant/beagleplayer/blob/master/README-windows.md). Debian based distributions should be able to run without issue.  Minor modifications necessary, to cache path, for other Linux based systems.
 
 ##Included
 ```
@@ -40,40 +31,35 @@ beagleplayer/
 ├── debian/
 └── docs/
 
-#themes(html,js,css) for detached player and icons + assets for player, all in ./res
-#src files for Qt(c++) in ./src
-```
-
 ##Compile and Run
-- download and extract beagleplayer.v.0.1.5.tar.gz 
+
+1. Install Codecs http://www.codecguide.com/download_kl.htm
+
+2. Install Qt community edition.
+
+3. Install Git
+
+4. Open Git cmdline type: 
 ```
-wget https://github.com/hutchgrant/beagleplayer/archive/master.zip
-cd ~/Downloads
-tar -zxvf beagleplayer*.tar.gz 
-```
-- Or install git and clone
-```
-sudo apt-get install git
+cd Documents 
 git clone https://github.com/hutchgrant/beagleplayer.git
 ```
-- Compile
-```
-cd ./beagleplayer
-qmake 
-make
-sudo make install
-```
-- Run the compiled binary with
-```
-beagleplayer
-```
+5. Open QtCreator -> Open Project -> browse C:\User\youruser\Documents\beagleplayer, open the beagleplayer.pro file
 
-##PPA Install
+6. Compile and run.
 
-If you're using Ubuntu 14.04(Trusty) or Ubuntu 14.10(Utopic) you can install the launchpad ppa with:
+7. Database will be created at C:\User\youruser\beagleplayer\beagle.db
+
+8. You need to manually copy the entire 'res' folder 
 ```
-sudo add-apt-repository ppa:hutchgrant/beagleplayer && sudo apt-get update && sudo apt-get install beagleplayer
+Copy
+from: C:\User\youruser\Documents\beagleplayer\res
+to: C:\User\youruser\beagleplayer\res
 ```
+This is so beagleplayer can use the custom themes.
+
+9. Enjoy.
+
 
 ##Themes
 
@@ -101,4 +87,3 @@ see [Contributing](https://github.com/hutchgrant/beagleplayer/blob/master/CONTRI
 
 ## License
 All code and documentation from 2011- 2015 is available under the terms of the [GNU Public License v3](http://www.gnu.org/copyleft/gpl.html)
-

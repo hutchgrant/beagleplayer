@@ -4,6 +4,7 @@
 #include <QtSql>
 #include <QString>
 #include <QApplication>
+#include <QtGlobal>
 #include <string>
 #include <iostream>
 #include <sstream>

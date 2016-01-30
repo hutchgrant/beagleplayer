@@ -16,75 +16,72 @@
     </head>
    <body>
         <div class="main">
-        <div class="track_head">
-            <h1 id="track_title">Track</h1>
+            <div class="track_head">
+                <h1 id="track_title">Track</h1>
+            </div>
             <div class="player">
                 <video id="video" width="1024" height="800" style="display: block;"></video>
             </div>
-            <div id="track_seek">
-                <div class="container">
-                    <div class="row">
-                        <div id="range">
-                            <div class="col-md-4" id="seek_time">00:00:00</div>
-                            <div class="col-sm-1" id="seek_divide">/</div>
-                            <div class="col-md-5" id="seek_range">00:00:00</div>
-                        </div>
-                    </div>
-                    <div class="row">
-                      <input type="text" id="seek_amount" hidden>
-                      <div id="seek_slider"></div>
-                    </div>
-                </div>
+            <div class="track_foot">
+                <div id="track_buttons">
+                    <ul class="buttons">
+                       <li class="track_button" id="prev">
+                       <img src="qrc:///res/RRWD_icon.png" id="button"/>
+                       </li>
+                       <li class="track_button" id="pause">
+                       <img src="qrc:///res/PAUSE_icon.png" id="button"/>
+                        </li>
+                       <li class="track_button" id="play">
+                       <img src="qrc:///res/FWD_icon.png" id="button"/>
+                       </li>
+                        <li class="track_button" id="next">
+                       <img src="qrc:///res/FFWD_icon.png" id="button"/>
+                        </li>
+                       <li class="track_button" id="open">
+                       <img src="qrc:///res/OPEN_icon.png" id="button"/>
+                       </li>
+                       <li class="track_button" id="playlist">
+                       <img src="qrc:///res/PLAYLIST_icon.png" id="button"/>
+                       </li>
+                       <li class="track_button" id="full">
+                       <img src="qrc:///res/UP_icon.png" id="button"/>
+                       </li>
+                       <li class="track_button" id="vol">
+                       <img src="qrc:///res/VOL_icon.png" id="button"/>
+                       </li>
+                    </ul>
+               </div>
+               <div id="track_seek">
+                       <div class="row">
+                           <div id="range">
+                               <div class="col-md-4" id="seek_time">00:00:00</div>
+                               <div class="col-sm-1" id="seek_divide">/</div>
+                               <div class="col-md-5" id="seek_range">00:00:00</div>
+                           </div>
+                       </div>
+                       <div class="row">
+                         <input type="text" id="seek_amount" hidden>
+                         <div id="seek_slider"></div>
+                       </div>
+               </div>
+            </div>
+            <div class="directory">
+                <table id="directory_table"></table>
+            </div>
+            <ul id="mode">
+                <li id="0">Audio</li>
+                <li id="1">Video</li>
+                <li id="2">Radio</li>
+            </ul>
+            <div class="playlist">
+                <img src="qrc:///res/OPEN_icon.png" id="open_directory"/>
+                <table id="playlist_table"></table>
+            </div>
+            <div id="track_volume">
+                 <label for="vol_amount"></label>
+                 <input type="text" id="vol_amount" readonly>
+               <div id="vol_slider"></div>
             </div>
         </div>
-        <div id="track_buttons">
-            <ul class="buttons">
-               <li class="track_button" id="prev">
-               <img src="qrc:///res/RRWD_icon.png" id="button"/>
-               </li>
-               <li class="track_button" id="pause">
-               <img src="qrc:///res/PAUSE_icon.png" id="button"/>
-                </li>
-               <li class="track_button" id="play">
-               <img src="qrc:///res/FWD_icon.png" id="button"/>
-               </li>
-                <li class="track_button" id="next">
-               <img src="qrc:///res/FFWD_icon.png" id="button"/>
-                </li>
-               <li class="track_button" id="open">
-               <img src="qrc:///res/OPEN_icon.png" id="button"/>
-               </li>
-               <li class="track_button" id="playlist">
-               <img src="qrc:///res/PLAYLIST_icon.png" id="button"/>
-               </li>
-               <li class="track_button" id="full">
-               <img src="qrc:///res/UP_icon.png" id="button"/>
-               </li>
-               <li class="track_button" id="vol">
-               <img src="qrc:///res/VOL_icon.png" id="button"/>
-               </li>
-            </ul>
-        </div>
-        <div class="track_foot">
-               <div id="track_volume">
-                 <p>
-                   <label for="vol_amount"></label>
-                   <input type="text" id="vol_amount" readonly>
-                 </p>
-                 <div id="vol_slider"></div>
-               </div>
-        </div>
-        <div class="playlist">
-            <img src="qrc:///res/OPEN_icon.png" id="open_directory"/>
-            <table id="playlist_table"></table>
-        </div>
-        <div class="directory">
-            <table id="directory_table"></table>
-        </div>
-        <ul id="mode">
-        <li id="0">Audio</li>
-        <li id="1">Video</li>
-        <li id="2">Radio</li>
-        </ul>
     </body>
 </html>

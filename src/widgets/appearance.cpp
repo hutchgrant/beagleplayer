@@ -43,7 +43,12 @@ void appearance::getThemes(){
     int count = 0;
     fileObj themeDir;
     themeDir.initFile(100);
+#ifdef Q_OS_LINUX
     QString theme = QApplication::applicationDirPath() + "/res/themes/";
+#endif
+#ifdef Q_OS_WIN
+    QString theme = QApplication::applicationDirPath() + "\\res\themes\\";
+#endif
     QDirIterator directories(theme.toStdString().c_str(), QDir::Dirs | QDir::NoDotAndDotDot);
     while(directories.hasNext()){
         directories.next();
@@ -186,7 +191,12 @@ void appearance::setCurrent(){
 bool appearance::createDefaultTheme(){
     fileObj addTheme;
     addTheme.initFile(100);
+#ifdef Q_OS_LINUX
     QString theme = QApplication::applicationDirPath() + "/res/themes/default/default.theme";
+#endif
+#ifdef Q_OS_WIN
+    QString theme = QApplication::applicationDirPath() + "\res\themes\default\default.theme";
+#endif
     addTheme.set(0,0,0,"default", theme.toStdString().c_str());
     if(cah->writeDB(&addTheme, "theme") >=0){
         return true;

@@ -70,14 +70,23 @@ RESOURCES += \
     res/BPres.qrc
 
 documentation.files = docs/*
-documentation.path = /opt/extras.ubuntu.com/beagleplayer/docs
+linux:documentation.path = /opt/extras.ubuntu.com/beagleplayer/docs
+win32:documentation.path = c:\Progra~1\beagleplayer\docs
+
 sources.files = src/*
-sources.path = /opt/extras.ubuntu.com/beagleplayer/src
-target.path = /opt/extras.ubuntu.com/beagleplayer
+linux:sources.path = /opt/extras.ubuntu.com/beagleplayer/src
+win32:sources.path = c:\Progra~1\beagleplayer\src
+
+linux:target.path = /opt/extras.ubuntu.com/beagleplayer
+win32:target.path = c:\Progra~1\beagleplayer
+
 other.files = ./*
-other.path = /opt/extras.ubuntu.com/beagleplayer/release
+linux:other.path = /opt/extras.ubuntu.com/beagleplayer/release
+win32:other.path = $$(HOMEDRIVE)\$$(HOMEPATH)\beagleplayer
+
 res.files = res/*
-res.path = /opt/extras.ubuntu.com/beagleplayer/res
+linux:res.path = /opt/extras.ubuntu.com/beagleplayer/res
+win32:res.path = $$(HOMEDRIVE)\$$(HOMEPATH)\beagleplayer\res
 
 INSTALLS += target \
             sources \

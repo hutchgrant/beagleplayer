@@ -206,10 +206,16 @@ void controls::startSelected(){
  */
 void controls::openPlayer(){
     /* Default player theme */
-    string cache_dir = "/.cache/beagleplayer2/";
-    cache_dir = getenv("HOME") + cache_dir;
-    string theme_dir = cache_dir + "themes/";
-    string default_theme = theme_dir + "default/default.html";
+#ifdef Q_OS_LINUX
+    string theme_dir = "/opt/extras.ubuntu.com/beagleplayer/res/themes/";
+    string default_theme = theme_dir + "default/default.theme";
+#endif
+#ifdef Q_OS_WIN
+    string base_dir = "C:";
+    string theme_dir =  "\\beagleplayer\res\themes\\";
+    theme_dir = base_dir + getenv("homepath") + theme_dir;
+    string default_theme = theme_dir + "default\default.html";
+#endif
 
     if(!detachOpen){
         QIcon icon;
@@ -230,6 +236,7 @@ void controls::openPlayer(){
         if(themePath == ""){
             themePath = default_theme;
         }
+        qDebug() << "loading theme: " << default_theme.c_str() << endl;
         detach->loadFile(themePath.c_str());
     }
 }
